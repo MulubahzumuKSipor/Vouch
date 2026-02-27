@@ -209,3 +209,58 @@
   color: var(--color-text-muted);
   font-size: 0.95rem;
 }
+
+/* --- Currency Toggle Button --- */
+.currencyToggleBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem;
+  background-color: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 9999px; /* Perfect pill shape */
+  color: #374151;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Hover State */
+.currencyToggleBtn:hover {
+  background-color: #f9fafb;
+  border-color: #d1d5db;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+/* Click State */
+.currencyToggleBtn:active {
+  transform: translateY(0);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Typography */
+.currencyCode {
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #111827;
+}
+
+.exchangeRate {
+  font-size: 0.75rem;
+  color: #6b7280;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+/* Icon Animation */
+.toggleIcon {
+  color: #9ca3af;
+  transition: transform 0.3s ease; /* Smooth rotation */
+}
+
+.currencyToggleBtn:hover .toggleIcon {
+  color: #4b5563;
+  transform: rotate(180deg); /* Flips the arrows on hover */
+}

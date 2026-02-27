@@ -6,32 +6,55 @@ import Image from 'next/image'
 import { useCart } from '@/context/CartContext'
 import styles from '@/styles/shop.module.css'
 
+// Helper to keep the JSX clean
+const formatPrice = (amount: number, currency: string = 'USD') => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: currency,
+    minimumFractionDigits: 0
+  }).format(amount / 100)
+}
+
 export default function CartDrawer() {
   const { items, removeItem, isOpen, closeDrawer, isLoading } = useCart()
   const total = items.reduce((acc, item) => acc + (item.price * item.quantity), 0)
 
-  if (!isOpen) return null
 
   return (
     <>
-      <div className={styles.overlay} onClick={closeDrawer} />
-      <div className={styles.drawer}>
+      {/* Overlay - Fades in/out */}
+      <div
+        className={`${styles.overlay} ${isOpen ? styles.overlayOpen : ''}`}
+        onClick={closeDrawer}
+        aria-hidden="true"
+      />
+
+      {/* Drawer - Slides in/out */}
+      <div className={`${styles.drawer} ${isOpen ? styles.drawerOpen : ''}`} role="dialog" aria-label="Shopping Cart">
 
         <div className={styles.drawerHeader}>
           <div className={styles.drawerTitleWrapper}>
             <ShoppingBag size={20} />
             <h2 className={styles.drawerTitle}>Your Bag ({items.length})</h2>
           </div>
-          <button onClick={closeDrawer} className={styles.closeBtn}>
+          <button onClick={closeDrawer} className={styles.closeBtn} aria-label="Close cart">
             <X size={24} />
           </button>
         </div>
 
         <div className={styles.drawerBody}>
           {isLoading && items.length === 0 ? (
-            <div className={styles.drawerLoading}>
-              <div className={styles.spin}></div>
-              <span>Loading cart...</span>
+            // 🔴 POLISHED: Premium Skeleton Loader instead of a basic spinner
+            <div className={styles.skeletonContainer}>
+              {[1, 2, 3].map((i) => (
+                <div key={i} className={styles.skeletonItem}>
+                  <div className={styles.skeletonImage} />
+                  <div className={styles.skeletonTextWrapper}>
+                    <div className={styles.skeletonTextLine} style={{ width: '80%' }} />
+                    <div className={styles.skeletonTextLine} style={{ width: '40%' }} />
+                  </div>
+                </div>
+              ))}
             </div>
           ) : items.length > 0 ? (
             items.map((item) => (
@@ -51,7 +74,6 @@ export default function CartDrawer() {
                 </div>
 
                 <div className={styles.itemDetails}>
-                  {/* UX CHECK: Conditionally render the link if we have the right data */}
                   {item.username && item.slug ? (
                     <Link
                       href={`/@${item.username}/${item.slug}`}
@@ -67,12 +89,9 @@ export default function CartDrawer() {
                   )}
 
                   <p className={styles.itemPrice}>
-                    {new Intl.NumberFormat('en-US', {
-                      style: 'currency',
-                      currency: item.currency || 'USD',
-                      minimumFractionDigits: 0
-                    }).format(item.price / 100)}
+                    {formatPrice(item.price, item.currency)}
                   </p>
+
                   <button onClick={() => removeItem(item.product_id)} className={styles.removeBtn}>
                     <Trash2 size={14} /> Remove
                   </button>
@@ -90,16 +109,13 @@ export default function CartDrawer() {
           )}
         </div>
 
+        {/* Footer sticks to the bottom */}
         {items.length > 0 && (
           <div className={styles.drawerFooter}>
             <div className={styles.totalRow}>
               <span>Subtotal</span>
               <span className={styles.totalAmount}>
-                {new Intl.NumberFormat('en-US', {
-                  style: 'currency',
-                  currency: 'USD',
-                  minimumFractionDigits: 0
-                }).format(total / 100)}
+                {formatPrice(total)}
               </span>
             </div>
 
@@ -107,6 +123,7 @@ export default function CartDrawer() {
               <Link href="/checkout" className={styles.checkoutBtn} onClick={closeDrawer}>
                 Checkout <ArrowRight size={18} />
               </Link>
+              {/* Optional: if you don't have a dedicated /cart page, you can remove this link! */}
               <Link href="/cart" className={styles.viewCartLink} onClick={closeDrawer}>
                 View Full Cart
               </Link>

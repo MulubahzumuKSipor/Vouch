@@ -4,11 +4,15 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { login, signup } from '@/lib/action';
 import styles from '@/styles/auth.module.css';
+import { MailCheck } from 'lucide-react';
 
 export default function AuthPage() {
   const [view, setView] = useState<'login' | 'signup'>('login');
   const [isLoading, setIsLoading] = useState(false);
   const [usernameError, setUsernameError] = useState('');
+
+  // 🔴 Added state to track successful signups
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
   // Validate username on client side
   const validateUsername = (username: string): boolean => {
@@ -48,6 +52,15 @@ export default function AuthPage() {
     if (result?.error) {
       alert(result.error);
       setIsLoading(false);
+    } else {
+      // 🔴 If signup succeeds (no error), show the confirmation UI instead of redirecting
+      if (view === 'signup') {
+        setShowConfirmation(true);
+        setIsLoading(false);
+      } else {
+        // If login succeeds, the server action usually handles the redirect
+        setIsLoading(false);
+      }
     }
   };
 
@@ -95,129 +108,158 @@ export default function AuthPage() {
           {/* Right side - Form */}
           <div className={styles.formSection}>
             <div className={styles.formCard}>
-              {/* Toggle Switcher */}
-              <div className={styles.toggleContainer}>
-                <div
-                  className={styles.toggleSlider}
-                  style={{ transform: view === 'signup' ? 'translateX(100%)' : 'translateX(0)' }}
-                ></div>
-                <button
-                  className={`${styles.toggleBtn} ${view === 'login' ? styles.active : ''}`}
-                  onClick={() => setView('login')}
-                  type="button"
-                >
-                  Sign In
-                </button>
-                <button
-                  className={`${styles.toggleBtn} ${view === 'signup' ? styles.active : ''}`}
-                  onClick={() => setView('signup')}
-                  type="button"
-                >
-                  Create Account
-                </button>
-              </div>
 
-              {/* Form */}
-              <form action={handleSubmit} className={styles.form}>
-                {view === 'signup' && (
-                  <>
-                    <div className={styles.inputGroup}>
-                      <label htmlFor="username" className={styles.label}>
-                        Claim Your Handle
-                      </label>
-                      <div className={styles.inputWrapper}>
-                        <span className={styles.handlePrefix}>@</span>
-                        <input
-                          id="username"
-                          name="username"
-                          type="text"
-                          required
-                          placeholder="yourhandle"
-                          className={styles.input}
-                          autoCapitalize="none"
-                          pattern="[a-zA-Z0-9_]{3,30}"
-                          title="3-30 characters: letters, numbers, underscore only"
-                          onBlur={(e) => validateUsername(e.target.value)}
-                        />
-                      </div>
-                      {usernameError && (
-                        <p className={styles.errorText}>{usernameError}</p>
-                      )}
-                    </div>
+              {/* 🔴 Conditionally render the confirmation UI OR the Form */}
+              {showConfirmation ? (
+
+                <div style={{ textAlign: 'center', padding: '2rem 1rem' }}>
+                  <MailCheck size={56} color="#059669" style={{ margin: '0 auto 1.5rem' }} />
+                  <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#111827', marginBottom: '0.5rem' }}>
+                    Check your inbox!
+                  </h2>
+                  <p style={{ color: '#4B5563', marginBottom: '2rem', lineHeight: '1.6' }}>
+                    We&apos;ve sent a confirmation link to your email address. Please click the link to verify your account before signing in.
+                  </p>
+                  <button
+                    type="button"
+                    className={styles.submitBtn}
+                    onClick={() => {
+                      setShowConfirmation(false);
+                      setView('login');
+                    }}
+                  >
+                    <span className={styles.btnText}>Return to Sign In</span>
+                    <span className={styles.btnArrow}>→</span>
+                  </button>
+                </div>
+
+              ) : (
+                <>
+                  {/* Toggle Switcher */}
+                  <div className={styles.toggleContainer}>
+                    <div
+                      className={styles.toggleSlider}
+                      style={{ transform: view === 'signup' ? 'translateX(100%)' : 'translateX(0)' }}
+                    ></div>
+                    <button
+                      className={`${styles.toggleBtn} ${view === 'login' ? styles.active : ''}`}
+                      onClick={() => setView('login')}
+                      type="button"
+                    >
+                      Sign In
+                    </button>
+                    <button
+                      className={`${styles.toggleBtn} ${view === 'signup' ? styles.active : ''}`}
+                      onClick={() => setView('signup')}
+                      type="button"
+                    >
+                      Create Account
+                    </button>
+                  </div>
+
+                  {/* Form */}
+                  <form action={handleSubmit} className={styles.form}>
+                    {view === 'signup' && (
+                      <>
+                        <div className={styles.inputGroup}>
+                          <label htmlFor="username" className={styles.label}>
+                            Claim Your Handle
+                          </label>
+                          <div className={styles.inputWrapper}>
+                            <span className={styles.handlePrefix}>@</span>
+                            <input
+                              id="username"
+                              name="username"
+                              type="text"
+                              required
+                              placeholder="yourhandle"
+                              className={styles.input}
+                              autoCapitalize="none"
+                              pattern="[a-zA-Z0-9_]{3,30}"
+                              title="3-30 characters: letters, numbers, underscore only"
+                              onBlur={(e) => validateUsername(e.target.value)}
+                            />
+                          </div>
+                          {usernameError && (
+                            <p className={styles.errorText}>{usernameError}</p>
+                          )}
+                        </div>
+
+                        <div className={styles.inputGroup}>
+                          <label htmlFor="full_name" className={styles.label}>
+                            Full Name
+                          </label>
+                          <input
+                            id="full_name"
+                            name="full_name"
+                            type="text"
+                            required
+                            placeholder="Enter your full name"
+                            className={styles.input}
+                          />
+                        </div>
+                      </>
+                    )}
 
                     <div className={styles.inputGroup}>
-                      <label htmlFor="full_name" className={styles.label}>
-                        Full Name
+                      <label htmlFor="email" className={styles.label}>
+                        Email Address
                       </label>
                       <input
-                        id="full_name"
-                        name="full_name"
-                        type="text"
+                        id="email"
+                        name="email"
+                        type="email"
                         required
-                        placeholder="Enter your full name"
+                        autoComplete="email"
+                        placeholder="you@example.com"
                         className={styles.input}
                       />
                     </div>
-                  </>
-                )}
 
-                <div className={styles.inputGroup}>
-                  <label htmlFor="email" className={styles.label}>
-                    Email Address
-                  </label>
-                  <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    required
-                    autoComplete="email"
-                    placeholder="you@example.com"
-                    className={styles.input}
-                  />
-                </div>
+                    <div className={styles.inputGroup}>
+                      <label htmlFor="password" className={styles.label}>
+                        Password
+                      </label>
+                      <input
+                        id="password"
+                        name="password"
+                        type="password"
+                        required
+                        minLength={6}
+                        autoComplete={view === 'login' ? "current-password" : "new-password"}
+                        placeholder="••••••••"
+                        className={styles.input}
+                      />
+                    </div>
 
-                <div className={styles.inputGroup}>
-                  <label htmlFor="password" className={styles.label}>
-                    Password
-                  </label>
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    required
-                    minLength={6}
-                    autoComplete={view === 'login' ? "current-password" : "new-password"}
-                    placeholder="••••••••"
-                    className={styles.input}
-                  />
-                </div>
+                    <button
+                      type="submit"
+                      className={styles.submitBtn}
+                      disabled={isLoading}
+                    >
+                      <span className={styles.btnText}>
+                        {isLoading ? 'Processing...' : (view === 'login' ? 'Sign In' : 'Create Account')}
+                      </span>
+                      <span className={styles.btnArrow}>→</span>
+                    </button>
+                  </form>
 
-                <button
-                  type="submit"
-                  className={styles.submitBtn}
-                  disabled={isLoading}
-                >
-                  <span className={styles.btnText}>
-                    {isLoading ? 'Processing...' : (view === 'login' ? 'Sign In' : 'Create Account')}
-                  </span>
-                  <span className={styles.btnArrow}>→</span>
-                </button>
-              </form>
-
-              <div className={styles.footer}>
-                {view === 'login' ? (
-                  <Link href="/forgot-password" className={styles.footerLink}>
-                    Forgot your password?
-                  </Link>
-                ) : (
-                  <p className={styles.footerText}>
-                    By joining, you agree to our{' '}
-                    <Link href="/terms" className={styles.footerLink}>Terms</Link>
-                    {' '}and{' '}
-                    <Link href="/privacy" className={styles.footerLink}>Privacy Policy</Link>
-                  </p>
-                )}
-              </div>
+                  <div className={styles.footer}>
+                    {view === 'login' ? (
+                      <Link href="/forgot-password" className={styles.footerLink}>
+                        Forgot your password?
+                      </Link>
+                    ) : (
+                      <p className={styles.footerText}>
+                        By joining, you agree to our{' '}
+                        <Link href="/terms" className={styles.footerLink}>Terms</Link>
+                        {' '}and{' '}
+                        <Link href="/privacy" className={styles.footerLink}>Privacy Policy</Link>
+                      </p>
+                    )}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>

@@ -12,7 +12,7 @@ import styles from '@/styles/checkout.module.css'
 type PaymentMethod = 'mtn_momo' | 'orange_money' | 'tipme'
 
 export default function CheckoutPage() {
-  const { items, isLoading, removeItem } = useCart()
+  const { items: cartItems, isLoading, removeItem } = useCart()
   const router = useRouter()
   const supabase = createClient()
   
@@ -21,19 +21,51 @@ export default function CheckoutPage() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [paymentStep, setPaymentStep] = useState<'idle' | 'prompting' | 'verifying' | 'completing'>('idle')
 
-  const total = items.reduce((acc, item) => acc + (item.price * item.quantity), 0)
+  // 🔴 NEW: State to handle the "Buy Now" bypass
+  const [isDirectMode, setIsDirectMode] = useState(false)
+  const [directItem, setDirectItem] = useState<any | null>(null)
+  const [isInitializing, setIsInitializing] = useState(true)
+
+  // 1. Check if we are in Direct Buy mode on mount
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const isDirect = window.location.search.includes('mode=direct')
+      setIsDirectMode(isDirect)
+
+      if (isDirect) {
+        const storedItem = sessionStorage.getItem('directBuyItem')
+        if (storedItem) {
+          setDirectItem(JSON.parse(storedItem))
+        }
+      }
+      setIsInitializing(false)
+    }
+  }, [])
+
+  // 2. Determine which items we are actually checking out with
+  const activeItems = isDirectMode ? (directItem ? [directItem] : []) : cartItems
+  const isReady = isDirectMode ? !isInitializing : !isLoading
+
+  const total = activeItems.reduce((acc, item) => acc + (item.price_amount || item.price * item.quantity), 0)
   const totalFormatted = new Intl.NumberFormat('en-US', { 
     style: 'currency', 
     currency: 'USD', 
     minimumFractionDigits: 2 
   }).format(total / 100)
 
-  // Redirect if cart is empty
+  // 3. Bulletproof Kick-Out Logic
   useEffect(() => {
-    if (!isLoading && items.length === 0) {
-      router.push('/explore')
-    }
-  }, [items, isLoading, router])
+    if (isInitializing || isProcessing) return;
+
+    const timer = setTimeout(() => {
+      // Only kick them out if they aren't in direct mode AND the global cart is empty
+      if (isReady && activeItems.length === 0) {
+        router.push('/explore')
+      }
+    }, 600)
+
+    return () => clearTimeout(timer)
+  }, [activeItems.length, isReady, isProcessing, isInitializing, router])
 
   // --- THE REAL DATABASE SIMULATION ---
   const handleSimulatedPayment = async (e: React.FormEvent) => {
@@ -42,72 +74,71 @@ export default function CheckoutPage() {
 
     setIsProcessing(true)
     
-    // 1. Simulate Mobile Money Prompt
     setPaymentStep('prompting')
     await new Promise(resolve => setTimeout(resolve, 1500))
 
-    // 2. Simulate Network Verification
     setPaymentStep('verifying')
     await new Promise(resolve => setTimeout(resolve, 1500))
 
     setPaymentStep('completing')
 
     try {
-      // 3. Authenticate the Buyer
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) {
         throw new Error("You must be logged in to complete a purchase.")
       }
 
-      // 4. Process each item in the cart into a real Order
-      for (const item of items) {
-        // We need the seller's ID to record the sale accurately
+      for (const item of activeItems) {
+        // Handle varying payload structures (Cart vs Direct Buy)
+        const productId = item.product_id || item.id
+        const itemPrice = item.price_amount || item.price
+
         const { data: product } = await supabase
           .from('products')
           .select('seller_id')
-          .eq('id', item.product_id)
+          .eq('id', productId)
           .single()
 
         if (!product) continue;
 
-        // Calculate exact financial breakdown
-        const amountPaid = item.price * item.quantity
-        const platformFee = Math.floor(amountPaid * 0.05) // 5% Vouch Fee
+        const amountPaid = itemPrice * (item.quantity || 1)
+        const platformFee = Math.floor(amountPaid * 0.05)
         const sellerEarnings = amountPaid - platformFee
 
-        // Generate a random Order Number
         const orderNumber = `ORD-${Math.random().toString(36).substring(2, 10).toUpperCase()}`
 
-        // Insert the official order into your database matching your exact schema requirements
         const { error: orderError } = await supabase.from('orders').insert({
           order_number: orderNumber,
           buyer_id: user.id,
           buyer_email: user.email,
-          buyer_phone: phone,                      // Captured from the form
+          buyer_phone: phone,
           seller_id: product.seller_id,
-          product_id: item.product_id,
+          product_id: productId,
           product_title: item.title,
-          product_price: item.price,               // REQUIRED: Base price
+          product_price: itemPrice,
           amount_paid: amountPaid,
-          currency: (item.currency || 'USD') as 'USD' | 'LRD' | 'EUR' | 'GBP' | 'NGN' | 'GHS' | 'KES',
+          currency: (item.currency || item.price_currency || 'USD') as 'USD' | 'LRD' | 'EUR' | 'GBP' | 'NGN' | 'GHS' | 'KES',
           platform_fee: platformFee,
           seller_earnings: sellerEarnings,
           referral_commission: 0,
-          payment_method: method,                  // Track the method used
-          status: 'completed',                     // Matches order_status_enum
-          completed_at: new Date().toISOString()   // Timestamp the completion
+          payment_method: method,
+          status: 'completed',
+          completed_at: new Date().toISOString()
         })
 
-        if (orderError) {
-          console.error("Order insertion failed:", orderError)
-          throw new Error("Failed to create order record. Please contact support.")
-        }
+        if (orderError) throw new Error("Failed to create order record.")
 
-        // 5. Remove the item from the cart now that it is purchased
-        await removeItem(item.product_id)
+        // Only remove from global cart if we are NOT in direct mode
+        if (!isDirectMode) {
+          await removeItem(productId)
+        }
       }
 
-      // 6. Success! Route to the confirmation page.
+      // Clear the temporary direct buy item
+      if (isDirectMode) {
+        sessionStorage.removeItem('directBuyItem')
+      }
+
       router.push(`/checkout/success?amount=${total}`)
 
     } catch (error: unknown) {
@@ -119,7 +150,8 @@ export default function CheckoutPage() {
     }
   }
 
-  if (isLoading || items.length === 0) {
+  // Loading UI
+  if (!isReady || (activeItems.length === 0 && !isProcessing)) {
     return (
       <div className={styles.loadingState}>
         <Loader2 size={40} className={styles.spin} />
@@ -253,24 +285,24 @@ export default function CheckoutPage() {
           <h2 className={styles.summaryTitle}>Order Summary</h2>
           
           <div className={styles.itemList}>
-            {items.map((item) => (
-              <div key={item.product_id} className={styles.summaryItem}>
+            {activeItems.map((item) => (
+              <div key={item.product_id || item.id} className={styles.summaryItem}>
                 <div className={styles.itemImageWrapper}>
                   {item.cover_image ? (
                     <Image src={item.cover_image} alt={item.title} fill sizes="64px" className={styles.itemImage} />
                   ) : (
                     <div className={styles.placeholderImg}>{item.title[0]}</div>
                   )}
-                  {item.quantity > 1 && (
+                  {item.quantity && item.quantity > 1 && (
                     <span className={styles.quantityBadge}>{item.quantity}</span>
                   )}
                 </div>
                 <div className={styles.itemDetails}>
                   <h4 className={styles.itemTitle}>{item.title}</h4>
-                  <p className={styles.itemAuthor}>by {item.seller_username || 'Creator'}</p>
+                  <p className={styles.itemAuthor}>by {item.seller_username || item.username || 'Creator'}</p>
                 </div>
                 <div className={styles.itemPrice}>
-                  {new Intl.NumberFormat('en-US', { style: 'currency', currency: item.currency || 'USD' }).format((item.price * item.quantity) / 100)}
+                  {new Intl.NumberFormat('en-US', { style: 'currency', currency: item.currency || item.price_currency || 'USD' }).format((item.price_amount || item.price * (item.quantity || 1)) / 100)}
                 </div>
               </div>
             ))}

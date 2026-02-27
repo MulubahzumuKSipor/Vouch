@@ -37,7 +37,7 @@ export function Navbar() {
 
           <div className={styles.actions}>
             <Link href="/login"  className={styles.loginBtn}>Log in</Link>
-            <Link href="/signup" className={styles.ctaBtn}>Start Selling</Link>
+            <Link href="/login" className={styles.ctaBtn}>Start Selling</Link>
           </div>
 
         </div>

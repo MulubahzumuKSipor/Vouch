@@ -218,7 +218,6 @@ export async function deleteBunnyVideo(videoId: string) {
     if (!res.ok) throw new Error('Failed to delete from CDN')
     return { success: true }
   } catch (err) {
-    // 🔴 FIXED: Safely stringify the unknown error to prevent strict TS catch block errors
     return { success: false, error: String(err) }
   }
 }

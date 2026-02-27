@@ -138,12 +138,17 @@
 }
 
 .coverPattern {
-  height: 140px;
-  background-color: #F5F5F4;
-  background-image:
-    radial-gradient(at 0% 0%, #FFFFFF 0px, transparent 50%),
-    radial-gradient(at 100% 100%, #E7E5E4 0px, transparent 50%);
+  height: 160px;
+  width: 100%;
   position: relative;
+  overflow: hidden;
+  /* Color 1: Rich Midnight Charcoal */
+  background-color: #171717;
+  /* Color 2: The pattern (White rendered at 8% opacity for a very sleek look) */
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M54.627 0l1.43 1.43-23.86 23.862-1.43-1.432L54.627 0zm-47.73 0l23.862 23.86-1.432 1.432L4.034 0h2.862zm-2.863 0H0v2.862l23.86 23.862 1.432-1.43L4.034 0zm51.932 0H60v2.862L36.138 26.724l-1.43-1.432L55.966 0zM0 55.966V60h4.034L27.896 36.138l-1.432-1.43L0 55.966zm60-4.034V60h-4.034L32.104 36.138l1.43-1.432L60 51.932zM30 27.896L1.43 56.463l1.432 1.43L30 30.758l27.138 27.135 1.43-1.432L30 27.896z' fill='%23ffffff' fill-opacity='0.08' fill-rule='evenodd'/%3E%3C/svg%3E");
+  background-size: 60px 60px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
 }
 
 @media (min-width: 768px) {
@@ -497,34 +502,86 @@
   font-weight: 600;
 }
 
-/* ==========================================================================
-   CART DRAWER (Slide-out Overlay)
-   ========================================================================== */
+/* --- Overlay Animations --- */
 .overlay {
   position: fixed;
-  inset: 0;
-  background-color: rgba(28, 25, 23, 0.4); /* Dark semi-transparent */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.4);
   backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  z-index: 90;
-  animation: fadeIn 0.2s ease-out;
+  z-index: 998;
+  opacity: 0;
+  pointer-events: none; /* Prevents clicking when closed */
+  transition: opacity 0.3s ease;
 }
 
+.overlayOpen {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* --- Drawer Animations --- */
 .drawer {
   position: fixed;
   top: 0;
   right: 0;
-  bottom: 0;
+  height: 100vh;
   width: 100%;
   max-width: 400px;
-  background-color: var(--color-bg-white);
-  z-index: 100;
+  background-color: #ffffff;
+  z-index: 999;
   display: flex;
   flex-direction: column;
-  box-shadow: -8px 0 24px rgba(0,0,0,0.06);
-  animation: slideInRight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: -4px 0 15px rgba(0, 0, 0, 0.1);
+  transform: translateX(100%); /* Hides it off-screen to the right */
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1); /* Buttery smooth snap */
 }
 
+.drawerOpen {
+  transform: translateX(0); /* Slides it in */
+}
+
+/* --- Skeleton Loader --- */
+.skeletonContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1rem 0;
+}
+
+.skeletonItem {
+  display: flex;
+  gap: 1rem;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.skeletonImage {
+  width: 80px;
+  height: 80px;
+  background-color: #f3f4f6;
+  border-radius: 8px;
+}
+
+.skeletonTextWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.skeletonTextLine {
+  height: 14px;
+  background-color: #f3f4f6;
+  border-radius: 4px;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
 /* Animations */
 @keyframes fadeIn {
   from { opacity: 0; }
@@ -799,3 +856,4 @@
   border-radius: 50%;
   animation: spin 1s linear infinite;
 }
+

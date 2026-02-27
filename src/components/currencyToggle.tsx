@@ -12,10 +12,11 @@ export default function CurrencyToggle() {
       onClick={toggleCurrency} 
       className={styles.currencyToggleBtn}
       title={`Exchange Rate: 1 USD = ${exchangeRate} LRD`}
+      aria-label="Toggle Currency"
     >
-      <span style={{ fontWeight: 800 }}>{preferredCurrency}</span>
-      <ArrowLeftRight size={14} />
-      <span style={{ fontSize: '0.8rem', opacity: 0.7 }}>
+      <span className={styles.currencyCode}>{preferredCurrency}</span>
+      <ArrowLeftRight size={14} className={styles.toggleIcon} />
+      <span className={styles.exchangeRate}>
         Rate: {Math.round(exchangeRate)}
       </span>
     </button>

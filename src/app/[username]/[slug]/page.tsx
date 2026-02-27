@@ -12,6 +12,7 @@ import PriceDisplay from '@/components/priceDisplay'
 import CurrencyToggle from '@/components/currencyToggle'
 import ShareButton from '@/components/shareButton'
 import BuyNowButton from '@/components/buyProduct'
+import AddToCartButton from '@/components/AddToCartButton' // 🔴 ADDED IMPORT
 
 // Helper: Product Cover
 function ProductHeroImage({ src, alt }: { src?: string | null; alt: string }) {
@@ -40,7 +41,7 @@ export default async function ProductPage({ params }: { params: Promise<{ userna
   const supabase = await createClient()
   const { username, slug } = await params
 
-  // 1. Clean Username (Remove @ and force lowercase to match DB constraint)
+  // 1. Clean Username
   const cleanUsername = decodeURIComponent(username).replace('@', '').toLowerCase()
 
   // 2. Fetch Product & Creator
@@ -63,7 +64,6 @@ export default async function ProductPage({ params }: { params: Promise<{ userna
 
   if (!product) return notFound()
 
-  // 🔴 FIXED: Passed the exact argument name 'p_product_id' required by database.ts
   supabase.rpc('increment_view_count', { p_product_id: product.id }).then()
 
   // 3. SECURE ACCESS CHECK (Creator or Buyer)
@@ -72,10 +72,8 @@ export default async function ProductPage({ params }: { params: Promise<{ userna
 
   if (user) {
     if (user.id === product.seller_id) {
-      // User is the creator
       hasAccess = true
     } else {
-      // User is a buyer: Check if a completed order exists
       const { data: order } = await supabase
         .from('orders')
         .select('id')
@@ -144,7 +142,6 @@ export default async function ProductPage({ params }: { params: Promise<{ userna
           {/* --- RIGHT COLUMN: DETAILS & ACTION --- */}
           <div className={styles.detailsColumn}>
 
-            {/* Header Info */}
             <div className={styles.headerInfo}>
               <div className={styles.typeBadgeWrapper}>
                 <span className={`${styles.typeBadge} ${styles['type_' + product.product_type]}`}>
@@ -194,13 +191,19 @@ export default async function ProductPage({ params }: { params: Promise<{ userna
                   Access {product.product_type === 'course' ? 'Course' : 'Product'}
                 </Link>
               ) : (
-                <>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
+                  {/* Primary Action */}
                   <BuyNowButton product={cartPayload} />
                   
+                  {/* 🔴 ADDED: Secondary Action (Centered Pill) */}
+                  <div style={{ display: 'flex', justifyContent: 'center' }}>
+                    <AddToCartButton product={cartPayload} />
+                  </div>
+
                   <p className={styles.guaranteeText}>
                      100% Secure Checkout via TipMe / Orange Money
                   </p>
-                </>
+                </div>
               )}
             </div>
 

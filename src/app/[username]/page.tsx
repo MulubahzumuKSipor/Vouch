@@ -10,7 +10,6 @@ import { getLrdRate } from '@/lib/currency'
 import { CurrencyProvider } from '@/context/CurrencyContext'
 import PriceDisplay from '@/components/priceDisplay'
 import ShareButton from '@/components/shareButton'
-// import AddToCartButton from '@/components/AddToCartButton'
 
 interface ShopProduct {
   id: string
@@ -67,13 +66,13 @@ export default async function ShopPage({ params }: { params: Promise<{ username:
   const memberSince = new Date(profile.created_at).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
 
   return (
-    // Note: DashboardLayout REMOVED. ShopHeader is now in layout.tsx
     <CurrencyProvider initialRate={exchangeRate}>
       <div className={styles.container}>
 
         {/* HERO SECTION */}
         <div className={styles.heroCard}>
-          {/* If you ever add custom cover images, you can swap this pattern for an <Image> */}
+
+          {/* 🔴 FIXED: The clean, 2-color pattern is now driven entirely by your CSS file */}
           <div className={styles.coverPattern}></div>
 
           <div className={styles.heroContent}>
@@ -149,10 +148,6 @@ export default async function ShopPage({ params }: { params: Promise<{ username:
                       <h3 className={styles.productTitle}>{product.title}</h3>
                       <div className={styles.productFooter}>
                         <PriceDisplay amount={product.price_amount} sourceCurrency={product.price_currency || 'USD'} className={styles.price} />
-
-                        {/* CORRECTED LINE: Passing the full product object
-                        <AddToCartButton product={product} /> */}
-
                       </div>
                     </div>
                   </Link>
