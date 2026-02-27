@@ -1,0 +1,550 @@
+/* --- COLOR PALETTE (Warm African Minimalism) --- */
+.main {
+  --color-bg-sand: #FCFAF8;
+  --color-bg-white: #FFFFFF;
+  --color-bg-stone: #F5F5F4;
+  --color-text-main: #292524;
+  --color-text-muted: #78716C;
+  --color-terracotta: #C2410C;
+  --radius-soft: 12px;
+
+  font-family: system-ui, -apple-system, sans-serif;
+  color: var(--color-text-main);
+  overflow-x: hidden;
+}
+
+.container {
+  width: 100%;
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+.centerHeader {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 4rem auto;
+}
+
+.sectionTitle {
+  font-size: clamp(2rem, 3vw, 2.5rem);
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.sectionSubtitle {
+  font-size: 1.125rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.subtleTexture {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(var(--color-text-muted) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.04;
+  z-index: 1;
+}
+
+/* --- 1. HERO --- */
+.heroSection {
+  background-color: var(--color-bg-sand);
+  padding: 120px 0 160px;
+  position: relative;
+  text-align: center;
+}
+
+.eyebrow {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-terracotta);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.eyebrow::before,
+.eyebrow::after {
+  content: "❖";
+  font-size: 0.6rem;
+  opacity: 0.4;
+}
+
+.headline {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.highlight {
+  position: relative;
+  display: inline-block;
+}
+
+.highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background-color: var(--color-terracotta);
+  opacity: 0.2;
+  z-index: -1;
+}
+
+.subheadline {
+  font-size: 1.25rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* --- 2. PRICING CARD --- */
+.pricingSection {
+  background-color: var(--color-bg-stone);
+  padding-bottom: 100px;
+  margin-top: -80px;
+  position: relative;
+  z-index: 10;
+}
+
+.pricingCard {
+  background-color: var(--color-bg-white);
+  border-radius: var(--radius-soft);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.06);
+  border: 1px solid #E7E5E4;
+  overflow: hidden;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.cardHeader {
+  padding: 3rem;
+  text-align: center;
+  border-bottom: 1px solid #E7E5E4;
+}
+
+.planName {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 1.5rem;
+}
+
+.priceContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  margin-bottom: 1rem;
+}
+
+.priceSymbol {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+  align-self: flex-start;
+  margin-top: 0.5rem;
+}
+
+.priceAmount {
+  font-size: 5rem;
+  font-weight: 800;
+  line-height: 1;
+  color: var(--color-text-main);
+  letter-spacing: -0.05em;
+}
+
+.pricePeriod {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  align-self: flex-end;
+  margin-bottom: 1rem;
+}
+
+.priceDesc {
+  font-size: 1.125rem;
+  color: var(--color-text-muted);
+  max-width: 400px;
+  margin: 0 auto;
+  line-height: 1.5;
+}
+
+.transactionFee {
+  background-color: var(--color-bg-sand);
+  padding: 2rem 3rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1.5rem;
+  border-bottom: 1px solid #E7E5E4;
+}
+
+@media (max-width: 600px) {
+  .transactionFee {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem;
+  }
+}
+
+.feeHighlight {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--color-terracotta);
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid #E7E5E4;
+  line-height: 1;
+}
+
+.feeText strong {
+  display: block;
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.feeText p {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.featuresList {
+  padding: 3rem;
+}
+
+.featuresTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+.featuresList ul {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 600px) {
+  .featuresList ul {
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+}
+
+.featuresList li {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 1rem;
+  color: var(--color-text-main);
+  font-weight: 500;
+  line-height: 1.4;
+}
+
+.checkIcon {
+  color: var(--color-terracotta);
+  flex-shrink: 0;
+}
+
+.cardAction {
+  padding: 0 3rem 3rem;
+  text-align: center;
+}
+
+.primaryBtn {
+  display: inline-block;
+  width: 100%;
+  background-color: var(--color-terracotta);
+  color: white;
+  padding: 1.25rem 2.5rem;
+  border-radius: var(--radius-soft);
+  font-weight: 700;
+  font-size: 1.125rem;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  box-shadow: 0 4px 14px rgba(194, 65, 12, 0.2);
+}
+
+.primaryBtn:hover {
+  background-color: #9A3412;
+  transform: translateY(-2px);
+}
+
+/* --- 3. THE VALUE STACK (Pure White) --- */
+.valueSection {
+  background-color: var(--color-bg-white);
+  padding: 100px 0;
+}
+
+.comparisonGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .comparisonGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.oldWayCard, .vouchWayCard {
+  padding: 2.5rem;
+  border-radius: var(--radius-soft);
+  border: 1px solid #E7E5E4;
+}
+
+.oldWayCard {
+  background-color: #FAFAF9;
+}
+
+.vouchWayCard {
+  background-color: var(--color-bg-sand);
+  border: 2px solid var(--color-terracotta);
+  box-shadow: 0 10px 30px rgba(194, 65, 12, 0.05);
+}
+
+.compareTitle {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.compareTitleVouch {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: var(--color-terracotta);
+}
+
+.compareDesc {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  margin-bottom: 2rem;
+}
+
+.compareList {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.compareList li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+}
+
+.compareList li span {
+  margin-left: auto;
+  font-weight: 700;
+  color: var(--color-text-muted);
+}
+
+.xIcon {
+  color: #A8A29E;
+  flex-shrink: 0;
+}
+
+.compareTotalBad, .compareTotalGood {
+  padding-top: 2rem;
+  border-top: 1px solid #E7E5E4;
+}
+
+.compareTotalBad span, .compareTotalGood span {
+  display: block;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.compareTotalBad strong {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--color-text-muted);
+}
+
+.compareTotalGood strong {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--color-terracotta);
+}
+
+.compareTotalBad p, .compareTotalGood p {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  margin-top: 0.5rem;
+}
+
+/* --- 4. THE MONEY FLOW (Warm Sand) --- */
+.flowSection {
+  background-color: var(--color-bg-sand);
+  padding: 100px 0;
+  position: relative;
+  border-top: 1px solid #E7E5E4;
+  border-bottom: 1px solid #E7E5E4;
+}
+
+.flowGrid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .flowGrid {
+    flex-direction: row;
+    align-items: stretch;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+}
+
+.flowStep, .flowStepHighlight {
+  flex: 1;
+  background-color: var(--color-bg-white);
+  padding: 2.5rem 2rem;
+  border-radius: var(--radius-soft);
+  text-align: center;
+  border: 1px solid #E7E5E4;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+  width: 100%;
+}
+
+.flowStepHighlight {
+  border: 2px solid var(--color-terracotta);
+  background-color: var(--color-bg-sand);
+}
+
+.stepIcon, .stepIconHighlight {
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 1.5rem auto;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.stepIcon {
+  background-color: var(--color-bg-stone);
+  color: var(--color-text-muted);
+}
+
+.stepIconHighlight {
+  background-color: var(--color-terracotta);
+  color: white;
+}
+
+.stepNumber, .stepNumberHighlight {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.stepNumber { color: var(--color-text-muted); }
+.stepNumberHighlight { color: var(--color-terracotta); }
+
+.flowStep h3, .flowStepHighlight h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.flowStep p, .flowStepHighlight p {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.flowStep p strong, .flowStepHighlight p strong {
+  color: var(--color-text-main);
+  font-weight: 700;
+}
+
+.flowArrow {
+  color: #D6D3D1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@media (max-width: 767px) {
+  .flowArrow {
+    transform: rotate(90deg);
+  }
+}
+
+/* --- 5. FAQ SECTION (Soft Stone) --- */
+.faqSection {
+  background-color: var(--color-bg-stone);
+  padding: 100px 0;
+}
+
+.faqGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+}
+
+@media (min-width: 768px) {
+  .faqGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+  }
+}
+
+.faqItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.faqIcon {
+  color: var(--color-terracotta);
+  flex-shrink: 0;
+  background: white;
+  padding: 0.5rem;
+  border-radius: 50%;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.faqItem h3 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin-bottom: 0.75rem;
+  line-height: 1.4;
+}
+
+.faqItem p {
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  font-size: 0.95rem;
+}

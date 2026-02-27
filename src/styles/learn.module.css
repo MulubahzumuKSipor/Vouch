@@ -1,0 +1,418 @@
+/* --- APP VARIABLES & ROOT LAYOUT --- */
+.layout {
+  --color-bg-sand: #FCFAF8;
+  --color-bg-white: #FFFFFF;
+  --color-bg-stone: #F5F5F4;
+  --color-border: #E7E5E4;
+  --color-text-main: #292524;
+  --color-text-muted: #78716C;
+  --color-terracotta: #C2410C;
+  --color-terracotta-light: #FFF7ED;
+  --radius-soft: 12px;
+
+  display: flex;
+  height: 100vh; /* Lock to viewport */
+  width: 100vw;
+  background-color: var(--color-bg-sand);
+  color: var(--color-text-main);
+  overflow: hidden; /* Prevent full-page scroll */
+  font-family: system-ui, -apple-system, sans-serif;
+}
+
+/* ==========================================================================
+   LEFT SIDEBAR (Curriculum)
+   ========================================================================== */
+.sidebar {
+  width: 340px;
+  flex-shrink: 0;
+  background-color: var(--color-bg-white);
+  border-right: 1px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  z-index: 10;
+}
+
+.sidebarHeader {
+  padding: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+  background-color: var(--color-bg-white);
+  flex-shrink: 0;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-decoration: none;
+  margin-bottom: 1rem;
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  color: var(--color-text-main);
+}
+
+.courseTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  line-height: 1.3;
+  margin-bottom: 0.75rem;
+  color: var(--color-text-main);
+}
+
+.progressBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #065F46;
+  background-color: #D1FAE5;
+  padding: 0.35rem 0.75rem;
+  border-radius: 20px;
+}
+
+.curriculumNav {
+  flex: 1;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  padding-bottom: 2rem;
+}
+
+.moduleGroup {
+  border-bottom: 1px solid var(--color-border);
+}
+
+.moduleGroup:last-child {
+  border-bottom: none;
+}
+
+.moduleHeader {
+  padding: 1.25rem 1.5rem;
+  background-color: #FAFAF9;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.moduleBadge {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--color-text-muted);
+  letter-spacing: 0.05em;
+}
+
+.moduleTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.lessonList {
+  display: flex;
+  flex-direction: column;
+}
+
+.emptyModuleText {
+  padding: 1rem 1.5rem;
+  font-size: 0.85rem;
+  color: #A8A29E;
+  font-style: italic;
+}
+
+/* Individual Lesson Buttons */
+.lessonItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.2s;
+  position: relative;
+}
+
+.lessonItem:hover {
+  background-color: var(--color-bg-stone);
+}
+
+.activeItem {
+  background-color: var(--color-terracotta-light);
+}
+
+.activeItem:hover {
+  background-color: var(--color-terracotta-light);
+}
+
+.lessonIconWrapper {
+  color: var(--color-text-muted);
+  margin-top: 0.1rem; /* Visual alignment with text */
+}
+
+.activeItem .lessonIconWrapper {
+  color: var(--color-terracotta);
+}
+
+.lessonDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.lessonNumber {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.activeItem .lessonNumber {
+  color: var(--color-terracotta);
+}
+
+.lessonName {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-text-main);
+  line-height: 1.4;
+}
+
+.activeItem .lessonName {
+  font-weight: 700;
+}
+
+.activeIndicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: var(--color-terracotta);
+}
+
+/* ==========================================================================
+   MAIN STAGE (Content Area)
+   ========================================================================== */
+.mainStage {
+  flex: 1;
+  overflow-y: auto;
+  position: relative;
+  background-color: var(--color-bg-sand);
+}
+
+.contentContainer {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 2rem 3rem 5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+/* --- Media Players & Resources --- */
+.mediaStage {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: #000000;
+  border-radius: var(--radius-soft);
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.missingMedia {
+  width: 100%;
+  padding: 4rem 2rem;
+  background-color: var(--color-bg-stone);
+  border-radius: var(--radius-soft);
+  border: 1px dashed var(--color-border);
+  text-align: center;
+  color: var(--color-text-muted);
+  font-weight: 600;
+}
+
+/* File / Link Downloads */
+.resourceStage {
+  width: 100%;
+  background-color: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-soft);
+  padding: 4rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+}
+
+.resourceIcon {
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  background-color: #FAFAF9;
+  border-radius: 50%;
+}
+
+.resourceTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 0.5rem;
+}
+
+.resourceNotice {
+  color: var(--color-text-muted);
+  margin-bottom: 2rem;
+  max-width: 400px;
+}
+
+.actionButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--color-text-main);
+  color: white;
+  padding: 0.875rem 2rem;
+  border-radius: 8px;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.actionButton:hover {
+  background-color: black;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.15);
+}
+
+/* PDF Viewer */
+.pdfStage {
+  width: 100%;
+  height: 80vh; /* Tall enough to read comfortably */
+  background-color: var(--color-bg-white);
+  border-radius: var(--radius-soft);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+}
+
+.pdfToolbar {
+  padding: 1rem 1.5rem;
+  background-color: #FAFAF9;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pdfTitle {
+  font-weight: 700;
+  font-size: 0.95rem;
+}
+
+.actionButtonSmall {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background-color: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  color: var(--color-text-main);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.actionButtonSmall:hover {
+  background-color: #F5F5F4;
+}
+
+.pdfIframe {
+  flex: 1;
+  width: 100%;
+  border: none;
+  background-color: #525659; /* Standard PDF reader background */
+}
+
+/* Text & Info Box */
+.infoCard {
+  background-color: var(--color-bg-white);
+  border-radius: var(--radius-soft);
+  border: 1px solid var(--color-border);
+  padding: 2.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+}
+
+.activeTitle {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 1.5rem;
+  color: var(--color-text-main);
+}
+
+.textBody {
+  font-size: 1.1rem;
+  line-height: 1.7;
+  color: #44403C;
+}
+
+.textBody p {
+  margin-bottom: 1.25rem;
+}
+
+.spinIcon {
+  animation: spin 1s linear infinite;
+  margin-bottom: 1.5rem;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   MOBILE RESPONSIVENESS
+   ========================================================================== */
+/* ==========================================================================
+   MOBILE RESPONSIVENESS
+   ========================================================================== */
+@media (max-width: 860px) {
+  .layout {
+    flex-direction: column;
+    height: auto;
+    min-height: 100vh;
+    overflow: visible; /* Release 100vh lock so mobile can scroll normally */
+  }
+
+  /* Main stage sits naturally below the sidebar */
+  .mainStage {
+    overflow: visible;
+  }
+
+  .contentContainer {
+    padding: 1.5rem 1rem;
+    gap: 1.5rem;
+  }
+
+  .sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--color-border); /* Moved border to bottom */
+  }
+
+  .pdfStage {
+    height: 60vh;
+  }
+}

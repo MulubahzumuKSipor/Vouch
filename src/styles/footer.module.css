@@ -1,0 +1,363 @@
+/* ═══════════════════════════════════════════════════════════════
+   DIGITAL KENTE — Footer
+   Deep night canvas with golden kente accents
+   The closing pattern - woven threads completing the tapestry
+   ═══════════════════════════════════════════════════════════════ */
+
+.footer {
+  --night: #111827;
+  --night-mid: #1F2937;
+  --night-light: #374151;
+  --gold: #F59E0B;
+  --gold-deep: #D97706;
+  --gold-light: #FCD34D;
+  --green: #059669;
+  --red: #DC2626;
+  --white: #F3F4F6;
+  --white-muted: #9CA3AF;
+
+  position: relative;
+  background: linear-gradient(180deg, var(--night) 0%, #0D1117 100%);
+  color: var(--white);
+  padding: clamp(60px, 8vw, 80px) clamp(20px, 5vw, 48px) clamp(24px, 4vw, 32px);
+  overflow: hidden;
+}
+
+/* Animated kente ribbon at top - the signature closing element */
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  background: linear-gradient(90deg,
+    #D97706 0%, #B45309 15%, #059669 30%, #DC2626 45%,
+    #FCD34D 60%, #B45309 75%, #059669 90%, #D97706 100%);
+  background-size: 200% 100%;
+  animation: kenteRibbon 8s linear infinite;
+}
+
+@keyframes kenteRibbon {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+/* Subtle kente weave in the background */
+.footer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    /* Horizontal bands */
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 60px,
+      rgba(217, 119, 6, 0.04) 60px,
+      rgba(217, 119, 6, 0.04) 62px
+    ),
+    /* Vertical threads */
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 60px,
+      rgba(5, 150, 105, 0.03) 60px,
+      rgba(5, 150, 105, 0.03) 62px
+    ),
+    /* Diagonal weave */
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 28px,
+      rgba(220, 38, 38, 0.02) 28px,
+      rgba(220, 38, 38, 0.02) 30px
+    );
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* ══ MAIN GRID ══════════════════════════════════════════════════ */
+.grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  gap: clamp(32px, 5vw, 56px);
+  margin-bottom: clamp(48px, 6vw, 64px);
+}
+
+/* ══ BRAND COLUMN ═══════════════════════════════════════════════ */
+.brandColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  max-width: 360px;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: white;
+  transition: transform 0.2s;
+}
+
+.logo:hover {
+  transform: scale(1.02);
+}
+
+.logoIcon {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
+  color: var(--night);
+  font-weight: 900;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  font-size: 1.35rem;
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+}
+
+.logoText {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.tagline {
+  color: var(--white-muted);
+  font-size: 1rem;
+  line-height: 1.55;
+}
+
+/* ══ NEWSLETTER ═════════════════════════════════════════════════ */
+.newsletter {
+  margin-top: 8px;
+}
+
+.newsletterLabel {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: white;
+  margin-bottom: 12px;
+}
+
+.newsletterForm {
+  display: flex;
+  gap: 8px;
+}
+
+.newsletterInput {
+  background: var(--night-mid);
+  border: 2px solid var(--night-light);
+  color: white;
+  padding: 12px 16px;
+  border-radius: 10px;
+  width: 100%;
+  font-size: 0.9rem;
+  transition: all 0.2s;
+}
+
+.newsletterInput:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(217, 119, 6, 0.15);
+}
+
+.newsletterInput::placeholder {
+  color: var(--white-muted);
+}
+
+.newsletterButton {
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-deep) 100%);
+  color: var(--night);
+  border: none;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+  box-shadow: 0 2px 8px rgba(217, 119, 6, 0.25);
+}
+
+.newsletterButton:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(217, 119, 6, 0.35);
+}
+
+/* ══ LINKS COLUMNS ══════════════════════════════════════════════ */
+.linksColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.columnTitle {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 800;
+  color: var(--gold);
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Kente accent beside column title */
+.columnTitle::before {
+  content: '';
+  width: 3px;
+  height: 16px;
+  background: linear-gradient(180deg, var(--gold), var(--green));
+  border-radius: 2px;
+}
+
+.linkList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.link {
+  color: #D1D5DB;
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.link::before {
+  content: '';
+  width: 0;
+  height: 2px;
+  background: var(--gold);
+  border-radius: 1px;
+  transition: width 0.2s;
+}
+
+.link:hover {
+  color: white;
+}
+
+.link:hover::before {
+  width: 12px;
+}
+
+/* ══ BOTTOM BAR ═════════════════════════════════════════════════ */
+.bottomBar {
+  padding-top: clamp(20px, 3vw, 28px);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  position: relative;
+}
+
+/* Kente accent on border */
+.bottomBar::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  width: 80px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--green), var(--red));
+  border-radius: 1px;
+}
+
+.copyright {
+  color: #6B7280;
+  font-size: 0.9rem;
+}
+
+/* ══ SOCIAL LINKS ═══════════════════════════════════════════════ */
+.socials {
+  display: flex;
+  gap: 18px;
+}
+
+.socialLink {
+  color: var(--white-muted);
+  transition: all 0.2s;
+  padding: 8px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.socialLink:hover {
+  color: var(--gold);
+  background: rgba(217, 119, 6, 0.1);
+  transform: translateY(-3px);
+}
+
+/* ══ ANIMATIONS ═════════════════════════════════════════════════ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.brandColumn { animation: fadeInUp 0.6s cubic-bezier(0.22, 0.68, 0, 1.2) both; }
+.linksColumn:nth-child(2) { animation: fadeInUp 0.6s cubic-bezier(0.22, 0.68, 0, 1.2) 0.05s both; }
+.linksColumn:nth-child(3) { animation: fadeInUp 0.6s cubic-bezier(0.22, 0.68, 0, 1.2) 0.1s both; }
+.linksColumn:nth-child(4) { animation: fadeInUp 0.6s cubic-bezier(0.22, 0.68, 0, 1.2) 0.15s both; }
+.linksColumn:nth-child(5) { animation: fadeInUp 0.6s cubic-bezier(0.22, 0.68, 0, 1.2) 0.2s both; }
+.bottomBar { animation: fadeInUp 0.6s cubic-bezier(0.22, 0.68, 0, 1.2) 0.25s both; }
+
+/* ══ RESPONSIVE ═════════════════════════════════════════════════ */
+@media (max-width: 1024px) {
+  .grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+  .brandColumn {
+    grid-column: span 2;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+  }
+
+  .brandColumn {
+    grid-column: span 1;
+  }
+
+  .newsletterForm {
+    flex-direction: column;
+  }
+
+  .newsletterButton {
+    width: 100%;
+  }
+
+  .bottomBar {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .bottomBar::before {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

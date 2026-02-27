@@ -1,0 +1,451 @@
+/* --- COLOR PALETTE VARIABLES --- */
+/* We scope these to the .main container so they are available everywhere inside */
+.main {
+  --color-bg-sand: #FCFAF8;      /* Soft, warm cream */
+  --color-bg-white: #FFFFFF;     /* Pure white for contrast */
+  --color-bg-stone: #F5F5F4;     /* Very light earthy gray */
+  --color-bg-charcoal: #292524;  /* Deep, warm charcoal */
+  --color-terracotta: #C2410C;   /* Earthy burnt orange */
+  --color-terracotta-dark: #9A3412;
+  --color-text-main: #292524;
+  --color-text-muted: #78716C;
+  --color-text-light: #E7E5E4;
+  --radius-soft: 12px;
+
+  font-family: system-ui, -apple-system, sans-serif;
+  color: var(--color-text-main);
+  overflow-x: hidden;
+}
+
+/* --- GLOBAL LAYOUT --- */
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 20px;
+  position: relative;
+  z-index: 2;
+}
+
+.sectionTitle {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.subtleTexture {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(var(--color-text-muted) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.04;
+  z-index: 1;
+}
+
+/* --- 1. HERO (Warm Sand) --- */
+.heroSection {
+  background-color: var(--color-bg-sand);
+  padding: 50px 0 100px;
+  position: relative;
+  text-align: center;
+  border-bottom: 1px solid #E7E5E4;
+}
+
+.eyebrow {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-terracotta);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.eyebrow::before,
+.eyebrow::after {
+  content: "❖";
+  font-size: 0.6rem;
+  opacity: 0.4;
+}
+
+.headline {
+  font-size: clamp(2.5rem, 5vw, 4.5rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  max-width: 800px;
+  margin-inline: auto;
+}
+
+.highlight {
+  position: relative;
+  display: inline-block;
+}
+
+.highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background-color: var(--color-terracotta);
+  opacity: 0.2;
+  z-index: -1;
+}
+
+.subheadline {
+  font-size: 1.25rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  max-width: 650px;
+  margin: 0 auto 3rem auto;
+}
+
+.buttonGroup {
+  display: flex;
+  justify-content: center;
+}
+
+.primaryBtn {
+  background-color: var(--color-terracotta);
+  color: white;
+  padding: 1.125rem 2.5rem;
+  border-radius: var(--radius-soft);
+  font-weight: 600;
+  font-size: 1.125rem;
+  transition: transform 0.2s ease, background-color 0.2s ease;
+  box-shadow: 0 4px 14px rgba(194, 65, 12, 0.2);
+}
+
+.primaryBtn:hover {
+  background-color: var(--color-terracotta-dark);
+  transform: translateY(-2px);
+}
+
+/* --- 2. THE REALITY (Pure White) --- */
+.problemSection {
+  background-color: var(--color-bg-white);
+  padding: 100px 0;
+}
+
+.problemGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .problemGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.problemText p {
+  font-size: 1.125rem;
+  color: var(--color-text-muted);
+  line-height: 1.7;
+  margin-bottom: 1.5rem;
+}
+
+.problemText strong {
+  color: var(--color-text-main);
+  font-weight: 700;
+}
+
+.imageBox {
+  background-color: var(--color-bg-sand);
+  border-radius: var(--radius-soft);
+  padding: 3rem;
+  height: 100%;
+  min-height: 300px;
+  display: flex;
+  align-items: flex-end;
+  border: 1px solid #E7E5E4;
+}
+
+.imageQuote {
+  font-size: 1.125rem;
+  font-weight: 600;
+  font-style: italic;
+  color: var(--color-terracotta-dark);
+}
+
+/* --- 3. THE TOOLS (Soft Stone) --- */
+.toolsSection {
+  background-color: var(--color-bg-stone);
+  padding: 100px 0;
+}
+
+.centerHeader {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 4rem auto;
+}
+
+.sectionSubtitle {
+  font-size: 1.125rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.toolsGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .toolsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.toolCard {
+  background: var(--color-bg-white);
+  padding: 2.5rem 2rem;
+  border-radius: var(--radius-soft);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+  transition: transform 0.2s;
+}
+
+.toolCard:hover {
+  transform: translateY(-5px);
+}
+
+.toolCard h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.toolCard p {
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.toolIcon {
+  color: var(--color-terracotta);
+  margin-bottom: 1.5rem;
+}
+
+/* --- 4. LOCAL ADVANTAGE (Warm Sand) --- */
+.paymentsSection {
+  background-color: var(--color-bg-sand);
+  padding: 100px 0;
+  position: relative;
+}
+
+.paymentsLayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .paymentsLayout {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.mockupReceipt {
+  background: white;
+  padding: 2rem;
+  border-radius: var(--radius-soft);
+  border: 1px solid #E7E5E4;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.05);
+  max-width: 350px;
+  margin: 0 auto;
+}
+
+.receiptHeader {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.receiptAmount {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #059669;
+  margin-bottom: 1.5rem;
+}
+
+.receiptMethod {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  background: var(--color-bg-stone);
+  padding: 0.75rem;
+  border-radius: 8px;
+}
+
+.checkList {
+  list-style: none;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.checkList li {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.checkList strong {
+  font-size: 1.125rem;
+  font-weight: 700;
+}
+
+.checkList span {
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+/* --- 5. VALUES (Deep Charcoal) --- */
+.valuesSection {
+  background-color: var(--color-bg-charcoal);
+  padding: 100px 0;
+  color: white;
+}
+
+.centerHeaderLight {
+  text-align: center;
+  max-width: 600px;
+  margin: 0 auto 4rem auto;
+}
+
+.sectionTitleLight {
+  font-size: clamp(2rem, 4vw, 3rem);
+  font-weight: 800;
+  line-height: 1.15;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+  color: white;
+}
+
+.sectionSubtitleLight {
+  font-size: 1.125rem;
+  color: var(--color-text-light);
+  line-height: 1.6;
+}
+
+.valuesGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .valuesGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.valueItem {
+  text-align: center;
+}
+
+.valueItem h4 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.valueItem p {
+  color: var(--color-text-light);
+  line-height: 1.6;
+}
+
+.accentIcon {
+  color: var(--color-terracotta);
+  margin-bottom: 1rem;
+}
+
+/* --- 6. FINAL CTA (Terracotta) --- */
+.ctaSection {
+  background-color: var(--color-terracotta);
+  padding: 100px 0;
+  text-align: center;
+  color: white;
+}
+
+.ctaTitle {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.ctaSubtitle {
+  font-size: 1.25rem;
+  color: rgba(255,255,255,0.8);
+  margin-bottom: 3rem;
+}
+
+.ctaBtn {
+  background-color: white;
+  color: var(--color-terracotta);
+  padding: 1.125rem 2.5rem;
+  border-radius: var(--radius-soft);
+  font-weight: 700;
+  font-size: 1.125rem;
+  box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+  display: inline-block;
+}
+
+.ctaBtn:hover {
+  transform: translateY(-2px);
+}
+
+/* --- THE REALITY IMAGE STYLING --- */
+.imageBox {
+  position: relative;
+  border-radius: var(--radius-soft);
+  padding: 2.5rem 2rem;
+  height: 100%;
+  min-height: 400px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.teacherImage {
+  object-fit: cover;
+  object-position: center; /* Adjust this to 'top' or 'bottom' if the face is cut off */
+  z-index: 1;
+}
+
+/* Gradient shadow that fades up from the bottom */
+.imageOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(41, 37, 36, 0.85) 0%, rgba(41, 37, 36, 0) 60%);
+  z-index: 2;
+}
+
+.imageQuote {
+  font-size: 1.25rem;
+  font-weight: 600;
+  font-style: italic;
+  color: white; /* Crisp white against the dark gradient overlay */
+  position: relative;
+  z-index: 3;
+  line-height: 1.5;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); /* Ensures readability over any part of the image */
+}

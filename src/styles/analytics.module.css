@@ -1,0 +1,168 @@
+.container {
+  padding: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.header {
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 4px;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 14px;
+}
+
+/* KPI Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.cardLabel {
+  font-size: 13px;
+  color: #666;
+  font-weight: 500;
+}
+
+.cardValue {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+/* Icons */
+.iconGold { color: #f59e0b; }
+.iconBlue { color: #3b82f6; }
+.iconGreen { color: #10b981; }
+.iconPurple { color: #8b5cf6; }
+
+/* Chart Area */
+.chartContainer {
+  margin-bottom: 24px;
+  min-height: 400px;
+}
+
+.chartTitle {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a1a1a;
+  margin-bottom: 24px;
+}
+
+.chartWrapper {
+  width: 100%;
+  height: 300px;
+}
+
+/* Bottom Grid */
+.bottomGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.pieWrapper {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.legend {
+  flex: 1;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+  font-size: 13px;
+}
+
+.legendDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.legendText {
+  color: #666;
+  flex: 1;
+}
+
+.legendValue {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+/* Insights */
+.insightItem {
+  display: flex;
+  gap: 16px;
+  padding: 16px 0;
+  border-bottom: 1px solid #f5f5f5;
+}
+
+.insightItem:last-child {
+  border-bottom: none;
+}
+
+.insightIcon {
+  color: #1a1a1a;
+  background: #f5f5f5;
+  padding: 8px;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+}
+
+.insightItem h4 {
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+
+.insightItem p {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.4;
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .bottomGrid {
+    grid-template-columns: 1fr;
+  }
+  
+  .pieWrapper {
+    flex-direction: column;
+  }
+  
+  .legend {
+    width: 100%;
+  }
+}

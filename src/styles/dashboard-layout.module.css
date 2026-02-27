@@ -1,0 +1,145 @@
+/* --- LAYOUT VARIABLES --- */
+.layoutContainer {
+  --sidebar-width: 280px;
+  --header-height: 64px;
+  --color-bg-main: #FCFAF8;
+  --color-bg-white: #FFFFFF;
+  --color-border: #E7E5E4;
+  --color-text-main: #292524;
+  --color-terracotta: #C2410C;
+
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--color-bg-main);
+  position: relative;
+}
+
+/* --- MOBILE HEADER (Hidden on Desktop) --- */
+.mobileHeader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: var(--header-height);
+  background-color: var(--color-bg-white);
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  z-index: 40; /* Above content, below sidebar */
+}
+
+.menuBtn {
+  background: transparent;
+  border: none;
+  color: var(--color-text-main);
+  cursor: pointer;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background-color 0.2s;
+}
+
+.menuBtn:hover {
+  background-color: #F5F5F4;
+}
+
+.mobileLogo {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 800;
+  font-size: 1.25rem;
+  color: var(--color-text-main);
+  text-decoration: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.logoIcon {
+  background-color: var(--color-text-main);
+  color: white;
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.9rem;
+}
+
+.mobileActions {
+  width: 40px; /* Balances the header flex layout against the menu button */
+}
+
+/* --- SIDEBAR WRAPPER --- */
+.sidebarWrapper {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--sidebar-width);
+  background-color: var(--color-bg-white);
+  border-right: 1px solid var(--color-border);
+  z-index: 50; /* Highest z-index to slide over mobile header */
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebarOpen {
+  transform: translateX(0);
+}
+
+/* --- MOBILE OVERLAY --- */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(41, 37, 36, 0.4);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  z-index: 45; /* Above header, below sidebar */
+  opacity: 1;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* --- MAIN CONTENT --- */
+.mainContent {
+  flex: 1;
+  width: 100%;
+  padding-top: var(--header-height); /* Clear the mobile header */
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* --- DESKTOP BREAKPOINT (768px and up) --- */
+@media (min-width: 768px) {
+  .mobileHeader {
+    display: none; /* Hide mobile header entirely */
+  }
+
+  .sidebarWrapper {
+    transform: translateX(0); /* Sidebar always visible */
+    transition: none; /* Remove sliding animation */
+  }
+
+  .mainContent {
+    padding-top: 0;
+    margin-left: var(--sidebar-width); /* Push content over to make room for sidebar */
+  }
+
+  .overlay {
+    display: none; /* Never show overlay on desktop */
+  }
+}

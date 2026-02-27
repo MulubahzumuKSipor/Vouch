@@ -1,0 +1,360 @@
+/* --- COLOR PALETTE (Warm African Minimalism) --- */
+.main {
+  --color-bg-sand: #FCFAF8;
+  --color-bg-white: #FFFFFF;
+  --color-bg-stone: #F5F5F4;
+  --color-text-main: #292524;
+  --color-text-muted: #78716C;
+  --color-terracotta: #C2410C;
+  --radius-soft: 12px;
+
+  font-family: system-ui, -apple-system, sans-serif;
+  color: var(--color-text-main);
+  overflow-x: hidden;
+}
+
+.container {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* --- 1. GRAND HERO (Immersive Background) --- */
+.grandHero {
+  position: relative;
+  min-height: 90vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  /* Add a wide, high-quality image to your public folder for this */
+  background-image: url('/about-hero.jpg');
+  background-size: cover;
+  background-position: center;
+  background-color: var(--color-text-main); /* Fallback color */
+}
+
+/* Dark gradient overlay to make text pop and feel cinematic */
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(41, 37, 36, 0.4), rgba(41, 37, 36, 0.85));
+  z-index: 1;
+}
+
+.grandHeroContent {
+  position: relative;
+  z-index: 2;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.grandHeadline {
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 800;
+  color: white;
+  line-height: 1.1;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+  text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.grandSubheadline {
+  font-size: clamp(1.125rem, 2vw, 1.5rem);
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+  max-width: 650px;
+  margin: 0 auto;
+}
+
+/* --- 2. ORIGIN STORY (Warm Sand) --- */
+.originSection {
+  background-color: var(--color-bg-sand);
+  padding: 100px 0 120px;
+  position: relative;
+  border-bottom: 1px solid #E7E5E4;
+}
+
+.subtleTexture {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(var(--color-text-muted) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.04;
+  z-index: 1;
+}
+
+.originLayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 4rem;
+  align-items: center;
+}
+
+@media (min-width: 1024px) {
+  .originLayout {
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+  }
+}
+
+.textContent {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.eyebrow {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--color-terracotta);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.eyebrow::before,
+.eyebrow::after {
+  content: "❖";
+  font-size: 0.6rem;
+  opacity: 0.4;
+}
+
+.headline {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  font-weight: 800;
+  line-height: 1.1;
+  margin-bottom: 2rem;
+  letter-spacing: -0.02em;
+}
+
+.highlight {
+  position: relative;
+  display: inline-block;
+}
+
+.highlight::after {
+  content: '';
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  width: 100%;
+  height: 8px;
+  background-color: var(--color-terracotta);
+  opacity: 0.2;
+  z-index: -1;
+}
+
+.prose {
+  max-width: 600px;
+}
+
+.prose p {
+  font-size: 1.125rem;
+  color: var(--color-text-muted);
+  line-height: 1.8;
+  margin-bottom: 1.5rem;
+}
+
+.visualContent {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-soft);
+  overflow: hidden;
+  z-index: 2;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  border: 1px solid #E7E5E4;
+  background-color: var(--color-bg-stone);
+}
+
+.originImage {
+  object-fit: cover;
+  object-position: center;
+}
+
+.imageOverlay {
+  position: absolute;
+  inset: 0;
+  background-color: var(--color-terracotta);
+  opacity: 0.05;
+  mix-blend-mode: multiply;
+}
+
+.accentBlock {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 70%;
+  height: 70%;
+  background-color: var(--color-terracotta);
+  border-radius: var(--radius-soft);
+  z-index: 1;
+  opacity: 0.1;
+}
+
+@media (min-width: 768px) {
+  .accentBlock {
+    bottom: -30px;
+    right: -30px;
+  }
+}
+
+/* --- 3. THE TEAM --- */
+.teamSection {
+  background-color: var(--color-bg-white);
+  padding: 100px 0;
+}
+
+.sectionHeader {
+  margin-bottom: 4rem;
+  max-width: 600px;
+}
+
+.sectionTitle {
+  font-size: clamp(2rem, 3vw, 2.5rem);
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.sectionSubtitle {
+  font-size: 1.125rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+.teamGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+}
+
+@media (min-width: 768px) {
+  .teamGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.teamCard {
+  display: flex;
+  flex-direction: column;
+}
+
+.photoWrapper {
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  background-color: var(--color-bg-stone);
+  border-radius: var(--radius-soft);
+  margin-bottom: 1.5rem;
+  overflow: hidden;
+  position: relative;
+  border: 1px solid #E7E5E4;
+}
+
+.photoPlaceholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  color: #D6D3D1;
+}
+
+.teamName {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 0.25rem;
+}
+
+.teamRole {
+  font-size: 0.875rem;
+  color: var(--color-terracotta);
+  font-weight: 600;
+  margin-bottom: 1rem;
+}
+
+.teamBio {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* --- 4. CONTACT & CAREERS --- */
+.contactSection {
+  background-color: var(--color-bg-stone);
+  padding: 100px 0;
+}
+
+.contactLayout {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+  background-color: var(--color-bg-white);
+  padding: 4rem;
+  border-radius: var(--radius-soft);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+}
+
+@media (min-width: 768px) {
+  .contactLayout {
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem;
+  }
+}
+
+.contactBox {
+  display: flex;
+  flex-direction: column;
+}
+
+.contactTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+.contactText {
+  color: var(--color-text-muted);
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+
+.textLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--color-terracotta);
+  font-weight: 600;
+  transition: opacity 0.2s;
+}
+
+.textLink:hover {
+  opacity: 0.8;
+}
+
+.contactItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.contactIcon {
+  color: var(--color-terracotta);
+}

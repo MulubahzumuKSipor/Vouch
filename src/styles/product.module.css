@@ -1,0 +1,362 @@
+/* --- LAYOUT --- */
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 6rem;
+}
+
+/* Breadcrumbs */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+  color: #6B7280;
+}
+
+.breadLink {
+  color: #6B7280;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.breadLink:hover {
+  color: #111827;
+  text-decoration: underline;
+}
+
+.breadSep {
+  color: #D1D5DB;
+}
+
+.breadCurrent {
+  color: #111827;
+  font-weight: 700;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* --- GRID LAYOUT --- */
+.grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr; /* Image is slightly wider */
+  gap: 3rem;
+  align-items: start;
+}
+
+/* --- VISUALS COLUMN (Left) --- */
+.visualsColumn {
+  position: sticky;
+  top: 100px; /* Sticky scroll effect */
+}
+
+.imageContainer {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4/3;
+  background: #F3F4F6;
+  border: 2px solid #111827;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 8px 8px 0px #E5E7EB; /* Subtle shadow */
+  margin-bottom: 1.5rem;
+}
+
+.heroImage {
+  object-fit: cover;
+}
+
+.placeholderHero {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4rem;
+  font-weight: 800;
+  color: #9CA3AF;
+}
+
+.trustRow {
+  display: flex;
+  justify-content: center;
+  gap: 1.5rem;
+  color: #4B5563;
+}
+
+.trustItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* --- DETAILS COLUMN (Right) --- */
+.detailsColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.typeBadgeWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.typeBadge {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.35rem 0.75rem;
+  border-radius: 6px;
+}
+
+.type_course { background: #FEF3C7; color: #D97706; }
+.type_service { background: #ECFDF5; color: #059669; }
+.type_asset { background: #EFF6FF; color: #2563EB; }
+
+.ratingBadge {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #F59E0B;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: #111827;
+  line-height: 1.1;
+  margin: 0 0 1rem 0;
+}
+
+/* Creator Link */
+.creatorLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  padding: 0.5rem 0;
+  transition: opacity 0.2s;
+}
+
+.creatorLink:hover {
+  opacity: 0.8;
+}
+
+.avatarSmall {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: #E5E7EB;
+}
+
+.avatarImg {
+  object-fit: cover;
+}
+
+.avatarPlaceholder {
+  width: 100%;
+  height: 100%;
+  background: #111827;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.7rem;
+  font-weight: 700;
+}
+
+.creatorName {
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+/* --- BUY CARD --- */
+.buyCard {
+  background: #F9FAFB;
+  border: 2px solid #111827;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 6px 6px 0px #111827;
+}
+
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.mainPrice {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #111827;
+}
+
+.buyButton {
+  width: 100%;
+  background: #F59E0B; /* Vouch Gold */
+  color: #111827;
+  font-size: 1.125rem;
+  font-weight: 800;
+  padding: 1rem;
+  border: 2px solid #111827;
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 4px 4px 0px #111827;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.buyButton:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0px #111827;
+  background: #FBBF24;
+}
+
+.buyButton:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0px 0px 0px;
+}
+
+.guaranteeText {
+  text-align: center;
+  font-size: 0.8rem;
+  color: #6B7280;
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+/* --- DESCRIPTION --- */
+.descriptionSection {
+  margin-top: 1rem;
+}
+
+.descTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 1rem;
+  color: #111827;
+}
+
+.descriptionText {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #4B5563;
+}
+
+.descriptionText p {
+  margin-bottom: 1rem;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .visualsColumn {
+    position: static; /* Remove sticky on mobile */
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+}
+
+/* Update the item layout to handle the split link/action */
+.itemWrapper {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  margin-bottom: 0.75rem;
+  transition: all 0.2s;
+  position: relative; /* For dropdown positioning */
+}
+
+.itemWrapper:hover {
+  border-color: #D1D5DB;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.itemMainLink {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Dropdown Menu Styles */
+.dropdownMenu {
+  position: absolute;
+  right: 1rem;
+  top: 3.5rem;
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  width: 200px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem;
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border: none;
+  background: transparent;
+  width: 100%;
+  text-align: left;
+  font-size: 0.9rem;
+  color: #374151;
+  border-radius: 6px;
+  cursor: pointer;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.dropdownItem:hover {
+  background: #F3F4F6;
+  color: #111827;
+}
+
+.buyButton {
+  /* Existing styles... */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.accessButton {
+  background-color: #059669; /* Kente Green for "You Own This" */
+  border-color: #059669;
+}
+.accessButton:hover {
+  background-color: #047857;
+}

@@ -1,0 +1,341 @@
+/* --- APP STRUCTURE & VARIABLES --- */
+.container {
+  --color-bg-white: #FFFFFF;
+  --color-bg-stone: #F5F5F4;
+  --color-border: #E7E5E4;
+  --color-text-main: #292524;
+  --color-text-muted: #78716C;
+  --color-terracotta: #C2410C;
+  --radius-soft: 12px;
+
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 5rem;
+}
+
+/* --- HEADER --- */
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 600px) {
+  .header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+}
+
+.title {
+  font-size: clamp(2rem, 3vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  margin-bottom: 0.25rem;
+  color: var(--color-text-main);
+}
+
+.subtitle {
+  font-size: 1.125rem;
+  color: var(--color-text-muted);
+}
+
+.exportBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  background-color: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-text-main);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.exportBtn:hover {
+  background-color: var(--color-bg-stone);
+}
+
+/* --- VIEW TOGGLE (Sales / Purchases) --- */
+.viewToggle {
+  display: flex;
+  background-color: var(--color-bg-stone);
+  padding: 0.25rem;
+  border-radius: 10px;
+  border: 1px solid var(--color-border);
+  margin-bottom: 2rem;
+  width: fit-content;
+}
+
+.toggleBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem;
+  border: none;
+  background: transparent;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.activeToggle {
+  background-color: var(--color-bg-white);
+  color: var(--color-text-main);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+/* --- CONTROLS (Search & Filter) --- */
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+@media (min-width: 600px) {
+  .controls {
+    flex-direction: row;
+  }
+}
+
+.searchWrap {
+  position: relative;
+  flex-grow: 1;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+}
+
+.searchInput {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-white);
+  font-family: inherit;
+  font-size: 0.95rem;
+  transition: all 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--color-terracotta);
+  box-shadow: 0 0 0 3px rgba(194, 65, 12, 0.1);
+}
+
+.filterWrap {
+  position: relative;
+  min-width: 160px;
+}
+
+.filterIcon {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+.filterSelect {
+  width: 100%;
+  padding: 0.75rem 1rem 0.75rem 2.5rem;
+  border-radius: 8px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-bg-white);
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--color-text-main);
+  cursor: pointer;
+  appearance: none; /* Removes default dropdown arrow for cleaner look */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.filterSelect:focus {
+  outline: none;
+  border-color: var(--color-text-muted);
+}
+
+/* --- ORDERS LIST CARDS --- */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.card {
+  background-color: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-soft);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.04);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 1.5rem;
+  background-color: #FAFAF9;
+  border-bottom: 1px solid var(--color-border);
+  border-radius: var(--radius-soft) var(--radius-soft) 0 0;
+}
+
+.orderMeta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.orderNumber {
+  color: var(--color-text-main);
+  font-family: monospace;
+  font-size: 0.9rem;
+}
+
+.dot { color: #D6D3D1; }
+
+.statusBadge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.25rem 0.6rem;
+  border-radius: 20px;
+}
+
+/* Dynamic Status Colors */
+.completed { background: #D1FAE5; color: #065F46; }
+.pending { background: #FEF3C7; color: #92400E; }
+.refunded { background: #FEE2E2; color: #991B1B; }
+.failed { background: var(--color-bg-stone); color: var(--color-text-muted); }
+
+.cardBody {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 600px) {
+  .cardBody {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}
+
+.productInfo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.iconBox {
+  width: 48px;
+  height: 48px;
+  background-color: var(--color-bg-stone);
+  color: var(--color-text-muted);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.productTitle {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin-bottom: 0.25rem;
+}
+
+.amount {
+  font-size: 0.9rem;
+  color: var(--color-terracotta);
+  font-weight: 600;
+}
+
+.counterparty {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  background-color: #FAFAF9;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  min-width: 200px;
+}
+
+.userRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.userIcon { color: #A8A29E; }
+.userName { font-weight: 600; color: var(--color-text-main); }
+.emailRow { font-size: 0.8rem; color: var(--color-text-muted); padding-left: 1.5rem; }
+
+.cardFooter {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--color-border);
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+
+.detailsLink, .actionLink {
+  font-size: 0.85rem;
+  font-weight: 700;
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+
+.detailsLink { color: var(--color-text-muted); }
+.detailsLink:hover { color: var(--color-text-main); }
+
+.actionLink { color: var(--color-terracotta); }
+.actionLink:hover { opacity: 0.8; }
+
+/* --- EMPTY STATE --- */
+.emptyState {
+  background-color: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-soft);
+  padding: 5rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.emptyIcon { color: #D6D3D1; margin-bottom: 1.5rem; }
+.emptyState h3 { font-size: 1.25rem; font-weight: 800; margin-bottom: 0.5rem; color: var(--color-text-main); }
+.emptyState p { color: var(--color-text-muted); max-width: 400px; }

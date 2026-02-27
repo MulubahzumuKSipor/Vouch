@@ -1,0 +1,234 @@
+/* --- LAYOUT & CONTAINERS --- */
+.section {
+  position: relative;
+  padding: 120px 0;
+  background-color: var(--bg-kente-amber); /* Deep, rich terracotta */
+  color: white; 
+  overflow: hidden;
+  border-top: 2px solid var(--color-border);
+}
+
+/* --- THEME-SPECIFIC BACKGROUND PATTERNS --- */
+
+/* 1. Financial Ledger Grid */
+.bgPatternGrid {
+  position: absolute;
+  inset: 0;
+  background-image: 
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 60px 60px; /* Large architectural squares */
+  z-index: 1;
+}
+
+/* 2. Mobile Money Signal Waves (Emanating from the mockup) */
+.bgPatternWaves {
+  position: absolute;
+  top: 50%;
+  right: -10%;
+  transform: translateY(-50%);
+  width: 1000px;
+  height: 1000px;
+  background-image: repeating-radial-gradient(
+    circle at center,
+    transparent,
+    transparent 60px,
+    rgba(252, 211, 77, 0.08) 60px, /* Kente Yellow tint */
+    rgba(252, 211, 77, 0.08) 62px
+  );
+  z-index: 2;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 5rem;
+  align-items: center;
+  position: relative;
+  z-index: 5; /* Keeps content strictly above the patterns */
+}
+
+@media (min-width: 1024px) {
+  .container {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* --- LEFT SIDE: TYPOGRAPHY --- */
+.content {
+  max-width: 540px;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #FCD34D; 
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: clamp(2.5rem, 5vw, 4rem);
+  line-height: 1.1;
+  font-weight: 800;
+  color: white;
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.highlight {
+  color: #FCD34D; 
+}
+
+.description {
+  font-size: 1.125rem;
+  color: #D1D5DB; 
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+}
+
+.descriptionSecondary {
+  font-size: 1rem;
+  color: #9CA3AF; 
+  margin-bottom: 3rem;
+  line-height: 1.6;
+}
+
+/* --- STATS ROW --- */
+.statRow {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  padding: 2rem 0;
+  border-top: 1px dashed rgba(255, 255, 255, 0.2);
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.2);
+}
+
+.statBlock {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.statNumber {
+  font-size: 2rem;
+  font-weight: 800;
+  color: white;
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #9CA3AF;
+}
+
+.divider {
+  width: 1px;
+  height: 40px;
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* --- PAYMENT METHODS --- */
+.paymentMethods {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.methodsLabel {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #D1D5DB;
+}
+
+.methodsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.methodBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  background-color: rgba(255, 255, 255, 0.1); 
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--radius-sm);
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: white;
+  backdrop-filter: blur(4px);
+}
+
+.methodIcon {
+  font-size: 1.25rem;
+}
+
+/* --- RIGHT SIDE: VISUAL MOCKUP --- */
+.visualWrapper {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  margin: 0 auto;
+  perspective: 1000px;
+}
+
+.visualCard {
+  background-color: white; 
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: 12px 12px 0px rgba(0, 0, 0, 0.2); 
+  border: 2px solid var(--color-text-main);
+  position: relative;
+  z-index: 10;
+  transform: rotateY(-5deg);
+  transition: transform 0.3s ease;
+}
+
+.visualCard:hover {
+  transform: rotateY(0deg);
+}
+
+/* Incoming Block */
+.paymentBlock { padding-bottom: 1.5rem; border-bottom: 2px dashed var(--color-border); }
+.paymentLabel { font-size: 0.875rem; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+.paymentAmount { font-size: 2rem; font-weight: 800; color: var(--color-text-main); margin-bottom: 1rem; }
+.paymentTags { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+.tagOrange { font-size: 0.75rem; font-weight: 700; color: #D97706; background: #FEF3C7; padding: 0.25rem 0.5rem; border-radius: 4px; }
+.tagSuccess { font-size: 0.75rem; font-weight: 700; color: var(--color-success); background: #D1FAE5; padding: 0.25rem 0.5rem; border-radius: 4px; }
+.paymentMeta { font-size: 0.875rem; color: var(--color-text-muted); }
+
+/* Processing Animation */
+.processingBar { display: flex; flex-direction: column; align-items: center; padding: 1rem 0; gap: 0.25rem; }
+.processingLine { width: 2px; height: 24px; background-color: var(--color-border); }
+.processingDot { width: 8px; height: 8px; border-radius: 50%; background-color: var(--color-text-muted); animation: pulse 2s infinite; }
+
+/* Payout Block */
+.payoutBlock { background-color: var(--color-bg-subtle); border: 1px solid var(--color-border); border-radius: var(--radius-md); padding: 1.5rem; margin-bottom: 1.5rem; }
+.payoutLabel { font-size: 0.875rem; font-weight: 700; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 0.5rem; }
+.payoutAmount { font-size: 2rem; font-weight: 800; color: var(--color-success); margin-bottom: 1rem; }
+.payoutAmount span { font-size: 1.25rem; color: var(--color-text-muted); }
+.payoutDestination { display: flex; align-items: center; gap: 0.5rem; font-size: 0.875rem; font-weight: 600; color: var(--color-text-main); margin-bottom: 0.5rem; }
+.payoutTiming { font-size: 0.75rem; color: var(--color-text-muted); }
+
+/* Trust Badge */
+.trustBadge { display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-size: 0.75rem; font-weight: 600; color: var(--color-text-muted); }
+
+/* Floating Stats */
+.floatingCard { position: absolute; bottom: -20px; right: -20px; background-color: var(--color-text-main); border: 2px solid white; border-radius: var(--radius-md); padding: 1.5rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5); z-index: 12; }
+@media (max-width: 768px) { .floatingCard { right: 0; bottom: -40px; } }
+.floatingTitle { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: #9CA3AF; letter-spacing: 0.05em; margin-bottom: 1rem; }
+.floatingStats { display: flex; gap: 1.5rem; }
+.floatingStat { font-size: 1.5rem; font-weight: 800; color: white; }
+.floatingLabel { font-size: 0.75rem; color: #D1D5DB; }
+
+@keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(0.9); } }

@@ -1,0 +1,467 @@
+/* --- LAYOUT CONTAINER --- */
+.container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding-bottom: 4rem;
+}
+
+.pageTitle {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #111827; /* Deep Black */
+  margin-bottom: 2rem;
+  letter-spacing: -0.02em;
+}
+
+.wrapper {
+  display: flex;
+  gap: 2rem;
+  align-items: flex-start;
+}
+
+/* --- SIDEBAR NAVIGATION --- */
+.sidebar {
+  width: 240px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tabBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border: none;
+  background: transparent;
+  color: #6B7280; /* Muted Gray */
+  font-weight: 600;
+  font-size: 0.9rem;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  text-align: left;
+}
+
+.tabBtn:hover {
+  background: #F3F4F6;
+  color: #111827;
+}
+
+.active {
+  background: #FEF3C7 !important; /* Light Gold */
+  color: #B45309 !important; /* Dark Gold Text */
+}
+
+/* --- MAIN FORM CARD --- */
+.formContainer {
+  flex: 1;
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  overflow: hidden; /* Clips footer content */
+  display: flex;
+  flex-direction: column;
+}
+
+.tabContent {
+  padding: 2rem;
+}
+
+/* Section Headers */
+.sectionHeader {
+  margin-bottom: 2rem;
+}
+
+.sectionHeader h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.25rem 0;
+}
+
+.sectionHeader p {
+  font-size: 0.85rem;
+  color: #6B7280;
+  margin: 0;
+}
+
+/* --- FORM ELEMENTS --- */
+.formGroup {
+  margin-bottom: 1.5rem;
+}
+
+.formGroup label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.formGroup input, 
+.formGroup textarea, 
+.formGroup select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #D1D5DB;
+  border-radius: 0.5rem;
+  font-size: 0.95rem;
+  font-family: inherit; /* Inherit font from body */
+  background: white;
+  color: #111827;
+  transition: all 0.2s ease;
+}
+
+.formGroup input:focus,
+.formGroup textarea:focus,
+.formGroup select:focus {
+  border-color: #F59E0B; /* Vouch Gold */
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.1); /* Subtle Gold Ring */
+}
+
+.formGroup textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Grid Layout for Side-by-Side Inputs */
+.gridRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+}
+
+/* --- AVATAR UPLOAD SECTION --- */
+.avatarRow {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.avatarPreview {
+  width: 80px;
+  height: 80px;
+  /* border-radius: 50%; Circle Shape */
+  border-radius: 12px; /* Or Squared with rounded corners */
+  overflow: hidden;
+  background: #F3F4F6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #E5E7EB;
+  flex-shrink: 0;
+}
+
+/* If no image is present, show initial */
+.avatarPreview span {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #9CA3AF;
+}
+
+.avatarInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.avatarInfo p {
+  margin: 0;
+  font-weight: 600;
+  color: #374151;
+  font-size: 0.95rem;
+}
+
+.avatarInfo span {
+  font-size: 0.75rem;
+  color: #9CA3AF;
+}
+
+/* --- DIVIDERS & HINTS --- */
+.divider {
+  height: 1px;
+  background: #F3F4F6;
+  margin: 2.5rem 0;
+}
+
+.hint {
+  font-size: 0.8rem;
+  color: #D97706; /* Dark Gold Warning Text */
+  margin-top: 0.5rem;
+  background: #FFFBEB;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  display: inline-block;
+}
+
+/* --- FOOTER & ACTIONS --- */
+.footer {
+  background: #F9FAFB;
+  padding: 1.5rem 2rem;
+  border-top: 1px solid #E5E7EB;
+  display: flex;
+  justify-content: flex-end; /* Pushes button to right */
+  align-items: center;
+  gap: 1rem;
+  margin-top: auto; /* Pushes footer to bottom if content is short */
+}
+
+/* Success/Error Messages */
+.successMsg {
+  color: #059669;
+  font-size: 0.9rem;
+  font-weight: 600;
+  animation: fadeIn 0.3s ease;
+}
+
+.errorMsg {
+  color: #DC2626;
+  font-size: 0.9rem;
+  font-weight: 600;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Primary Action Button */
+.saveBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #111827; /* Black */
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.5rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.saveBtn:hover:not(:disabled) {
+  background: black;
+  color: #F59E0B; /* Gold Text */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  transform: translateY(-1px);
+}
+
+.saveBtn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Loading Spinner Animation */
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- RESPONSIVE DESIGN (Mobile) --- */
+@media (max-width: 768px) {
+  .wrapper {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto; /* Scroll tabs horizontally */
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #E5E7EB;
+  }
+
+  .tabBtn {
+    white-space: nowrap; /* Prevent tabs wrapping */
+    padding: 0.5rem 1rem;
+  }
+
+  .gridRow {
+    grid-template-columns: 1fr; /* Stack inputs */
+    gap: 1rem;
+  }
+
+  .tabContent {
+    padding: 1.5rem;
+  }
+
+  .footer {
+    padding: 1rem 1.5rem;
+    flex-direction: column; /* Stack message and button */
+    align-items: stretch;
+    text-align: center;
+  }
+
+  .saveBtn {
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+/* --- AVATAR UPLOAD SECTION --- */
+.avatarRow {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem; /* Space between the circle and the text */
+  margin-top: 0.5rem;
+}
+
+/* The Container for the ImageUploader */
+.avatarUploaderWrapper {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%; /* Forces the square uploader into a Circle */
+  overflow: hidden;   /* Clips the image corners */
+  border: 2px solid #E5E7EB; /* Subtle border ring */
+  flex-shrink: 0;     /* Prevents squishing on mobile */
+  position: relative;
+  background: #F9FAFB;
+  transition: all 0.2s ease;
+}
+
+/* Hover effect for the avatar circle */
+.avatarUploaderWrapper:hover {
+  border-color: #F59E0B; /* Vouch Gold border on hover */
+  transform: scale(1.02); /* Slight pop effect */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Text Info Side */
+.avatarInfo {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+}
+
+.avatarInfo p {
+  margin: 0;
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #111827; /* Deep Black */
+}
+
+.avatarInfo span {
+  font-size: 0.8rem;
+  color: #6B7280; /* Muted Gray */
+  font-weight: 500;
+}
+
+/* --- MOBILE ADJUSTMENT --- */
+@media (max-width: 640px) {
+  .avatarRow {
+    gap: 1rem;
+  }
+
+  .avatarUploaderWrapper {
+    width: 64px;
+    height: 64px; /* Slightly smaller on mobile */
+  }
+}
+
+/* ... existing styles ... */
+
+.inputIconWrap {
+  position: relative;
+}
+
+.inputIconWrap svg {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9CA3AF;
+  pointer-events: none;
+}
+
+.inputIconWrap input {
+  padding-left: 2.75rem; /* Make room for the icon */
+}
+
+/* --- Account Role Toggle --- */
+.roleToggleGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+@media (min-width: 600px) {
+  .roleToggleGroup {
+    flex-direction: row;
+  }
+}
+
+.roleBtn {
+  flex: 1;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 1.25rem;
+  background-color: var(--color-bg-white);
+  border: 2px solid var(--color-border);
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  color: var(--color-text-muted);
+}
+
+.roleBtn:hover {
+  border-color: #D6D3D1;
+  background-color: #FAFAF9;
+}
+
+.roleText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.roleText strong {
+  color: var(--color-text-main);
+  font-size: 1rem;
+}
+
+.roleText span {
+  font-size: 0.85rem;
+}
+
+/* Active State: Buyer */
+.roleActive {
+  border-color: var(--color-text-main);
+  background-color: #FAFAF9;
+  color: var(--color-text-main);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+
+/* Active State: Seller */
+.roleActiveSeller {
+  border-color: var(--color-terracotta);
+  background-color: var(--color-terracotta-light);
+  color: var(--color-terracotta);
+  box-shadow: 0 4px 12px rgba(194, 65, 12, 0.08);
+}
+
+.roleActiveSeller .roleText strong {
+  color: var(--color-terracotta);
+}
+
+.sectionDivider {
+  height: 1px;
+  background-color: var(--color-border);
+  margin: 2.5rem 0;
+  width: 100%;
+}

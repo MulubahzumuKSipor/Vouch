@@ -1,0 +1,185 @@
+:root {
+  /* --- BRAND COLORS --- */
+  --color-primary: #2563eb;
+  --color-primary-dark: #1d4ed8;
+  --color-primary-light: #eff6ff;
+  /* --- DEEP KENTE BACKGROUNDS (For alternating sections) --- */
+  --bg-kente-green: #022C22; /* Very deep, rich emerald */
+  --bg-kente-amber: #451A03; /* Deep, warm terracotta/brown */
+  --bg-kente-red: #450A0A;   /* Deep, dark crimson */
+  --bg-kente-charcoal: #111827; /* Almost black */
+  
+  --color-text-main: #111827;
+  --color-text-muted: #6b7280;
+  --color-text-on-dark: #ffffff;
+  
+  --color-bg-white: #ffffff;
+  --color-bg-subtle: #f9fafb;
+  --color-border: #e5e7eb;
+
+  /* --- STATUS COLORS --- */
+  --color-success: #059669;
+  --color-error: #dc2626;
+  --color-warning: #d97706;
+
+  /* --- THE VOUCH SIGNATURE (KENTE ACCENT) --- */
+  --gradient-kente: linear-gradient(90deg, #D97706, #B45309, #059669, #DC2626);
+
+  /* --- LAYOUT & SPACING --- */
+  --max-width: 1280px;
+  --nav-height: 70px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+
+  /* --- FONTS --- */
+  --font-main: var(--font-inter), system-ui, -apple-system, sans-serif;
+}
+
+/* ==========================================
+   BASE RESET & ACCESSIBILITY
+   ========================================== */
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html {
+  scroll-behavior: smooth;
+  /* Prevent font size jumping on mobile orientation change */
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  font-family: var(--font-main);
+  color: var(--color-text-main);
+  background-color: var(--color-bg-white);
+  line-height: 1.6;
+  overflow-x: hidden; /* Critical for mobile to prevent side-scrolling */
+  min-height: 100vh;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+  transition: opacity 0.2s ease;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ==========================================
+   GLOBAL UTILITY CLASSES
+   ========================================== */
+
+/**
+ * .container:
+ * Use this as a wrapper for your main content blocks. 
+ * It ensures the site doesn't stretch to infinity on 4K monitors 
+ * and maintains healthy gutters on mobile.
+ */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.25rem;
+  padding-right: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Typography Utilities */
+.text-gradient {
+  background: var(--gradient-kente);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.text-muted {
+  color: var(--color-text-muted);
+}
+
+/* Visibility Utilities */
+@media (min-width: 769px) {
+  .mobile-only { 
+    display: none !important; 
+  }
+}
+
+@media (max-width: 768px) {
+  .desktop-only { 
+    display: none !important; 
+  }
+}
+
+/* ==========================================
+   ANIMATIONS
+   ========================================== */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.9); }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideRight {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+/* Accessibility: Respect user preference for reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-delay: -1ms !important;
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    background-attachment: initial !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0s !important;
+    transition-delay: 0s !important;
+  }
+}

@@ -1,0 +1,245 @@
+/* --- LAYOUT & CONTAINERS --- */
+.section {
+  position: relative;
+  padding: 100px 0;
+  /* An ultra-light, warm off-white (hint of amber) to separate from the pure white Hero */
+  background-color: #FFFBF5; 
+  overflow: hidden;
+  border-top: 2px solid var(--color-border); /* Hard separation line */
+}
+
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 1.5rem;
+  position: relative;
+  z-index: 5;
+}
+
+/* --- BACKGROUND SHAPES (Subtle & Structural) --- */
+.bgShapeCircle {
+  position: absolute;
+  top: -10%;
+  left: -10%;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background-color: rgba(217, 119, 6, 0.03); /* Extremely faint Kente Amber */
+  z-index: 1;
+}
+
+.bgShapeRect {
+  position: absolute;
+  bottom: 0;
+  right: -5%;
+  width: 400px;
+  height: 800px;
+  background-color: var(--color-bg-white);
+  border: 1px dashed var(--color-border);
+  transform: rotate(-15deg);
+  z-index: 1;
+}
+
+/* --- HEADER --- */
+.header {
+  text-align: left;
+  max-width: 600px;
+  margin-bottom: 4rem;
+  position: relative;
+  z-index: 2;
+}
+
+@media (min-width: 768px) {
+  .header {
+    text-align: center;
+    max-width: 800px;
+    margin: 0 auto 5rem auto;
+  }
+}
+
+.eyebrowWrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.eyebrowSquare {
+  width: 12px;
+  height: 12px;
+  background: var(--gradient-kente);
+}
+
+.eyebrow {
+  font-size: 0.875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--color-text-main);
+}
+
+.title {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  line-height: 1.1;
+  font-weight: 800;
+  color: var(--color-text-main);
+  margin-bottom: 1.5rem;
+  letter-spacing: -0.02em;
+}
+
+.subtitle {
+  font-size: 1.125rem;
+  color: var(--color-text-muted);
+  line-height: 1.6;
+}
+
+/* --- GRID --- */
+.grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+  position: relative;
+  z-index: 2;
+}
+
+@media (min-width: 1024px) {
+  .grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+}
+
+/* --- CARDS (Neo-Brutalist Geometry) --- */
+.card {
+  background-color: var(--color-bg-white);
+  border: 2px solid var(--color-text-main); /* Strong structural border */
+  padding: 2.5rem 2rem;
+  position: relative;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+/* Hard Drop Shadows matching Kente colors */
+.cardCourses { box-shadow: 6px 6px 0px #D97706; } /* Kente Amber */
+.cardServices { box-shadow: 6px 6px 0px #059669; } /* Kente Green */
+.cardDigital { box-shadow: 6px 6px 0px #2563EB; }  /* Brand Blue */
+
+.card:hover {
+  transform: translate(-4px, -4px);
+}
+
+.cardCourses:hover { box-shadow: 10px 10px 0px #D97706; }
+.cardServices:hover { box-shadow: 10px 10px 0px #059669; }
+.cardDigital:hover { box-shadow: 10px 10px 0px #2563EB; }
+
+/* --- ICONS & SHAPES --- */
+/* Course: The Circle */
+.iconWrapperCircle {
+  width: 56px;
+  height: 56px;
+  background-color: #FEF3C7; /* Light Amber */
+  color: #D97706;
+  border: 2px solid var(--color-text-main);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+/* Services: The Square */
+.iconWrapperSquare {
+  width: 56px;
+  height: 56px;
+  background-color: #D1FAE5; /* Light Emerald */
+  color: #059669;
+  border: 2px solid var(--color-text-main);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+/* Digital: The Diamond */
+.iconWrapperDiamond {
+  width: 56px;
+  height: 56px;
+  background-color: #DBEAFE; /* Light Blue */
+  border: 2px solid var(--color-text-main);
+  transform: rotate(45deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+}
+
+.diamondInner {
+  transform: rotate(-45deg);
+  color: #2563EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* --- CARD CONTENT --- */
+.cardLabel {
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  color: var(--color-text-muted);
+  margin-bottom: 0.5rem;
+}
+
+.cardTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--color-text-main);
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.cardDesc {
+  font-size: 0.95rem;
+  color: var(--color-text-muted);
+  margin-bottom: 2rem;
+  line-height: 1.6;
+}
+
+/* --- FEATURE LIST --- */
+.featureList {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+  padding-bottom: 2rem;
+  border-bottom: 1px dashed var(--color-border);
+}
+
+.featureItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: var(--color-text-main);
+}
+
+.check {
+  font-weight: 800;
+  color: var(--color-text-main);
+}
+
+/* --- BOTTOM EXAMPLE --- */
+.cardExample {
+  font-size: 0.875rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.exampleLabel {
+  font-weight: 700;
+  color: var(--color-text-main);
+  display: block;
+  margin-bottom: 0.25rem;
+}

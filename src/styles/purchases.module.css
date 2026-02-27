@@ -1,0 +1,512 @@
+/* ============================================================
+   purchases.module.css
+   Vouch — Order History Page
+   Palette: Terracotta #C2410C | Sand #FCFAF8 | Charcoal #292524
+   ============================================================ */
+
+/* ── Animations ──────────────────────────────────────────── */
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes rowIn {
+  from { opacity: 0; transform: translateX(-6px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+/* ── Page container ──────────────────────────────────────── */
+.container {
+  flex: 1;
+  padding: 28px 28px 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  animation: pageIn 0.35s ease both;
+}
+
+/* ── Page header ─────────────────────────────────────────── */
+.welcomeHeader {
+  /* margin-bottom applied inline */
+}
+
+.welcomeContent {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.welcomeTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: #292524;
+  line-height: 1.15;
+}
+
+.welcomeSubtitle {
+  margin-top: 5px;
+  font-size: 0.855rem;
+  color: #78716C;
+  font-weight: 400;
+}
+
+/* ── Action button (Browse Store / Export) ───────────────── */
+.newProductBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: 8px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #44403C;
+  background: none;
+  border: 1.5px solid #E7E5E4;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: inherit;
+  transition: border-color 0.15s, color 0.15s, background 0.15s;
+  margin-top: 4px;
+}
+
+.newProductBtn:hover {
+  border-color: #44403C;
+  background: #F5F3F0;
+  color: #292524;
+}
+
+/* ── Stat cards ──────────────────────────────────────────── */
+.statsRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+
+.statCard {
+  background: #FFFFFF;
+  border: 1px solid #E7E5E4;
+  border-radius: 12px;
+  padding: 18px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  box-shadow: 0 1px 3px rgba(41,37,36,.06), 0 1px 2px rgba(41,37,36,.04);
+  position: relative;
+  overflow: hidden;
+  transition: box-shadow 0.2s, transform 0.2s;
+  animation: cardIn 0.5s cubic-bezier(.22,.68,0,1.2) both;
+}
+
+.statCard:nth-child(1) { animation-delay: 0.04s; }
+.statCard:nth-child(2) { animation-delay: 0.09s; }
+.statCard:nth-child(3) { animation-delay: 0.14s; }
+
+.statCard:hover {
+  box-shadow: 0 4px 16px rgba(41,37,36,.08), 0 2px 6px rgba(41,37,36,.04);
+  transform: translateY(-2px);
+}
+
+/* Kente accent reveals on hover */
+.statCard::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #D97706, #B45309, #059669, #DC2626);
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.statCard:hover::after {
+  opacity: 1;
+}
+
+.statLabel {
+  font-size: 0.67rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #A8A29E;
+}
+
+.statValue {
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: #292524;
+  line-height: 1;
+}
+
+.statValueAmber { color: #D97706; }
+.statValueGreen  { color: #059669; }
+
+.statNote {
+  font-size: 0.72rem;
+  color: #A8A29E;
+  margin-top: 1px;
+}
+
+/* ── Main card ───────────────────────────────────────────── */
+.card {
+  background: #FFFFFF;
+  border: 1px solid #E7E5E4;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(41,37,36,.06), 0 1px 2px rgba(41,37,36,.04);
+  animation: cardIn 0.5s cubic-bezier(.22,.68,0,1.2) 0.18s both;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 22px;
+  border-bottom: 1px solid #E7E5E4;
+}
+
+.cardTitle {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #292524;
+  letter-spacing: -0.01em;
+}
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* ── Filter tabs ─────────────────────────────────────────── */
+.filterTabs {
+  display: flex;
+  gap: 3px;
+  background: #F5F3F0;
+  border-radius: 8px;
+  padding: 3px;
+}
+
+.filterTab {
+  padding: 5px 11px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #A8A29E;
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: inherit;
+  transition: background 0.12s, color 0.12s;
+}
+
+.filterTabActive {
+  background: #FFFFFF;
+  color: #292524;
+  box-shadow: 0 1px 3px rgba(41,37,36,.06), 0 1px 2px rgba(41,37,36,.04);
+}
+
+.filterTab:not(.filterTabActive):hover {
+  color: #78716C;
+}
+
+/* ── Table column header row ─────────────────────────────── */
+.tableHeader {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 110px;
+  padding: 9px 22px;
+  background: #FCFAF8;
+  border-bottom: 1px solid #E7E5E4;
+  gap: 12px;
+}
+
+.colHead {
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: #A8A29E;
+}
+
+.colHeadRight  { text-align: right; }
+.colHeadCenter { text-align: center; }
+
+/* ── List container ──────────────────────────────────────── */
+.listContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Order row ───────────────────────────────────────────── */
+.listItem {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 110px;
+  padding: 13px 22px;
+  border-bottom: 1px solid #E7E5E4;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+  position: relative;
+  transition: background 0.1s;
+  animation: rowIn 0.35s ease both;
+}
+
+.listItem:last-child {
+  border-bottom: none;
+}
+
+.listItem:hover {
+  background: #FCFAF8;
+}
+
+/* Left terracotta indicator on hover */
+.listItem::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 8px; bottom: 8px;
+  width: 3px;
+  border-radius: 0 2px 2px 0;
+  background: #C2410C;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.listItem:hover::before {
+  opacity: 1;
+}
+
+/* Row stagger delays */
+.listItem:nth-child(1) { animation-delay: 0.22s; }
+.listItem:nth-child(2) { animation-delay: 0.27s; }
+.listItem:nth-child(3) { animation-delay: 0.32s; }
+.listItem:nth-child(4) { animation-delay: 0.37s; }
+.listItem:nth-child(5) { animation-delay: 0.42s; }
+.listItem:nth-child(6) { animation-delay: 0.47s; }
+
+/* ── Item cells ──────────────────────────────────────────── */
+.itemLeft {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  min-width: 0;
+}
+
+.itemRight {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  flex-shrink: 0;
+}
+
+.itemImage {
+  flex-shrink: 0;
+}
+
+.itemImg {
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid #E7E5E4;
+  display: block;
+}
+
+.itemText {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.itemTitle {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #292524;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.3;
+}
+
+.itemSub {
+  font-size: 0.75rem;
+  color: #A8A29E;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.itemPrice {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #292524;
+  letter-spacing: -0.01em;
+  text-align: right;
+}
+
+/* ── Table data cells ────────────────────────────────────── */
+.cellMono {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.76rem;
+  color: #A8A29E;
+}
+
+.cellDate {
+  font-size: 0.83rem;
+  color: #78716C;
+}
+
+.cellRight  { text-align: right; }
+
+.cellCenter {
+  display: flex;
+  justify-content: center;
+}
+
+/* Price cell (stacked USD / LRD) */
+.priceCell { text-align: right; }
+
+.priceMain {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #292524;
+  letter-spacing: -0.01em;
+}
+
+.priceSub {
+  font-size: 0.7rem;
+  color: #A8A29E;
+  margin-top: 1px;
+}
+
+/* ── Status pills ────────────────────────────────────────── */
+.statusPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.69rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  padding: 4px 9px;
+  border-radius: 100px;
+  white-space: nowrap;
+}
+
+.statusCompleted {
+  color: #059669;
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
+}
+
+.statusPending {
+  color: #D97706;
+  background: #FFFBEB;
+  border: 1px solid #FDE68A;
+}
+
+.statusFailed {
+  color: #DC2626;
+  background: #FEF2F2;
+  border: 1px solid #FECACA;
+}
+
+.statusDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.statusCompleted .statusDot { background: #059669; }
+.statusFailed    .statusDot { background: #DC2626; }
+.statusPending   .statusDot {
+  background: #D97706;
+  animation: blink 1.6s ease-in-out infinite;
+}
+
+/* ── Card footer ─────────────────────────────────────────── */
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 13px 22px;
+  background: #FCFAF8;
+  border-top: 1px solid #E7E5E4;
+}
+
+.footerNote {
+  font-size: 0.78rem;
+  color: #A8A29E;
+}
+
+.footerTotal {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.footerTotalLabel {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #A8A29E;
+}
+
+.footerTotalAmount {
+  font-size: 0.95rem;
+  font-weight: 800;
+  color: #292524;
+  letter-spacing: -0.02em;
+}
+
+/* ── Empty state ─────────────────────────────────────────── */
+.emptyState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 52px 20px;
+  gap: 9px;
+}
+
+.emptyIcon {
+  width: 40px;
+  height: 40px;
+  color: #D6D3D1;
+}
+
+.emptyText {
+  font-size: 0.88rem;
+  color: #A8A29E;
+  font-weight: 500;
+}
+
+.emptyLink {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #C2410C;
+  text-decoration: none;
+  margin-top: 4px;
+  transition: color 0.15s;
+}
+
+.emptyLink:hover {
+  color: #9A3412;
+}
+
+/* ── Kente accent — always last child of .card ───────────── */
+.kenteAccent {
+  height: 4px;
+  background: linear-gradient(90deg, #D97706, #B45309, #059669, #DC2626);
+}

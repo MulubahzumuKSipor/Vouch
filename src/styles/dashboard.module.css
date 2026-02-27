@@ -1,0 +1,448 @@
+/* --- APP STRUCTURE & VARIABLES --- */
+.appWrapper {
+  --color-bg-sand: #FCFAF8;
+  --color-bg-white: #FFFFFF;
+  --color-bg-charcoal: #1C1917; /* Very deep, premium dark */
+  --color-border: #E7E5E4;
+  --color-text-main: #292524;
+  --color-text-muted: #78716C;
+  --color-terracotta: #C2410C;
+  --radius-soft: 16px; /* Increased for a smoother, app-like feel */
+
+  background-color: var(--color-bg-sand);
+  min-height: 100vh;
+  padding-bottom: 4rem;
+}
+
+.container {
+  max-width: 1100px; /* Tighter constraints for premium feel */
+  margin: 0 auto;
+  padding: 0 1.5rem;
+}
+
+/* --- THE HERO BANNER (Fintech Command Center) --- */
+.dashboardHero {
+  background-color: var(--color-bg-charcoal);
+  padding: 3rem 0 7rem; /* Deep padding to allow cards to overlap */
+  position: relative;
+  overflow: hidden;
+  color: white;
+}
+
+.heroSubtlePattern {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px);
+  background-size: 30px 30px;
+  z-index: 1;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .heroContent {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+}
+
+.dateLabel {
+  font-size: 0.875rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #A8A29E;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.welcomeTitle {
+  font-size: clamp(2rem, 3vw, 2.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.primaryBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: var(--color-terracotta);
+  color: white;
+  padding: 0.875rem 1.5rem;
+  border-radius: 12px;
+  font-weight: 700;
+  font-size: 0.95rem;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  box-shadow: 0 4px 14px rgba(194, 65, 12, 0.3);
+}
+
+.primaryBtn:hover {
+  background-color: #9A3412;
+  transform: translateY(-2px);
+}
+
+/* --- OVERLAPPING METRICS --- */
+.overlapMetrics {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+  margin-top: -4rem; /* This pulls the cards UP over the dark banner */
+  position: relative;
+  z-index: 10;
+  margin-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+  .overlapMetrics {
+    grid-template-columns: 1.5fr 1fr 1fr; /* Make revenue card wider */
+  }
+}
+
+.metricCardPremium, .metricCard {
+  background-color: var(--color-bg-white);
+  border-radius: var(--radius-soft);
+  padding: 2rem;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(255,255,255,0.8);
+}
+
+.metricCardPremium {
+  /* Give the main revenue card a subtle gradient or highlight */
+  border: 1px solid #E7E5E4;
+  position: relative;
+  overflow: hidden;
+}
+
+.metricHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+}
+
+.metricLabel {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.iconWrapGold { background: #FEF3C7; color: #D97706; padding: 0.5rem; border-radius: 8px; }
+.iconWrapTerracotta { background: #FFEDD5; color: var(--color-terracotta); padding: 0.5rem; border-radius: 8px; }
+.iconWrapStone { background: #F5F5F4; color: var(--color-text-main); padding: 0.5rem; border-radius: 8px; }
+
+.metricValueLarge {
+  font-size: clamp(2.5rem, 4vw, 3rem);
+  font-weight: 800;
+  color: var(--color-text-main);
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.metricValue {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--color-text-main);
+  line-height: 1;
+}
+
+/* --- QUICK ACTIONS (App Style) --- */
+.quickActionsBar {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+  /* Hide scrollbar */
+  scrollbar-width: none;
+}
+.quickActionsBar::-webkit-scrollbar { display: none; }
+
+.appIconBtn {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  text-decoration: none;
+  width: 90px;
+}
+
+.appIcon {
+  width: 56px;
+  height: 56px;
+  background-color: var(--color-bg-white);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-main);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  border: 1px solid var(--color-border);
+  transition: all 0.2s;
+}
+
+.appIconBtn:hover .appIcon {
+  background-color: var(--color-text-main);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 16px rgba(0,0,0,0.08);
+}
+
+.appIconLabel {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  text-align: center;
+}
+
+/* --- MAIN CONTENT & LISTS --- */
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+
+@media (min-width: 1024px) {
+  .mainGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.glassCard {
+  background-color: var(--color-bg-white);
+  border-radius: var(--radius-soft);
+  border: 1px solid var(--color-border);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+  overflow: hidden;
+}
+
+.cardHeader {
+  padding: 1.5rem 1.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.cardTitle {
+  font-size: 1.125rem;
+  font-weight: 800;
+}
+
+.cardLink {
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--color-terracotta);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+}
+
+.cleanList {
+  display: flex;
+  flex-direction: column;
+}
+
+.cleanListItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid #F5F5F4;
+  text-decoration: none;
+  transition: background-color 0.2s;
+}
+
+.cleanListItem:last-child {
+  border-bottom: none;
+}
+
+.cleanListItem:hover {
+  background-color: #FAFAF9;
+}
+
+.listItemLeft {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.listText {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.primaryText {
+  font-weight: 700;
+  color: var(--color-text-main);
+  font-size: 0.95rem;
+}
+
+.secondaryText {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+.listItemRight {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.35rem;
+}
+
+.amountText {
+  font-weight: 800;
+  color: #059669; /* Financial positive green */
+  font-size: 1.125rem;
+}
+
+.priceText {
+  font-weight: 700;
+  color: var(--color-text-main);
+}
+
+.statusBadge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+.statusCompleted { background: #D1FAE5; color: #065F46; }
+
+/* UTILS & EMPTY STATES */
+.avatarImg { border-radius: 50%; object-fit: cover; }
+.avatarFallback { border-radius: 50%; background: #E7E5E4; display: flex; align-items: center; justify-content: center; font-weight: 700; color: var(--color-text-muted); }
+.itemImg { border-radius: 12px; object-fit: cover; border: 1px solid #E7E5E4; }
+.itemImgFallback { border-radius: 12px; background: #F5F5F4; display: flex; align-items: center; justify-content: center; color: var(--color-text-muted); }
+
+.emptyState {
+  padding: 4rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.emptyIconCircle {
+  width: 64px;
+  height: 64px;
+  background-color: #F5F5F4;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-muted);
+  margin-bottom: 1rem;
+}
+
+.emptyTitle {
+  font-weight: 700;
+  color: var(--color-text-main);
+  margin-bottom: 0.25rem;
+}
+
+.emptyDesc {
+  font-size: 0.9rem;
+  color: var(--color-text-muted);
+}
+
+/* --- PRIMARY QUICK ACTIONS (Massive Action Cards) --- */
+.quickActionsSection {
+  margin-bottom: 3rem;
+}
+
+.quickActionsGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Bold 2x2 grid on mobile */
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .quickActionsGrid {
+    grid-template-columns: repeat(4, 1fr); /* 4 bold columns on desktop */
+    gap: 1.5rem;
+  }
+}
+
+.actionCard {
+  background-color: var(--color-bg-white);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-soft);
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* The magnetic lift & glow effect */
+.actionCard:hover {
+  border-color: var(--color-terracotta);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(194, 65, 12, 0.08);
+}
+
+/* A soft Terracotta tint that floods the card on hover */
+.actionCard::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-color: #FFF7ED; /* Very light Terracotta */
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: 0;
+}
+
+.actionCard:hover::after {
+  opacity: 1;
+}
+
+.actionIconWrapper {
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background-color: #F5F5F4; /* Soft stone default */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-main);
+  margin-bottom: 1rem;
+  position: relative;
+  z-index: 1; /* Stay above the hover background */
+  transition: all 0.2s ease;
+}
+
+/* Icon inverts and pops on hover */
+.actionCard:hover .actionIconWrapper {
+  background-color: var(--color-terracotta);
+  color: white;
+  transform: scale(1.05);
+}
+
+.actionName {
+  font-size: 1.125rem; /* Larger, more readable font */
+  font-weight: 800;
+  color: var(--color-text-main);
+  position: relative;
+  z-index: 1; /* Stay above the hover background */
+}
+
+.actionCard:hover .actionName {
+  color: var(--color-terracotta);
+}

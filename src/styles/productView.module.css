@@ -1,0 +1,331 @@
+/* --- GLOBAL LAYOUT --- */
+.pageWrapper {
+  background: #F9FAFB;
+  min-height: 100vh;
+}
+
+.main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* --- SALES VIEW (Marketing Page) --- */
+.gridLayout {
+  display: grid;
+  grid-template-columns: 1.8fr 1fr; /* Wider content, narrower sidebar */
+  gap: 3rem;
+  align-items: start;
+}
+
+/* Hero & Images */
+.desktopCover {
+  width: 100%;
+  aspect-ratio: 16/9;
+  position: relative;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  background: #E5E7EB;
+  margin-bottom: 2rem;
+}
+
+.mobileHeader { display: none; } /* Hidden on desktop */
+
+.placeholderCover {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #1F2937;
+  color: white;
+}
+
+/* Description */
+.sectionHeading {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #F3F4F6;
+}
+
+.prose p {
+  color: #374151;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  font-size: 1.05rem;
+}
+
+/* Sticky Buy Card (The Money Maker) */
+.sidebar {
+  position: sticky;
+  top: 6rem; /* Stick below navbar */
+}
+
+.buyCard {
+  background: white;
+  padding: 2rem;
+  border-radius: 1rem;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+.desktopTitle {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1.2;
+  margin-bottom: 1rem;
+}
+
+.statsRow {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9rem;
+  color: #4B5563;
+}
+
+.stat { display: flex; align-items: center; gap: 0.25rem; }
+.dividerDot { width: 3px; height: 3px; background: #D1D5DB; border-radius: 50%; }
+
+.priceTag {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 1.5rem;
+}
+
+.primaryBtn {
+  width: 100%;
+  padding: 1rem;
+  background: #111827;
+  color: white;
+  border: none;
+  border-radius: 0.75rem;
+  font-size: 1.1rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.primaryBtn:hover {
+  background: black;
+  color: #F59E0B; /* Vouch Gold */
+  transform: translateY(-1px);
+}
+
+.guaranteeText {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-size: 0.8rem;
+  color: #059669; /* Green */
+  font-weight: 600;
+}
+
+.featuresList {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #F3F4F6;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.featureItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: #4B5563;
+  font-weight: 500;
+}
+
+/* Seller Card */
+.sellerCard {
+  margin-top: 3rem;
+  padding: 1.5rem;
+  background: white;
+  border-radius: 1rem;
+  border: 1px solid #E5E7EB;
+}
+
+.sellerHeader {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sellerAvatar {
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #F3F4F6;
+}
+
+.sellerLabel { font-size: 0.75rem; text-transform: uppercase; color: #6B7280; font-weight: 700; margin: 0; }
+.sellerName { font-size: 1.1rem; font-weight: 700; color: #111827; margin: 0; }
+
+
+/* --- ACCESS VIEW (Player) --- */
+.accessLayout {
+  display: grid;
+  grid-template-columns: 1fr 380px; /* Fixed width sidebar for lessons */
+  gap: 2rem;
+  height: calc(100vh - 6rem); /* Fit to screen minus header */
+}
+
+.stage {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.playerWrapper {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: black;
+  border-radius: 1rem;
+  overflow: hidden;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.emptyPlayer {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  text-align: center;
+}
+
+.lessonInfo h1 { font-size: 1.5rem; font-weight: 700; color: #111827; }
+
+/* Playlist Sidebar */
+.playlist {
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 1rem;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.playlistHeader {
+  padding: 1.25rem;
+  background: #F9FAFB;
+  border-bottom: 1px solid #E5E7EB;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.playlistHeader h2 { margin: 0; font-size: 1rem; font-weight: 700; }
+.playlistHeader span { font-size: 0.8rem; color: #6B7280; background: white; padding: 2px 8px; border-radius: 12px; border: 1px solid #E5E7EB; }
+
+.scrollArea {
+  overflow-y: auto;
+  flex: 1;
+  padding: 0.5rem;
+}
+
+.moduleItem {
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-bottom: 2px;
+}
+
+.moduleItem:hover { background: #F3F4F6; }
+
+.activeModule {
+  background: #FEF3C7; /* Gold Highlight */
+  border-left: 3px solid #F59E0B;
+}
+
+.activeModule p { color: #92400E; font-weight: 700; }
+
+.moduleIcon {
+  margin-top: 2px;
+  color: #9CA3AF;
+}
+
+.activeModule .moduleIcon { color: #D97706; }
+
+.moduleText p { margin: 0; font-size: 0.9rem; font-weight: 500; color: #374151; line-height: 1.4; }
+.lessonNum { font-size: 0.7rem; text-transform: uppercase; color: #9CA3AF; font-weight: 600; display: block; margin-bottom: 2px; }
+
+/* Resources */
+.sectionDivider {
+  padding: 1rem 0.75rem 0.5rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: #6B7280;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+}
+
+.resourceItem {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background: white;
+  border: 1px solid #E5E7EB;
+  margin-bottom: 0.5rem;
+}
+
+.resourceIcon { color: #6B7280; }
+.fileSize { font-size: 0.7rem; color: #9CA3AF; background: #F3F4F6; padding: 1px 4px; border-radius: 4px; }
+
+.miniDownloadBtn {
+  margin-left: auto;
+  background: transparent;
+  border: none;
+  color: #6B7280;
+  cursor: pointer;
+  padding: 4px;
+}
+.miniDownloadBtn:hover { color: #111827; background: #F3F4F6; border-radius: 4px; }
+
+/* --- MOBILE RESPONSIVE --- */
+@media (max-width: 1024px) {
+  .gridLayout, .accessLayout { grid-template-columns: 1fr; gap: 2rem; }
+  
+  /* Sales Page Mobile */
+  .desktopCover { display: none; }
+  .mobileHeader { display: block; margin-bottom: 2rem; }
+  .mobileCover { width: 100%; aspect-ratio: 16/9; position: relative; border-radius: 0.75rem; overflow: hidden; margin-bottom: 1rem; }
+  .mobileTitle { font-size: 1.75rem; font-weight: 800; line-height: 1.2; }
+  .desktopTitle { display: none; } /* Hide duplicate title in sidebar */
+  
+  .sidebar { position: static; } /* Unstick sidebar */
+  .buyCard { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; border-radius: 0; border-top: 1px solid #E5E7EB; padding: 1rem; box-shadow: 0 -4px 6px -1px rgba(0,0,0,0.1); }
+  /* Simplified Mobile Buy Card layout would go here for extreme polish */
+
+  /* Access Page Mobile */
+  .accessLayout { height: auto; display: flex; flex-direction: column; }
+  .playlist { max-height: 500px; }
+}
