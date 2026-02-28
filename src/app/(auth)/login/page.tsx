@@ -50,13 +50,13 @@ export default function AuthPage() {
     if (result?.error) {
       alert(result.error);
       setIsLoading(false);
-    } else {
-      if (view === 'signup') {
-        // Redirect to dedicated check-email page on successful signup
+    } else if (result?.success) {
+      // 🟢 THE FIX: If the server hands us a destination, we go there!
+      if (result.redirectTo) {
+        router.push(result.redirectTo);
+      } else if (view === 'signup') {
+        // Fallback just in case
         router.push('/check-email');
-      } else {
-        // If login succeeds, the server action usually handles the redirect
-        setIsLoading(false);
       }
     }
   };
