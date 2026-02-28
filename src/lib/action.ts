@@ -1,7 +1,6 @@
 'use server'
 
 import { createClient } from "./server";
-import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 
 export async function login(formData: FormData) {
@@ -28,18 +27,19 @@ export async function login(formData: FormData) {
       .eq('id', user.id)
       .single();
 
+    // Revalidate the layout so the navbar updates with the user's logged-in state
     revalidatePath("/", "layout");
 
-    // Redirect based on onboarding status
+    // 🔴 THE FIX: Return the destination URL to the client instead of using redirect()
     if (profile && !profile.has_completed_onboarding) {
-      redirect("/onboard");
+      return { success: true, redirectTo: "/onboard" };
     } else {
-      redirect("/dashboard");
+      return { success: true, redirectTo: "/dashboard" };
     }
   }
 
-  revalidatePath("/", "layout");
-  redirect("/dashboard");
+  // Fallback
+  return { success: true, redirectTo: "/dashboard" };
 }
 
 export async function signup(formData: FormData) {
@@ -50,8 +50,7 @@ export async function signup(formData: FormData) {
   const username = formData.get("username") as string;
   const fullName = formData.get("full_name") as string;
 
-  // 1. Sign up the user
-  const { data: authData, error: authError } = await supabase.auth.signUp({
+  const { error: authError } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -59,8 +58,7 @@ export async function signup(formData: FormData) {
         username,
         full_name: fullName,
       },
-      // 🔴 CRUCIAL: This tells the email button where to send the user back to
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://vouch-sooty.vercel.app'}/auth/callback`,
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://vouch-sooty.vercel.app'}/login`,
     },
   });
 
@@ -68,10 +66,6 @@ export async function signup(formData: FormData) {
     return { error: authError.message };
   }
 
-  // 2. Note: The database trigger (handle_new_user) automatically creates the Profile row
-  // The has_completed_onboarding field defaults to FALSE for new users
-
-  // 🔴 THE FIX: We removed redirect("/onboard") here.
-  // By returning a success object, your AuthPage can now trigger router.push('/check-email')
-  return { success: true };
+  // 🔴 THE FIX: Tell the client to go to the check-email page
+  return { success: true, redirectTo: "/check-email" };
 }

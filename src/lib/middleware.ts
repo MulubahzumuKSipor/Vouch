@@ -45,12 +45,14 @@ export async function updateSession(request: NextRequest) {
 
   if (isProtected && !user) {
     const url = request.nextUrl.clone();
-    url.pathname = '/login';
+    // 🔴 FIXED: Route unauthenticated users to your unified /auth page
+    url.pathname = '/auth';
     url.searchParams.set('redirect', path);
     return NextResponse.redirect(url);
   }
 
-  if (user && (path.startsWith('/login') || path.startsWith('/signup'))) {
+  // 🔴 FIXED: Prevent logged-in users from accessing the auth page
+  if (user && path.startsWith('/auth')) {
     const url = request.nextUrl.clone();
     url.pathname = '/dashboard';
     return NextResponse.redirect(url);
@@ -59,9 +61,7 @@ export async function updateSession(request: NextRequest) {
   // -----------------------------------------------------------------
   // RULE 2: ENFORCE ONBOARDING (The "Trap")
   // -----------------------------------------------------------------
-  // We only run this check if the user is logged in and trying to access the app
   if (user && isProtected) {
-    // Fetch critical profile flags
     const { data: profile } = await supabase
       .from('profiles')
       .select('is_seller, has_completed_onboarding')
@@ -70,19 +70,16 @@ export async function updateSession(request: NextRequest) {
 
     // A. User HAS NOT finished onboarding
     if (profile && !profile.has_completed_onboarding) {
-      // If they are NOT on the /onboard page, send them there immediately.
       if (!path.startsWith('/onboard')) {
         const url = request.nextUrl.clone();
         url.pathname = '/onboard';
         return NextResponse.redirect(url);
       }
-      // If they ARE on /onboard, let them pass (allow the request)
       return supabaseResponse;
     }
 
     // B. User HAS finished onboarding
     if (profile && profile.has_completed_onboarding) {
-      // If they try to go back to /onboard, kick them to dashboard
       if (path.startsWith('/onboard')) {
         const url = request.nextUrl.clone();
         url.pathname = '/dashboard';
@@ -93,7 +90,6 @@ export async function updateSession(request: NextRequest) {
     // -----------------------------------------------------------------
     // RULE 3: SELLER ONLY ROUTES (Role Based Access)
     // -----------------------------------------------------------------
-    // Only run this check if they passed onboarding
     const sellerOnlyPrefixes = [
       '/dashboard/products',
       '/dashboard/orders',
@@ -104,7 +100,6 @@ export async function updateSession(request: NextRequest) {
     const isSellerRoute = sellerOnlyPrefixes.some((prefix) => path.startsWith(prefix));
 
     if (isSellerRoute && (!profile || !profile.is_seller)) {
-      // Buyer tried to access Seller pages -> Bounce to main dashboard
       const url = request.nextUrl.clone();
       url.pathname = '/dashboard';
       return NextResponse.redirect(url);
