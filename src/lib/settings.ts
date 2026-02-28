@@ -10,12 +10,11 @@ interface ProfileUpdates {
   bio?: string
   avatar_url?: string
   is_seller?: boolean
-  // Accepts a structured object or an empty object to satisfy Postgres NOT NULL constraints
   payment_details?: {
     method: string
     number: string
     currency: string
-  } | {}
+  }
 }
 
 interface ActionState {
@@ -28,7 +27,7 @@ export async function updateSettings(prevState: ActionState, formData: FormData)
   const { data: { user }, error: authError } = await supabase.auth.getUser()
   if (authError || !user) return { message: 'Unauthorized', type: 'error' }
 
-  // 1. Fetch CURRENT profile (The "Truth")
+  // 1. Fetch CURRENT profile
   const { data: profile } = await supabase
     .from('profiles')
     .select('*')
@@ -52,7 +51,7 @@ export async function updateSettings(prevState: ActionState, formData: FormData)
 
   // --- GENERAL FIELDS ---
 
-  // A. Username (Critical URL-Safe & Collision Check)
+  // A. Username
   if (rawUsername) {
     const cleanUsername = rawUsername.toLowerCase().replace(/[^a-z0-9_]/g, '')
 
@@ -61,7 +60,6 @@ export async function updateSettings(prevState: ActionState, formData: FormData)
         return { message: 'Username must be at least 3 characters.', type: 'error' }
       }
 
-      // Prevent claiming an existing username
       const { data: existingUser } = await supabase
         .from('profiles')
         .select('id')
@@ -79,7 +77,6 @@ export async function updateSettings(prevState: ActionState, formData: FormData)
   }
 
   // B. Role Toggle (Buyer vs Seller)
-  let isDowngrading = false
   let isNowSeller = profile.is_seller
 
   if (newIsSellerRaw !== null) {
@@ -88,11 +85,6 @@ export async function updateSettings(prevState: ActionState, formData: FormData)
       updates.is_seller = newIsSeller
       hasChanges = true
       isNowSeller = newIsSeller
-
-      // Flag if they are abandoning their seller account
-      if (profile.is_seller === true && newIsSeller === false) {
-        isDowngrading = true
-      }
     }
   }
 
@@ -134,14 +126,10 @@ export async function updateSettings(prevState: ActionState, formData: FormData)
         hasChanges = true
       }
     }
-  } else if (isDowngrading && Object.keys(profile.payment_details || {}).length > 0) {
-    // SECURITY UX: If they downgraded from Seller to Buyer, wipe their payment info safely
-    // using an empty object to satisfy the Postgres NOT NULL JSONB constraint.
-    updates.payment_details = {}
-    hasChanges = true
   }
+  // 🔴 REMOVED: The logic that wiped out payment details if they switched to Buyer mode.
 
-  // 3. Early Exit (Saves DB compute if nothing changed)
+  // 3. Early Exit
   if (!hasChanges) {
     return { message: 'No changes detected.', type: 'success' }
   }
@@ -160,20 +148,9 @@ export async function updateSettings(prevState: ActionState, formData: FormData)
     return { message: 'Failed to save settings. Please try again.', type: 'error' }
   }
 
-  // 5. SIDE-EFFECT: Handle Seller Downgrade (Protect Buyers)
-  if (isDowngrading) {
-    const { error: productsError } = await supabase
-      .from('products')
-      .update({ is_published: false })
-      .eq('seller_id', user.id)
-      .eq('is_published', true)
+  // 🔴 REMOVED: The Side-Effect code that was unpublishing all products!
 
-    if (productsError) {
-      console.error("Critical: Failed to unpublish products on downgrade:", productsError)
-    }
-  }
-
-  // 6. Revalidate Caches (Forces UI to immediately reflect new state)
+  // 5. Revalidate Caches
   revalidatePath('/dashboard/settings')
   revalidatePath('/', 'layout')
 
