@@ -59,6 +59,8 @@ export async function signup(formData: FormData) {
         username,
         full_name: fullName,
       },
+      // 🔴 CRUCIAL: This tells the email button where to send the user back to
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://vouch-sooty.vercel.app'}/auth/callback`,
     },
   });
 
@@ -69,8 +71,7 @@ export async function signup(formData: FormData) {
   // 2. Note: The database trigger (handle_new_user) automatically creates the Profile row
   // The has_completed_onboarding field defaults to FALSE for new users
 
-  revalidatePath("/", "layout");
-
-  // New signups always go to onboarding
-  redirect("/onboard");
+  // 🔴 THE FIX: We removed redirect("/onboard") here.
+  // By returning a success object, your AuthPage can now trigger router.push('/check-email')
+  return { success: true };
 }
