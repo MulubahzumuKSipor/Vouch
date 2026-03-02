@@ -1,0 +1,189 @@
+# Page snapshot
+
+```yaml
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e4]:
+      - link "V Vouch" [ref=e7] [cursor=pointer]:
+        - /url: /dashboard
+        - generic [ref=e8]: V
+        - generic [ref=e9]: Vouch
+      - navigation [ref=e10]:
+        - list [ref=e11]:
+          - listitem [ref=e12]:
+            - link "Dashboard" [ref=e13] [cursor=pointer]:
+              - /url: /dashboard
+              - img [ref=e14]
+              - generic [ref=e19]: Dashboard
+          - listitem [ref=e20]:
+            - link "Library" [ref=e21] [cursor=pointer]:
+              - /url: /dashboard/library
+              - img [ref=e22]
+              - generic [ref=e24]: Library
+          - listitem [ref=e25]:
+            - link "Purchases" [ref=e26] [cursor=pointer]:
+              - /url: /dashboard/purchases
+              - img [ref=e27]
+              - generic [ref=e30]: Purchases
+          - listitem [ref=e31]:
+            - link "Explore" [ref=e32] [cursor=pointer]:
+              - /url: /explore
+              - img [ref=e33]
+              - generic [ref=e36]: Explore
+      - generic [ref=e37]:
+        - link "Settings" [ref=e39] [cursor=pointer]:
+          - /url: /dashboard/settings
+          - img [ref=e40]
+          - generic [ref=e43]: Settings
+        - button "Log out" [ref=e44] [cursor=pointer]:
+          - img [ref=e45]
+          - generic [ref=e48]: Log out
+    - main [ref=e49]:
+      - generic [ref=e51]:
+        - generic [ref=e52]:
+          - generic [ref=e54]:
+            - heading "Explore Creators" [level=1] [ref=e55]
+            - paragraph [ref=e56]: Discover Liberia's top digital talent and storefronts.
+          - generic [ref=e58]:
+            - img
+            - textbox "Search" [ref=e59]:
+              - /placeholder: Search creators, skills, or services...
+          - generic [ref=e60]:
+            - link "All Creators" [ref=e61] [cursor=pointer]:
+              - /url: /explore?type=all
+            - link "Educators" [ref=e62] [cursor=pointer]:
+              - /url: /explore?type=course
+            - link "Freelancers" [ref=e63] [cursor=pointer]:
+              - /url: /explore?type=service
+            - link "Designers" [ref=e64] [cursor=pointer]:
+              - /url: /explore?type=asset
+        - generic [ref=e65]:
+          - link "amara_writes View Store Amara Johnson Digital Creator Liberia 2 Products Copywriter & Brand Strategist | Helping African brands tell their stories" [ref=e66] [cursor=pointer]:
+            - /url: /@amara_writes
+            - generic [ref=e68]:
+              - generic [ref=e69]:
+                - img "amara_writes" [ref=e71]
+                - generic [ref=e72]: View Store
+              - generic [ref=e73]:
+                - heading "Amara Johnson" [level=3] [ref=e74]
+                - paragraph [ref=e75]: Digital Creator
+              - generic [ref=e76]:
+                - generic [ref=e77]:
+                  - img [ref=e78]
+                  - text: Liberia
+                - generic [ref=e81]:
+                  - img [ref=e82]
+                  - text: 2 Products
+              - paragraph [ref=e85]: Copywriter & Brand Strategist | Helping African brands tell their stories
+          - link "kwame_designs View Store Kwame Asante Digital Creator Liberia 3 Products Digital artist & UI designer from Accra. Creating beautiful interfaces for African startup..." [ref=e86] [cursor=pointer]:
+            - /url: /@kwame_designs
+            - generic [ref=e88]:
+              - generic [ref=e89]:
+                - img "kwame_designs" [ref=e91]
+                - generic [ref=e92]: View Store
+              - generic [ref=e93]:
+                - heading "Kwame Asante" [level=3] [ref=e94]:
+                  - text: Kwame Asante
+                  - img [ref=e95]
+                - paragraph [ref=e98]: Digital Creator
+              - generic [ref=e99]:
+                - generic [ref=e100]:
+                  - img [ref=e101]
+                  - text: Liberia
+                - generic [ref=e104]:
+                  - img [ref=e105]
+                  - text: 3 Products
+              - paragraph [ref=e108]: Digital artist & UI designer from Accra. Creating beautiful interfaces for African startup...
+          - link "chidi_beats View Store Chidi Okonkwo Digital Creator Liberia 2 Products Music producer | Afrobeats | Available for collabs 🎵" [ref=e109] [cursor=pointer]:
+            - /url: /@chidi_beats
+            - generic [ref=e111]:
+              - generic [ref=e112]:
+                - img "chidi_beats" [ref=e114]
+                - generic [ref=e115]: View Store
+              - generic [ref=e116]:
+                - heading "Chidi Okonkwo" [level=3] [ref=e117]
+                - paragraph [ref=e118]: Digital Creator
+              - generic [ref=e119]:
+                - generic [ref=e120]:
+                  - img [ref=e121]
+                  - text: Liberia
+                - generic [ref=e124]:
+                  - img [ref=e125]
+                  - text: 2 Products
+              - paragraph [ref=e128]: Music producer | Afrobeats | Available for collabs 🎵
+          - link "fatou_learns View Store Fatou Diallo Digital Creator Liberia 3 Products Tech educator | Teaching Python & Web Dev in French & English | 10k+ students" [ref=e129] [cursor=pointer]:
+            - /url: /@fatou_learns
+            - generic [ref=e131]:
+              - generic [ref=e132]:
+                - img "fatou_learns" [ref=e134]
+                - generic [ref=e135]: View Store
+              - generic [ref=e136]:
+                - heading "Fatou Diallo" [level=3] [ref=e137]:
+                  - text: Fatou Diallo
+                  - img [ref=e138]
+                - paragraph [ref=e141]: Digital Creator
+              - generic [ref=e142]:
+                - generic [ref=e143]:
+                  - img [ref=e144]
+                  - text: Liberia
+                - generic [ref=e147]:
+                  - img [ref=e148]
+                  - text: 3 Products
+              - paragraph [ref=e151]: Tech educator | Teaching Python & Web Dev in French & English | 10k+ students
+          - link "yusuf_dev View Store Yusuf Mwangi Digital Creator Liberia 3 Products Full-stack developer | React, Node, Python | Building tools for Africa" [ref=e152] [cursor=pointer]:
+            - /url: /@yusuf_dev
+            - generic [ref=e154]:
+              - generic [ref=e155]:
+                - img "yusuf_dev" [ref=e157]
+                - generic [ref=e158]: View Store
+              - generic [ref=e159]:
+                - heading "Yusuf Mwangi" [level=3] [ref=e160]:
+                  - text: Yusuf Mwangi
+                  - img [ref=e161]
+                - paragraph [ref=e164]: Digital Creator
+              - generic [ref=e165]:
+                - generic [ref=e166]:
+                  - img [ref=e167]
+                  - text: Liberia
+                - generic [ref=e170]:
+                  - img [ref=e171]
+                  - text: 3 Products
+              - paragraph [ref=e174]: Full-stack developer | React, Node, Python | Building tools for Africa
+          - link "zynk View Store Mulubahzumu Kemmeh Sipor Digital Creator Liberia 3 Products Check out Mulubahzumu Kemmeh Sipor's digital shop." [ref=e175] [cursor=pointer]:
+            - /url: /@zynk
+            - generic [ref=e177]:
+              - generic [ref=e178]:
+                - img "zynk" [ref=e180]
+                - generic [ref=e181]: View Store
+              - generic [ref=e182]:
+                - heading "Mulubahzumu Kemmeh Sipor" [level=3] [ref=e183]
+                - paragraph [ref=e184]: Digital Creator
+              - generic [ref=e185]:
+                - generic [ref=e186]:
+                  - img [ref=e187]
+                  - text: Liberia
+                - generic [ref=e190]:
+                  - img [ref=e191]
+                  - text: 3 Products
+              - paragraph [ref=e194]: Check out Mulubahzumu Kemmeh Sipor's digital shop.
+          - link "C View Store Christopher Jones Digital Creator Liberia 1 Products Check out Christopher Jones's digital shop." [ref=e195] [cursor=pointer]:
+            - /url: /@chrisjones
+            - generic [ref=e197]:
+              - generic [ref=e198]:
+                - generic [ref=e200]: C
+                - generic [ref=e201]: View Store
+              - generic [ref=e202]:
+                - heading "Christopher Jones" [level=3] [ref=e203]
+                - paragraph [ref=e204]: Digital Creator
+              - generic [ref=e205]:
+                - generic [ref=e206]:
+                  - img [ref=e207]
+                  - text: Liberia
+                - generic [ref=e210]:
+                  - img [ref=e211]
+                  - text: 1 Products
+              - paragraph [ref=e214]: Check out Christopher Jones's digital shop.
+  - button "Open Next.js Dev Tools" [ref=e220] [cursor=pointer]:
+    - img [ref=e221]
+  - alert [ref=e224]
+```

@@ -62,7 +62,7 @@ export default function MinimalNavbar() {
               Log in
             </Link>
             <Link
-              href="/signup"
+              href="/login"
               style={{
                 padding: '0.5rem 1rem',
                 background: '#111827',

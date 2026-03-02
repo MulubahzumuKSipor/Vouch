@@ -17,7 +17,7 @@ export function CTA() {
           No setup fees. No tech stress.
         </p>
 
-        <Link href="/signup" className={styles.primaryBtn}>
+        <Link href="/login" className={styles.primaryBtn}>
           Start Selling Free
           <ArrowRight size={24} strokeWidth={3} />
         </Link>

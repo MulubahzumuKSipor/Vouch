@@ -54,7 +54,7 @@ export function Navbar() {
           <Link href="/community" className={styles.drawerLink} onClick={() => setOpen(false)}>Community</Link>
           <div className={styles.drawerDivider} />
           <Link href="/login"  className={styles.drawerLogin}  onClick={() => setOpen(false)}>Log in</Link>
-          <Link href="/signup" className={styles.drawerCta}    onClick={() => setOpen(false)}>Start Selling Free</Link>
+          <Link href="/login" className={styles.drawerCta}    onClick={() => setOpen(false)}>Start Selling Free</Link>
         </div>
       </div>
 

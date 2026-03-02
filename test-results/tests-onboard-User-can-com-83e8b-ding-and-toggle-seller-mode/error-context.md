@@ -1,0 +1,96 @@
+# Page snapshot
+
+```yaml
+- generic [ref=e1]:
+  - generic [ref=e2]:
+    - complementary [ref=e4]:
+      - link "V Vouch" [ref=e7] [cursor=pointer]:
+        - /url: /dashboard
+        - generic [ref=e8]: V
+        - generic [ref=e9]: Vouch
+      - navigation [ref=e10]:
+        - list [ref=e11]:
+          - listitem [ref=e12]:
+            - link "Dashboard" [ref=e13] [cursor=pointer]:
+              - /url: /dashboard
+              - img [ref=e14]
+              - generic [ref=e19]: Dashboard
+          - listitem [ref=e20]:
+            - link "Course" [ref=e21] [cursor=pointer]:
+              - /url: /dashboard/products
+              - img [ref=e22]
+              - generic [ref=e26]: Course
+          - listitem [ref=e27]:
+            - link "Orders" [ref=e28] [cursor=pointer]:
+              - /url: /dashboard/orders
+              - img [ref=e29]
+              - generic [ref=e33]: Orders
+          - listitem [ref=e34]:
+            - link "Library" [ref=e35] [cursor=pointer]:
+              - /url: /dashboard/library
+              - img [ref=e36]
+              - generic [ref=e38]: Library
+          - listitem [ref=e39]:
+            - link "Analytics" [ref=e40] [cursor=pointer]:
+              - /url: /dashboard/analytics
+              - img [ref=e41]
+              - generic [ref=e44]: Analytics
+          - listitem [ref=e45]:
+            - link "Payouts" [ref=e46] [cursor=pointer]:
+              - /url: /dashboard/payouts
+              - img [ref=e47]
+              - generic [ref=e49]: Payouts
+          - listitem [ref=e50]:
+            - link "Store Settings" [ref=e51] [cursor=pointer]:
+              - /url: /dashboard/store
+              - img [ref=e52]
+              - generic [ref=e56]: Store Settings
+      - generic [ref=e57]:
+        - link "View My Store" [ref=e58] [cursor=pointer]:
+          - /url: /@vouch
+          - img [ref=e59]
+          - generic [ref=e63]: View My Store
+        - link "Settings" [ref=e65] [cursor=pointer]:
+          - /url: /dashboard/settings
+          - img [ref=e66]
+          - generic [ref=e69]: Settings
+        - button "Log out" [ref=e70] [cursor=pointer]:
+          - img [ref=e71]
+          - generic [ref=e74]: Log out
+    - main [ref=e75]:
+      - generic [ref=e76]:
+        - heading "Settings" [level=1] [ref=e77]
+        - generic [ref=e78]:
+          - generic [ref=e79]:
+            - button "General Profile" [ref=e80] [cursor=pointer]:
+              - img [ref=e81]
+              - text: General Profile
+            - button "Payments & Currency" [active] [ref=e84] [cursor=pointer]:
+              - img [ref=e85]
+              - text: Payments & Currency
+          - generic [ref=e88]:
+            - generic [ref=e89]:
+              - generic [ref=e90]:
+                - heading "Payout Settings" [level=2] [ref=e91]
+                - paragraph [ref=e92]: Where should we send your money?
+              - generic [ref=e93]:
+                - generic [ref=e94]:
+                  - generic [ref=e95]: Mobile Money Provider
+                  - combobox [ref=e96]:
+                    - option "MTN Mobile Money" [selected]
+                    - option "Orange Money"
+                - generic [ref=e97]:
+                  - generic [ref=e98]: Phone Number
+                  - textbox "088..." [ref=e99]
+              - generic [ref=e100]:
+                - generic [ref=e101]: Primary Currency
+                - combobox [ref=e102]:
+                  - option "USD (United States Dollar)" [selected]
+                  - option "LRD (Liberian Dollar)"
+            - button "Save Changes" [ref=e104] [cursor=pointer]:
+              - img [ref=e105]
+              - text: Save Changes
+  - button "Open Next.js Dev Tools" [ref=e114] [cursor=pointer]:
+    - img [ref=e115]
+  - alert [ref=e118]
+```

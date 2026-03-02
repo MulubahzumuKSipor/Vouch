@@ -17,7 +17,7 @@ export function Footer() {
               Sell what you know. Get paid.
             </p>
 
-            {/* Newsletter signup */}
+            {/* Newsletter login */}
             <div className={styles.newsletter}>
               <p className={styles.newsletterLabel}>Get creator tips &amp; updates</p>
               <div className={styles.newsletterForm}>

@@ -22,7 +22,7 @@ export default function HomePage() {
             pay with Mobile Money, so you can focus on what you do best.
           </p>
           <div className={styles.buttonGroup}>
-            <Link href="/signup" className={styles.primaryBtn}>
+            <Link href="/login" className={styles.primaryBtn}>
               Start Your Free Classroom
             </Link>
           </div>
@@ -163,7 +163,7 @@ export default function HomePage() {
           <p className={styles.ctaSubtitle}>
             Join the community of Liberian experts building a living from their knowledge.
           </p>
-          <Link href="/signup" className={styles.ctaBtn}>
+          <Link href="/login" className={styles.ctaBtn}>
             Create Your Free Account
           </Link>
         </div>

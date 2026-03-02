@@ -10,6 +10,7 @@ export default function AuthPage() {
   const [view, setView] = useState<'login' | 'signup'>('login');
   const [isLoading, setIsLoading] = useState(false);
   const [usernameError, setUsernameError] = useState('');
+  const [serverError, setServerError] = useState(''); // 🔴 New accessible error state
   const router = useRouter();
 
   // Validate username on client side
@@ -30,7 +31,15 @@ export default function AuthPage() {
     return true;
   };
 
+  const handleViewSwitch = (newView: 'login' | 'signup') => {
+    setView(newView);
+    setServerError(''); // Clear any lingering errors when switching tabs
+    setUsernameError('');
+  };
+
   const handleSubmit = async (formData: FormData) => {
+    setServerError(''); // Clear previous server errors on new attempt
+
     // Validate username before submission (signup only)
     if (view === 'signup') {
       const username = formData.get('username') as string;
@@ -48,10 +57,9 @@ export default function AuthPage() {
     const result = await action(formData);
 
     if (result?.error) {
-      alert(result.error);
+      setServerError(result.error); // 🔴 Replaced alert() with state
       setIsLoading(false);
     } else if (result?.success) {
-      // 🟢 THE FIX: If the server hands us a destination, we go there!
       if (result.redirectTo) {
         router.push(result.redirectTo);
       } else if (view === 'signup') {
@@ -107,26 +115,47 @@ export default function AuthPage() {
             <div className={styles.formCard}>
 
               {/* Toggle Switcher */}
-              <div className={styles.toggleContainer}>
+              <div className={styles.toggleContainer} role="group" aria-label="Authentication mode">
                 <div
                   className={styles.toggleSlider}
                   style={{ transform: view === 'signup' ? 'translateX(100%)' : 'translateX(0)' }}
                 ></div>
                 <button
                   className={`${styles.toggleBtn} ${view === 'login' ? styles.active : ''}`}
-                  onClick={() => setView('login')}
+                  onClick={() => handleViewSwitch('login')}
                   type="button"
+                  aria-pressed={view === 'login'} // 🔴 A11y addition
                 >
                   Sign In
                 </button>
                 <button
                   className={`${styles.toggleBtn} ${view === 'signup' ? styles.active : ''}`}
-                  onClick={() => setView('signup')}
+                  onClick={() => handleViewSwitch('signup')}
                   type="button"
+                  aria-pressed={view === 'signup'} // 🔴 A11y addition
                 >
                   Create Account
                 </button>
               </div>
+
+              {/* 🔴 Accessible Server Error Banner */}
+              {serverError && (
+                <div
+                  role="alert"
+                  aria-live="assertive"
+                  style={{
+                    color: '#92400E',
+                    backgroundColor: '#FFFBEB',
+                    padding: '1rem',
+                    marginBottom: '1.5rem',
+                    borderRadius: '8px',
+                    border: '1px solid #FEF3C7',
+                    fontSize: '0.95rem'
+                  }}
+                >
+                  {serverError}
+                </div>
+              )}
 
               {/* Form */}
               <form action={handleSubmit} className={styles.form}>
@@ -149,10 +178,14 @@ export default function AuthPage() {
                           pattern="[a-zA-Z0-9_]{3,30}"
                           title="3-30 characters: letters, numbers, underscore only"
                           onBlur={(e) => validateUsername(e.target.value)}
+                          aria-invalid={usernameError ? "true" : "false"} // 🔴 A11y addition
+                          aria-describedby={usernameError ? "username-error" : undefined} // 🔴 A11y addition
                         />
                       </div>
                       {usernameError && (
-                        <p className={styles.errorText}>{usernameError}</p>
+                        <p id="username-error" className={styles.errorText} role="alert">
+                          {usernameError}
+                        </p> // 🔴 A11y ID and Role added
                       )}
                     </div>
 

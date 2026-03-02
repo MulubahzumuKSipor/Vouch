@@ -59,7 +59,7 @@ export default function PricingPage() {
             </div>
 
             <div className={styles.cardAction}>
-              <Link href="/signup" className={styles.primaryBtn}>
+              <Link href="/login" className={styles.primaryBtn}>
                 Create Your Free Account
               </Link>
             </div>
