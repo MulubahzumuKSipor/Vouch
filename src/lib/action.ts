@@ -2,6 +2,7 @@
 
 import { createClient } from "./server";
 import { revalidatePath } from "next/cache";
+import { Provider } from '@supabase/supabase-js'; // 🔴 Required for Google/GitHub typing
 
 export async function login(formData: FormData) {
   const supabase = await createClient();
@@ -30,7 +31,7 @@ export async function login(formData: FormData) {
     // Revalidate the layout so the navbar updates with the user's logged-in state
     revalidatePath("/", "layout");
 
-    // 🔴 THE FIX: Return the destination URL to the client instead of using redirect()
+    // Return the destination URL to the client instead of using redirect()
     if (profile && !profile.has_completed_onboarding) {
       return { success: true, redirectTo: "/onboard" };
     } else {
@@ -66,6 +67,49 @@ export async function signup(formData: FormData) {
     return { error: authError.message };
   }
 
-  // 🔴 THE FIX: Tell the client to go to the check-email page
+  // Tell the client to go to the check-email page
   return { success: true, redirectTo: "/check-email" };
+}
+
+// 🔴 NEW: Social Login Server Action
+export async function signInWithOAuth(provider: Provider) {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider,
+    options: {
+      // Route them back to your auth callback to establish the session
+      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`,
+    },
+  });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  // Return the URL so the client component can redirect the user
+  return { url: data.url };
+}
+
+// 🔴 NEW: Magic Link / OTP Server Action (For Passwordless Entry)
+export async function loginWithOtp(formData: FormData) {
+  const supabase = await createClient();
+  const email = formData.get("email") as string;
+
+  if (!email) {
+    return { error: "Please enter your email address." };
+  }
+
+  const { error } = await supabase.auth.signInWithOtp({
+    email,
+    options: {
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'}/auth/callback`,
+    },
+  });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  return { success: true, message: "Magic link sent! Check your email." };
 }
