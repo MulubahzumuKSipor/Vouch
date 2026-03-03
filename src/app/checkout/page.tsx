@@ -6,7 +6,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { createClient } from '@/lib/client'
 import { useCart } from '@/context/CartContext'
-import { Lock, Smartphone, ShieldCheck, Loader2, ArrowLeft } from 'lucide-react'
+import { processGuestCheckout } from '@/lib/action' // 🔴 IMPORTED THE SERVER ACTION
+import { Lock, Smartphone, ShieldCheck, Loader2, ArrowLeft, Mail } from 'lucide-react'
 import styles from '@/styles/checkout.module.css'
 
 type PaymentMethod = 'mtn_momo' | 'orange_money' | 'tipme'
@@ -17,16 +18,16 @@ export default function CheckoutPage() {
   const supabase = createClient()
   
   const [method, setMethod] = useState<PaymentMethod>('mtn_momo')
+  const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [isProcessing, setIsProcessing] = useState(false)
   const [paymentStep, setPaymentStep] = useState<'idle' | 'prompting' | 'verifying' | 'completing'>('idle')
 
-  // 🔴 NEW: State to handle the "Buy Now" bypass
   const [isDirectMode, setIsDirectMode] = useState(false)
   const [directItem, setDirectItem] = useState<any | null>(null)
   const [isInitializing, setIsInitializing] = useState(true)
 
-  // 1. Check if we are in Direct Buy mode on mount
+  // 1. Check if we are in Direct Buy mode & Fetch User on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const isDirect = window.location.search.includes('mode=direct')
@@ -40,9 +41,17 @@ export default function CheckoutPage() {
       }
       setIsInitializing(false)
     }
-  }, [])
 
-  // 2. Determine which items we are actually checking out with
+    // Pre-fill email if user is already logged in
+    const fetchUser = async () => {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user?.email) {
+        setEmail(user.email)
+      }
+    }
+    fetchUser()
+  }, [supabase.auth])
+
   const activeItems = isDirectMode ? (directItem ? [directItem] : []) : cartItems
   const isReady = isDirectMode ? !isInitializing : !isLoading
 
@@ -53,12 +62,11 @@ export default function CheckoutPage() {
     minimumFractionDigits: 2 
   }).format(total / 100)
 
-  // 3. Bulletproof Kick-Out Logic
+  // Kick out if cart is empty
   useEffect(() => {
     if (isInitializing || isProcessing) return;
 
     const timer = setTimeout(() => {
-      // Only kick them out if they aren't in direct mode AND the global cart is empty
       if (isReady && activeItems.length === 0) {
         router.push('/explore')
       }
@@ -67,13 +75,13 @@ export default function CheckoutPage() {
     return () => clearTimeout(timer)
   }, [activeItems.length, isReady, isProcessing, isInitializing, router])
 
-  // --- THE REAL DATABASE SIMULATION ---
   const handleSimulatedPayment = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!phone || phone.length < 9) return
+    if (!phone || phone.length < 9 || !email) return
 
     setIsProcessing(true)
     
+    // Simulate Mobile Money USSD prompt delay
     setPaymentStep('prompting')
     await new Promise(resolve => setTimeout(resolve, 1500))
 
@@ -83,74 +91,39 @@ export default function CheckoutPage() {
     setPaymentStep('completing')
 
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) {
-        throw new Error("You must be logged in to complete a purchase.")
+      // 🔴 THE MAGIC: We send everything to our secure Server Action!
+      const result = await processGuestCheckout({
+        email,
+        phone,
+        method,
+        items: activeItems
+      })
+
+      if (result.error) {
+        throw new Error(result.error)
       }
 
-      for (const item of activeItems) {
-        // Handle varying payload structures (Cart vs Direct Buy)
-        const productId = item.product_id || item.id
-        const itemPrice = item.price_amount || item.price
-
-        const { data: product } = await supabase
-          .from('products')
-          .select('seller_id')
-          .eq('id', productId)
-          .single()
-
-        if (!product) continue;
-
-        const amountPaid = itemPrice * (item.quantity || 1)
-        const platformFee = Math.floor(amountPaid * 0.05)
-        const sellerEarnings = amountPaid - platformFee
-
-        const orderNumber = `ORD-${Math.random().toString(36).substring(2, 10).toUpperCase()}`
-
-        const { error: orderError } = await supabase.from('orders').insert({
-          order_number: orderNumber,
-          buyer_id: user.id,
-          buyer_email: user.email,
-          buyer_phone: phone,
-          seller_id: product.seller_id,
-          product_id: productId,
-          product_title: item.title,
-          product_price: itemPrice,
-          amount_paid: amountPaid,
-          currency: (item.currency || item.price_currency || 'USD') as 'USD' | 'LRD' | 'EUR' | 'GBP' | 'NGN' | 'GHS' | 'KES',
-          platform_fee: platformFee,
-          seller_earnings: sellerEarnings,
-          referral_commission: 0,
-          payment_method: method,
-          status: 'completed',
-          completed_at: new Date().toISOString()
-        })
-
-        if (orderError) throw new Error("Failed to create order record.")
-
-        // Only remove from global cart if we are NOT in direct mode
-        if (!isDirectMode) {
+      // If successful, clean up the cart/storage
+      if (!isDirectMode) {
+        for (const item of activeItems) {
+          const productId = item.product_id || item.id
           await removeItem(productId)
         }
-      }
-
-      // Clear the temporary direct buy item
-      if (isDirectMode) {
+      } else {
         sessionStorage.removeItem('directBuyItem')
       }
 
-      router.push(`/checkout/success?amount=${total}`)
+      // Send them to the success page!
+      router.push(`/checkout/success?amount=${total}&email=${encodeURIComponent(email)}`)
 
-    } catch (error: unknown) {
+    } catch (error: any) {
       console.error(error)
-      const err = error as Error
-      alert(err.message || "Something went wrong during checkout.")
+      alert(error.message || "Something went wrong during checkout.")
       setIsProcessing(false)
       setPaymentStep('idle')
     }
   }
 
-  // Loading UI
   if (!isReady || (activeItems.length === 0 && !isProcessing)) {
     return (
       <div className={styles.loadingState}>
@@ -163,7 +136,6 @@ export default function CheckoutPage() {
   return (
     <div className={styles.checkoutLayout}>
       
-      {/* LEFT COLUMN: Payment Details */}
       <div className={styles.paymentColumn}>
         <div className={styles.header}>
           <Link href="/explore" className={styles.backLink}>
@@ -177,14 +149,36 @@ export default function CheckoutPage() {
 
         <div className={styles.formContainer}>
           <div className={styles.sectionHeader}>
-            <h2 className={styles.sectionTitle}>Payment Method</h2>
+            <h2 className={styles.sectionTitle}>Payment Details</h2>
             <div className={styles.secureBadge}>
               <Lock size={14} /> End-to-End Encrypted
             </div>
           </div>
 
           <form onSubmit={handleSimulatedPayment} className={styles.form}>
-            {/* Method Selectors */}
+
+            <div className={styles.inputGroup}>
+              <label htmlFor="email" className={styles.label}>
+                Where should we send your receipt?
+              </label>
+              <div className={styles.inputWrapper}>
+                <Mail size={20} className={styles.inputIcon} />
+                <input
+                  id="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  className={styles.input}
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  required
+                  disabled={isProcessing}
+                />
+              </div>
+              <p style={{ fontSize: '0.75rem', color: '#6B7280', marginTop: '0.25rem' }}>
+                We&apos;ll email you a secure link so you never lose access to your purchase.
+              </p>
+            </div>
+
             <div className={styles.methodGrid}>
               <button
                 type="button"
@@ -223,7 +217,6 @@ export default function CheckoutPage() {
               </button>
             </div>
 
-            {/* Phone Input */}
             <div className={styles.inputGroup}>
               <label htmlFor="phone" className={styles.label}>
                 {method === 'tipme' ? 'TipMe Wallet Number' : 'Mobile Money Number'}
@@ -236,7 +229,7 @@ export default function CheckoutPage() {
                   placeholder="e.g. 088xxxxxxx or 077xxxxxxx"
                   className={styles.input}
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))} // Strictly numbers
+                  onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
                   required
                   disabled={isProcessing}
                   maxLength={10}
@@ -244,11 +237,10 @@ export default function CheckoutPage() {
               </div>
             </div>
 
-            {/* Submit Button */}
             <button 
               type="submit" 
               className={styles.submitBtn}
-              disabled={isProcessing || phone.length < 9}
+              disabled={isProcessing || phone.length < 9 || !email}
             >
               {isProcessing ? (
                 <div className={styles.processingWrapper}>
@@ -264,7 +256,6 @@ export default function CheckoutPage() {
               )}
             </button>
 
-            {/* Trust Indicators */}
             <div className={styles.trustIndicators}>
               <div className={styles.trustItem}>
                 <ShieldCheck size={16} />
@@ -278,7 +269,6 @@ export default function CheckoutPage() {
         </div>
       </div>
 
-      {/* RIGHT COLUMN: Order Summary */}
       <div className={styles.summaryColumn}>
         <div className={styles.kenteAccent} />
         <div className={styles.summaryContent}>

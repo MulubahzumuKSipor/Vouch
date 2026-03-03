@@ -38,20 +38,28 @@ export async function updateSession(request: NextRequest) {
   const path = request.nextUrl.pathname;
 
   // -----------------------------------------------------------------
+  // 🟢 NEW: NEUTRAL / PUBLIC ROUTES
+  // These routes never trigger redirects, even if a user exists
+  // but hasn't onboarded (like a guest after checkout).
+  // -----------------------------------------------------------------
+  const publicPaths = ['/', '/auth', '/explore', '/checkout/success'];
+  const isPublicPath = publicPaths.some((p) => path === p || path.startsWith('/checkout/success'));
+
+  // -----------------------------------------------------------------
   // RULE 1: PUBLIC vs PROTECTED
   // -----------------------------------------------------------------
   const protectedPrefixes = ['/dashboard', '/settings', '/onboard'];
   const isProtected = protectedPrefixes.some((prefix) => path.startsWith(prefix));
 
+  // If trying to access a protected page without being logged in
   if (isProtected && !user) {
     const url = request.nextUrl.clone();
-    // 🔴 FIXED: Route unauthenticated users to your unified /auth page
     url.pathname = '/auth';
     url.searchParams.set('redirect', path);
     return NextResponse.redirect(url);
   }
 
-  // 🔴 FIXED: Prevent logged-in users from accessing the auth page
+  // Prevent logged-in users from accessing the auth page
   if (user && path.startsWith('/auth')) {
     const url = request.nextUrl.clone();
     url.pathname = '/dashboard';
@@ -61,7 +69,9 @@ export async function updateSession(request: NextRequest) {
   // -----------------------------------------------------------------
   // RULE 2: ENFORCE ONBOARDING (The "Trap")
   // -----------------------------------------------------------------
-  if (user && isProtected) {
+  // 🔴 UPDATED: We only enforce the trap if the user is on a PROTECTED path
+  // and NOT on a public/success path.
+  if (user && isProtected && !isPublicPath) {
     const { data: profile } = await supabase
       .from('profiles')
       .select('is_seller, has_completed_onboarding')
@@ -78,7 +88,7 @@ export async function updateSession(request: NextRequest) {
       return supabaseResponse;
     }
 
-    // B. User HAS finished onboarding
+    // B. User HAS finished onboarding (prevent them from going back to onboard)
     if (profile && profile.has_completed_onboarding) {
       if (path.startsWith('/onboard')) {
         const url = request.nextUrl.clone();

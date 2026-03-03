@@ -28,7 +28,7 @@ interface LibraryOrder {
       username: string
       is_verified: boolean
     }
-  }
+  } | null // 🔴 Added null type in case product was deleted
 }
 
 // Helper for consistent images
@@ -59,7 +59,14 @@ export default async function LibraryPage() {
   const { data: { user }, error } = await supabase.auth.getUser()
   if (error || !user) redirect('/login')
 
-  // 2. Fetch Orders
+  // 2. Fetch the actual profile for the Layout (more reliable than user_metadata)
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('full_name, is_seller')
+    .eq('id', user.id)
+    .single()
+
+  // 3. Fetch Orders
   const { data: orders } = await supabase
     .from('orders')
     .select(`
@@ -83,15 +90,15 @@ export default async function LibraryPage() {
     .eq('status', 'completed')
     .order('created_at', { ascending: false })
 
-  const totalItems = orders?.length || 0
-  const courseCount = orders?.filter(o => o.products?.product_type === 'course').length || 0
-  const assetCount = orders?.filter(o => o.products?.product_type === 'asset').length || 0
+  // 4. Safely filter out any orders where the product might have been deleted from the DB
+  const validOrders = (orders as unknown as LibraryOrder[])?.filter(o => o.products !== null) || []
 
-  // Note: If you want to filter by tabs on the client side later, you can pass these to a client component.
-  // For now, we will render all items and the tabs act as visual indicators.
+  const totalItems = validOrders.length
+  const courseCount = validOrders.filter(o => o.products?.product_type === 'course').length
+  const assetCount = validOrders.filter(o => o.products?.product_type === 'asset').length
 
   return (
-    <DashboardLayout isSeller={user?.user_metadata?.is_seller || false} username={user?.user_metadata?.full_name}>
+    <DashboardLayout isSeller={profile?.is_seller || false} username={profile?.full_name || 'User'}>
       <div className={styles.appWrapper}>
 
         {/* ── HEADER ── */}
@@ -115,21 +122,22 @@ export default async function LibraryPage() {
 
         <div className={styles.container}>
           {/* ── CONTENT GRID ── */}
-          {orders && orders.length > 0 ? (
+          {validOrders.length > 0 ? (
             <div className={styles.grid}>
-              {orders.map((order: LibraryOrder) => {
-                const product = order.products
+              {validOrders.map((order: LibraryOrder) => {
+                const product = order.products! // Safe to assert because of the filter above
                 const isCourse = product.product_type === 'course'
                 const isService = product.product_type === 'service'
                 const isAsset = product.product_type === 'asset'
 
-                // Routing directly to the creator's storefront product page
-                const productUrl = `/@${product.profiles?.username}/${product.slug}`
+                // Safe routing fallback
+                const creatorUsername = product.profiles?.username || 'creator'
+                const productUrl = `/@${creatorUsername}/${product.slug || product.id}`
 
                 return (
                   <Link href={productUrl} key={order.id} className={styles.card}>
                     <div className={styles.imageWrapper}>
-                      <ProductImage src={product.cover_image} alt={product.title} />
+                      <ProductImage src={product.cover_image} alt={product.title || 'Product'} />
 
                       {/* Floating Type Badge inside Image */}
                       <div className={styles.imageBadge}>
@@ -145,7 +153,7 @@ export default async function LibraryPage() {
                     <div className={styles.cardBody}>
                       <h3 className={styles.cardTitle}>{product.title}</h3>
                       <p className={styles.author}>
-                        by {product.profiles?.full_name}
+                        by {product.profiles?.full_name || 'Unknown Creator'}
                         {product.profiles?.is_verified && <span className={styles.verifiedBadge}>✓</span>}
                       </p>
                     </div>
@@ -168,7 +176,7 @@ export default async function LibraryPage() {
               </div>
               <h3 className={styles.emptyTitle}>Your library is waiting</h3>
               <p className={styles.emptyDesc}>
-                Start your journey. Purchase courses and assets from Liberia&apos;s top creators.
+                Start your journey. Purchase courses and assets from top creators.
               </p>
               <Link href="/explore" className={styles.primaryBtn}>
                 Explore Marketplace
