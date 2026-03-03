@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { BookOpen, CalendarHeart, DownloadCloud, HeartHandshake, ShieldCheck, Smartphone } from "lucide-react";
+import { Heart, Users, Lightbulb, TrendingUp, ShieldCheck, Wallet } from "lucide-react";
 import Image from "next/image";
 import styles from "@/styles/hero.module.css";
 
@@ -11,19 +11,18 @@ export default function HomePage() {
       <section className={styles.heroSection}>
         <div className={styles.subtleTexture} aria-hidden="true" />
         <div className={styles.container}>
-          <div className={styles.eyebrow}>Built for Liberian Educators & Creators</div>
+          <div className={styles.eyebrow}>Built for Liberian Creators</div>
           <h1 className={styles.headline}>
-            Your knowledge is valuable. <br />
-            We make it simple to <span className={styles.highlight}>share it.</span>
+            Your Audience Is Valuable. <br />
+            Now It Can <span className={styles.highlight}>Pay You Back.</span>
           </h1>
           <p className={styles.subheadline}>
-            You are a teacher, a consultant, a creator. You shouldn&apos;t have to fight
-            complex foreign tech just to get paid. Vouch lets your students and clients
-            pay with Mobile Money, so you can focus on what you do best.
+            You’ve built attention. You’ve built influence. You’ve built trust.
+            Now you can turn that into income directly from the people who support you. No brand deals required.
           </p>
           <div className={styles.buttonGroup}>
             <Link href="/login" className={styles.primaryBtn}>
-              Start Your Free Classroom
+              Create Your Support Page
             </Link>
           </div>
         </div>
@@ -34,31 +33,28 @@ export default function HomePage() {
         <div className={styles.container}>
           <div className={styles.problemGrid}>
             <div className={styles.problemText}>
-              <h2 className={styles.sectionTitle}>Global platforms weren&apos;t built for our reality.</h2>
+              <h2 className={styles.sectionTitle}>Stop Depending Only on Brand Deals.</h2>
               <p>
-                A tutor in Monrovia shouldn&apos;t lose a student because they can&apos;t
-                accept MTN Mobile Money online. A consultant in Buchanan shouldn&apos;t struggle
-                to get paid because international websites don&apos;t support Liberian bank accounts.
+                Brand deals are inconsistent, hard to get, not guaranteed, and often underpaid.
+                Why wait for a company to value you when your audience already does?
               </p>
               <p>
-                <strong>We built Vouch to fix this.</strong> We handle the
-                complexities of local payments and digital delivery so you can serve your community without the headache.
+                <strong>If you have followers, you can earn.</strong> Whether you are a TikTok personality, a community leader, or a WAEC tutor with engaged students. If people follow you, they believe in you. And people who believe in you are willing to support you.
               </p>
             </div>
             <div className={styles.problemImagePlaceholder}>
               <div className={styles.imageBox}>
                 <Image
-                  src="/teacher.jpg"
-                  alt="A Liberian teacher managing their online classroom"
+                  src="/teacher.jpg" /* 🔴 Update this image in your public folder */
+                  alt="A Liberian content creator engaging with their community"
                   fill
                   className={styles.teacherImage}
-                  priority /* Loads this image quickly since it's above the fold */
+                  priority
                 />
-                {/* Dark gradient overlay to make the white text readable */}
                 <div className={styles.imageOverlay} aria-hidden="true"></div>
 
                 <span className={styles.imageQuote}>
-                  &quot;Finally, a platform that understands how my students actually pay.&quot;
+                  &quot;Your followers don’t just watch you. They feel connected to you. Now they can support you.&quot;
                 </span>
               </div>
             </div>
@@ -70,60 +66,65 @@ export default function HomePage() {
       <section className={styles.toolsSection}>
         <div className={styles.container}>
           <div className={styles.centerHeader}>
-            <h2 className={styles.sectionTitle}>Everything you need to share your gift.</h2>
+            <h2 className={styles.sectionTitle}>Turn your influence into income.</h2>
             <p className={styles.sectionSubtitle}>
-              No coding required. Just upload what you know, and we give you a beautiful link to share on WhatsApp or Facebook.
+              With our platform, your supporters can back you consistently. You decide your offers. You build community, not just views.
             </p>
           </div>
 
           <div className={styles.toolsGrid}>
             <div className={styles.toolCard}>
-              <div className={styles.toolIcon}><BookOpen size={28} /></div>
-              <h3>Your Online Classroom</h3>
-              <p>Upload video lessons, share notes, and track your students&apos; progress. We make sure it loads fast on mobile phones.</p>
+              <div className={styles.toolIcon}><Heart size={28} /></div>
+              <h3>Direct Support</h3>
+              <p>Receive direct financial support from followers who value your voice and your content.</p>
             </div>
             <div className={styles.toolCard}>
-              <div className={styles.toolIcon}><CalendarHeart size={28} /></div>
-              <h3>Book Your Time</h3>
-              <p>Offer 1-on-1 coaching or consulting. Clients pick a time, pay upfront, and get a meeting link automatically.</p>
+              <div className={styles.toolIcon}><Users size={28} /></div>
+              <h3>Exclusive Community</h3>
+              <p>Launch a supporter club where fans contribute monthly for exclusive access to you.</p>
             </div>
             <div className={styles.toolCard}>
-              <div className={styles.toolIcon}><DownloadCloud size={28} /></div>
-              <h3>Share Resources</h3>
-              <p>Sell your e-books, study guides, or templates. As soon as they pay, they get the file instantly.</p>
+              <div className={styles.toolIcon}><Lightbulb size={28} /></div>
+              <h3>Fund Your Ideas</h3>
+              <p>Raise funds to upgrade your equipment, host community events, or launch your next big project.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── 4. THE LOCAL ADVANTAGE (Warm Sand) ── */}
+      {/* ── 4. THE MATH (Warm Sand) ── */}
       <section className={styles.paymentsSection}>
         <div className={styles.subtleTexture} aria-hidden="true" />
         <div className={styles.container}>
           <div className={styles.paymentsLayout}>
             <div className={styles.paymentsVisual}>
                <div className={styles.mockupReceipt}>
-                  <div className={styles.receiptHeader}>New Student Enrolled</div>
-                  <div className={styles.receiptAmount}>LRD 4,500</div>
+                  <div className={styles.receiptHeader}>Monthly Predictable Income</div>
+                  <div className={styles.receiptAmount}>$500.00</div>
                   <div className={styles.receiptMethod}>
-                    <Smartphone size={16} /> Paid via Orange Money
+                    <TrendingUp size={16} /> From 100 loyal supporters
                   </div>
                </div>
+               {/* 🔴 Adding diagram for context */}
+
             </div>
             <div className={styles.paymentsText}>
-              <h2 className={styles.sectionTitle}>Make it easy for them to pay.</h2>
+              <h2 className={styles.sectionTitle}>Small Audience. Real Income.</h2>
+              <p style={{ fontSize: '1.1rem', color: '#4B5563', marginBottom: '1.5rem' }}>
+                You don’t need millions of followers. You need to go deep.
+              </p>
               <ul className={styles.checkList}>
                 <li>
-                  <strong>MTN & Orange Money Ready</strong>
-                  <span>Your people pay with what&apos;s already in their pockets.</span>
+                  <strong>Do the math:</strong>
+                  <span>If just 100 followers support you with $5, that’s $500.</span>
                 </li>
                 <li>
-                  <strong>Direct to your Bank</strong>
-                  <span>Get your earnings sent straight to your local account in LRD or USD.</span>
+                  <strong>Predictable Earnings:</strong>
+                  <span>If 200 supporters contribute monthly, you’ve created sustainable, predictable income.</span>
                 </li>
                 <li>
-                  <strong>No Hidden Surprises</strong>
-                  <span>Free to start. We only take a small, transparent 10% fee when you actually make a sale.</span>
+                  <strong>No viral algorithms needed:</strong>
+                  <span>You don&apos;t need to trend to make a living. You just need a true community.</span>
                 </li>
               </ul>
             </div>
@@ -131,26 +132,26 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 5. VALUES & COMMUNITY (Deep Charcoal) ── */}
+      {/* ── 5. VISION & COMMUNITY (Deep Charcoal) ── */}
       <section className={styles.valuesSection}>
         <div className={styles.container}>
           <div className={styles.centerHeaderLight}>
-            <h2 className={styles.sectionTitleLight}>Our promise to you.</h2>
+            <h2 className={styles.sectionTitleLight}>Ownership Changes Everything.</h2>
             <p className={styles.sectionSubtitleLight}>
-              We are a small team building from Monrovia. We don&apos;t answer to overseas investors; we answer to you.
+              Imagine a campus influencer raising funds for a project, or a content creator buying a new camera through audience support.
             </p>
           </div>
 
           <div className={styles.valuesGrid}>
             <div className={styles.valueItem}>
-              <HeartHandshake size={32} className={styles.accentIcon} />
-              <h4>Creators First</h4>
-              <p>Every decision we make starts with one question: &quot;Does this help you earn more for your family?&quot;</p>
+              <Wallet size={32} className={styles.accentIcon} />
+              <h4>Control Your Income</h4>
+              <p>When you monetize your audience directly, you stop waiting for permission from sponsors. Your audience becomes your economic power.</p>
             </div>
             <div className={styles.valueItem}>
               <ShieldCheck size={32} className={styles.accentIcon} />
-              <h4>Africa-Grade Reliable</h4>
-              <p>We know internet drops and power cuts happen. We built Vouch to be fast, light, and resilient.</p>
+              <h4>Grow Independently</h4>
+              <p>Built for how creators actually grow in Liberia: strong community ties, loyal followers, and active, personal engagement.</p>
             </div>
           </div>
         </div>
@@ -159,13 +160,16 @@ export default function HomePage() {
       {/* ── 6. FINAL CTA (Terracotta) ── */}
       <section className={styles.ctaSection}>
         <div className={styles.container}>
-          <h2 className={styles.ctaTitle}>Ready to welcome your students?</h2>
+          <h2 className={styles.ctaTitle}>This Is the New Creator Economy in Liberia.</h2>
           <p className={styles.ctaSubtitle}>
-            Join the community of Liberian experts building a living from their knowledge.
+            Not just posting. Not just trending. Building sustainable income and stronger communities.
           </p>
           <Link href="/login" className={styles.ctaBtn}>
-            Create Your Free Account
+            Create Your Support Page Today
           </Link>
+          <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#FCA5A5' }}>
+            Set up your page. Invite your followers. Start receiving support.
+          </p>
         </div>
       </section>
 
