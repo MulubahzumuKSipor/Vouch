@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import { Provider } from '@supabase/supabase-js';
 import { createClient as createAdminClient } from '@supabase/supabase-js';
 
+// --- AUTHENTICATION ---
+
 export async function login(formData: FormData) {
   const supabase = await createClient();
   const email = formData.get("email") as string;
@@ -15,11 +17,8 @@ export async function login(formData: FormData) {
     password,
   });
 
-  if (error) {
-    return { error: error.message };
-  }
+  if (error) return { error: error.message };
 
-  // Check if user has completed onboarding
   const { data: { user } } = await supabase.auth.getUser();
 
   if (user) {
@@ -27,26 +26,20 @@ export async function login(formData: FormData) {
       .from('profiles')
       .select('has_completed_onboarding')
       .eq('id', user.id)
-      .single();
+      .maybeSingle(); // Changed to maybeSingle to prevent 406 errors
 
-    // Revalidate the layout so the navbar updates with the user's logged-in state
     revalidatePath("/", "layout");
 
-    // Return the destination URL to the client instead of using redirect()
     if (profile && !profile.has_completed_onboarding) {
       return { success: true, redirectTo: "/onboard" };
-    } else {
-      return { success: true, redirectTo: "/dashboard" };
     }
   }
 
-  // Fallback
   return { success: true, redirectTo: "/dashboard" };
 }
 
 export async function signup(formData: FormData) {
   const supabase = await createClient();
-
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const username = formData.get("username") as string;
@@ -56,66 +49,85 @@ export async function signup(formData: FormData) {
     email,
     password,
     options: {
-      data: {
-        username,
-        full_name: fullName,
-      },
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://vouch-sooty.vercel.app'}/login`,
+      data: { username, full_name: fullName },
+      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/login`,
     },
   });
 
-  if (authError) {
-    return { error: authError.message };
-  }
-
-  // Tell the client to go to the check-email page
+  if (authError) return { error: authError.message };
   return { success: true, redirectTo: "/check-email" };
 }
 
-// Social Login Server Action
+// --- SOCIAL & OTP LOGIN ---
+
 export async function signInWithOAuth(provider: Provider) {
   const supabase = await createClient();
-
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider,
     options: {
-      // Route them back to your auth callback to establish the session
-      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://vouch-sooty.vercel.app'}/auth/callback`,
+      redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback`,
     },
   });
 
-  if (error) {
-    return { error: error.message };
-  }
-
-  // Return the URL so the client component can redirect the user
+  if (error) return { error: error.message };
   return { url: data.url };
 }
 
-// Magic Link / OTP Server Action (For Passwordless Entry)
-export async function loginWithOtp(formData: FormData) {
+// --- 🔴 THE NEW PASSWORD RESET FLOW (OTP BASED) ---
+
+/**
+ * STEP 1: Send the 6-digit code to the user's email
+ */
+export async function sendPasswordResetOtp(formData: FormData) {
   const supabase = await createClient();
-  const email = formData.get("email") as string;
+  const email = formData.get('email') as string;
 
-  if (!email) {
-    return { error: "Please enter your email address." };
-  }
+  if (!email) return { error: "Please enter your email address." };
 
-  const { error } = await supabase.auth.signInWithOtp({
-    email,
-    options: {
-      emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://vouch-sooty.vercel.app'}/auth/callback`,
-    },
-  });
+  // This triggers the Reset Password email template in Supabase
+  const { error } = await supabase.auth.resetPasswordForEmail(email);
 
-  if (error) {
-    return { error: error.message };
-  }
+  if (error) return { error: error.message };
 
-  return { success: true, message: "Magic link sent! Check your email." };
+  return { success: true, email };
 }
 
-// 🔴 UPDATED: Guest Checkout with Gatekeeper & Consultation Booking Time
+/**
+ * STEP 2: Verify the code and immediately update the password
+ */
+export async function verifyAndSetNewPassword(formData: FormData) {
+  const supabase = await createClient();
+  const email = formData.get('email') as string;
+  const code = formData.get('code') as string;
+  const password = formData.get('password') as string;
+  const confirm = formData.get('confirm_password') as string;
+
+  if (password !== confirm) return { error: "Passwords do not match." };
+  if (!code || code.length !== 6) return { error: "Please enter the 6-digit code." };
+  if (password.length < 6) return { error: "Password must be at least 6 characters." };
+
+  // 1. Verify the OTP (This logs the user in if successful)
+  const { error: verifyError } = await supabase.auth.verifyOtp({
+    email,
+    token: code,
+    type: 'recovery'
+  });
+
+  if (verifyError) return { error: "Invalid or expired code. Please try again." };
+
+  // 2. Update the password for the now-authenticated user
+  const { error: updateError } = await supabase.auth.updateUser({
+    password: password
+  });
+
+  if (updateError) return { error: updateError.message };
+
+  revalidatePath("/", "layout");
+  return { success: true, redirectTo: "/dashboard" };
+}
+
+// --- GUEST CHECKOUT & GATEKEEPER ---
+
 export async function processGuestCheckout(payload: {
   email: string;
   phone: string;
@@ -123,64 +135,42 @@ export async function processGuestCheckout(payload: {
   items: any[];
 }) {
   const { email, phone, method, items } = payload;
-
   const supabaseAdmin = createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!
   );
 
   try {
-    // ------------------------------------------------------------------
-    // 🛡️ STEP 1: THE PRE-CHECKOUT GATEKEEPER
-    // ------------------------------------------------------------------
     for (const item of items) {
       const productId = item.product_id || item.id;
-
-      // Fetch the Product and the Seller's Profile Email
       const { data: productData, error: productError } = await supabaseAdmin
         .from('products')
         .select(`seller_id, profiles!inner(email)`)
         .eq('id', productId)
         .single();
 
-      if (productError || !productData) {
-        return { error: `Product not found: ${item.title}` };
-      }
+      if (productError || !productData) return { error: `Product not found: ${item.title}` };
 
-      // 🛑 Gate 1: Prevent Sellers from buying their own products
       const profileData = productData.profiles as any;
       const sellerEmail = Array.isArray(profileData) ? profileData[0]?.email : profileData?.email;
 
-      if (sellerEmail && sellerEmail.toLowerCase() === email.toLowerCase()) {
-        return {
-          error: `Checkout blocked: You are the creator of "${item.title}". Please log in to your account to access it for free.`
-        };
+      if (sellerEmail?.toLowerCase() === email.toLowerCase()) {
+        return { error: `Checkout blocked: You are the creator of "${item.title}".` };
       }
 
-      // 🛑 Gate 2: Prevent Duplicate Purchases
       const { data: existingOrder } = await supabaseAdmin
         .from('orders')
         .select('id')
         .eq('product_id', productId)
-        .ilike('buyer_email', email) // Case-insensitive match
+        .ilike('buyer_email', email)
         .eq('status', 'completed')
         .maybeSingle();
 
-      if (existingOrder) {
-        return {
-          error: `Checkout blocked: You have already purchased "${item.title}" with this email! Log in to access it, or check your email for the receipt.`
-        };
-      }
-
-      // Temporarily store the seller_id on the item so we don't have to query it again later
+      if (existingOrder) return { error: `Checkout blocked: You already own "${item.title}".` };
       item.seller_id = productData.seller_id;
     }
 
-    // ------------------------------------------------------------------
-    // 👤 STEP 2: BUYER IDENTIFICATION / AUTO-ACCOUNT CREATION
-    // ------------------------------------------------------------------
     let buyerId = null;
-
     const { data: authData, error: authError } = await supabaseAdmin.auth.admin.createUser({
       email: email,
       email_confirm: true,
@@ -188,41 +178,30 @@ export async function processGuestCheckout(payload: {
     });
 
     if (authError) {
-      const errorMessage = authError.message.toLowerCase();
-      if (errorMessage.includes('already') && errorMessage.includes('registered')) {
-        const { data: existingProfile } = await supabaseAdmin
-          .from('profiles')
-          .select('id')
-          .eq('email', email)
-          .single();
-        buyerId = existingProfile?.id || null;
-      } else {
-        throw new Error(authError.message);
-      }
+      const { data: existingProfile } = await supabaseAdmin
+        .from('profiles')
+        .select('id')
+        .eq('email', email)
+        .single();
+      buyerId = existingProfile?.id || null;
     } else {
       buyerId = authData.user.id;
     }
 
-    // ------------------------------------------------------------------
-    // 🛒 STEP 3: PREPARE AND INSERT ORDERS
-    // ------------------------------------------------------------------
     const ordersToInsert = items.map(item => {
-      const productId = item.product_id || item.id;
-      const itemPrice = item.price_amount || item.price;
-      const amountPaid = itemPrice * (item.quantity || 1);
+      const amountPaid = (item.price_amount || item.price) * (item.quantity || 1);
       const platformFee = Math.floor(amountPaid * 0.05);
-
       return {
         order_number: `ORD-${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
         buyer_id: buyerId,
         buyer_email: email,
         buyer_phone: phone,
         seller_id: item.seller_id,
-        product_id: productId,
+        product_id: item.product_id || item.id,
         product_title: item.title,
-        product_price: itemPrice,
+        product_price: item.price_amount || item.price,
         amount_paid: amountPaid,
-        currency: item.currency || item.price_currency || 'USD',
+        currency: item.currency || 'USD',
         platform_fee: platformFee,
         seller_earnings: amountPaid - platformFee,
         payment_method: method,
@@ -234,23 +213,21 @@ export async function processGuestCheckout(payload: {
     const { error: orderError } = await supabaseAdmin.from('orders').insert(ordersToInsert);
     if (orderError) throw orderError;
 
-    // Send the secure login link
+    // Send the buyer their "Magic Link" to access the library immediately
     await supabaseAdmin.auth.signInWithOtp({
       email: email,
       options: {
-        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://vouch-sooty.vercel.app'}/auth/callback?next=/library`
+        emailRedirectTo: `${process.env.NEXT_PUBLIC_SITE_URL}/auth/callback?next=/library`
       }
     });
 
     return { success: true };
-
   } catch (error: any) {
-    console.error("Checkout Error:", error);
     return { error: error.message || "Failed to process checkout." };
   }
 }
 
-// 🔴 NEW: The Real-Time Email Checker for the Checkout Modal
+// Re-export checkEmailOwnership for modal usage...
 export async function checkEmailOwnership(email: string, productIds: string[]) {
   const supabaseAdmin = createAdminClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -258,7 +235,6 @@ export async function checkEmailOwnership(email: string, productIds: string[]) {
   );
 
   try {
-    // 1. Check if they are the seller of any of these products
     const { data: products } = await supabaseAdmin
       .from('products')
       .select('title, profiles!inner(email)')
@@ -267,13 +243,11 @@ export async function checkEmailOwnership(email: string, productIds: string[]) {
     for (const p of products || []) {
       const profileData = p.profiles as any;
       const sellerEmail = Array.isArray(profileData) ? profileData[0]?.email : profileData?.email;
-
-      if (sellerEmail && sellerEmail.toLowerCase() === email.toLowerCase()) {
-        return { status: 'owner', message: `You are the creator of "${p.title}". You don't need to buy your own product.` };
+      if (sellerEmail?.toLowerCase() === email.toLowerCase()) {
+        return { status: 'owner', message: `You created "${p.title}".` };
       }
     }
 
-    // 2. Check if they already bought any of these products
     const { data: existingOrders } = await supabaseAdmin
       .from('orders')
       .select('product_title')
@@ -281,52 +255,12 @@ export async function checkEmailOwnership(email: string, productIds: string[]) {
       .eq('status', 'completed')
       .in('product_id', productIds);
 
-    if (existingOrders && existingOrders.length > 0) {
-      const ownedTitles = existingOrders.map(o => o.product_title).join(', ');
-      return { status: 'purchased', message: `You already purchased: ${ownedTitles}.` };
+    if (existingOrders?.length) {
+      return { status: 'purchased', message: `You already purchased these products.` };
     }
 
     return { status: 'clear' };
   } catch (error) {
     return { status: 'error' };
   }
-}
-
-// 🔴 NEW: Send the password reset email
-export async function resetPassword(formData: FormData) {
-  const supabase = await createClient();
-  const email = formData.get('email') as string;
-
-  if (!email) return { error: "Please enter your email address." };
-
-  const { error } = await supabase.auth.resetPasswordForEmail(email, {
-    // We explicitly tell it to send them to the update-password page after clicking the link!
-    redirectTo: `${process.env.NEXT_PUBLIC_SITE_URL || 'https://vouch-sooty.vercel.app'}/auth/callback?next=/update-password`,
-  });
-
-  if (error) {
-    return { error: error.message };
-  }
-
-  return { success: true, message: "Password reset link sent! Please check your email." };
-}
-
-// 🔴 NEW: Save the brand new password
-export async function updatePassword(formData: FormData) {
-  const supabase = await createClient();
-  const password = formData.get('password') as string;
-
-  if (!password || password.length < 6) {
-    return { error: "Password must be at least 6 characters long." };
-  }
-
-  const { error } = await supabase.auth.updateUser({
-    password: password
-  });
-
-  if (error) {
-    return { error: error.message };
-  }
-
-  return { success: true, redirectTo: "/dashboard" };
 }
