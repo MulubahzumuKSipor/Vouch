@@ -1,19 +1,25 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { login, signup, signInWithOAuth, loginWithOtp } from '@/lib/action';
 import styles from '@/styles/auth.module.css';
 
-export default function AuthPage() {
+// 1. We extract the core logic into a separate component so we can use useSearchParams safely
+function AuthFormContent() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // 🔴 NEW: Grab the email from the URL (e.g., ?email=mzksipor@gmail.com)
+  const prefilledEmail = searchParams.get('email');
+
   const [view, setView] = useState<'login' | 'signup'>('login');
   const [loginMethod, setLoginMethod] = useState<'password' | 'magic_link'>('password');
   const [isLoading, setIsLoading] = useState(false);
   const [usernameError, setUsernameError] = useState('');
   const [serverError, setServerError] = useState('');
   const [successMessage, setSuccessMessage] = useState('');
-  const router = useRouter();
 
   const validateUsername = (username: string): boolean => {
     const cleaned = username.toLowerCase().replace(/[^a-z0-9_]/g, '');
@@ -77,7 +83,6 @@ export default function AuthPage() {
       setServerError(result.error);
       setIsLoading(false);
     } else if (result?.success) {
-      // 🔴 THE FIX: Use the 'in' operator to safely check properties for TypeScript
       if ('message' in result) {
         setSuccessMessage(result.message as string);
         setIsLoading(false);
@@ -242,16 +247,37 @@ export default function AuthPage() {
                   </>
                 )}
 
-                <div className={styles.inputGroup}>
-                  <label htmlFor="email" className={styles.label}>Email Address</label>
-                  <input id="email" name="email" type="email" required autoComplete="email" placeholder="you@example.com" className={styles.input} />
-                </div>
+                {/* 🔴 NEW: Dynamic Email Field */}
+                {prefilledEmail && view === 'login' ? (
+                  <div className={styles.inputGroup}>
+                    <label className={styles.label}>Email Address</label>
+                    <div style={{ padding: '0.75rem', backgroundColor: '#F3F4F6', borderRadius: '8px', border: '1px solid #E5E7EB', color: '#4B5563', fontSize: '0.95rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ fontWeight: '500' }}>{prefilledEmail}</span>
+                      <Link href="/login" style={{ fontSize: '0.75rem', color: '#4F46E5', textDecoration: 'none', fontWeight: '600' }}>
+                        Change
+                      </Link>
+                    </div>
+                    {/* Hidden input ensures the email is still sent with formData */}
+                    <input type="hidden" name="email" value={prefilledEmail} />
+                  </div>
+                ) : (
+                  <div className={styles.inputGroup}>
+                    <label htmlFor="email" className={styles.label}>Email Address</label>
+                    <input id="email" name="email" type="email" required autoComplete="email" placeholder="you@example.com" className={styles.input} />
+                  </div>
+                )}
 
-                {/* 🔴 Password Field Logic - Hidden if user chooses Magic Link */}
+                {/* Password Field Logic - Hidden if user chooses Magic Link */}
                 {(view === 'signup' || loginMethod === 'password') && (
                   <div className={styles.inputGroup}>
+                    {/* 🔴 NEW: Moved Forgot Password Link right above the password field */}
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.25rem' }}>
                       <label htmlFor="password" className={styles.label} style={{ marginBottom: 0 }}>Password</label>
+                      {view === 'login' && (
+                        <Link href="/forgot-password" style={{ fontSize: '0.8rem', color: '#4F46E5', textDecoration: 'none', fontWeight: '500' }}>
+                          Forgot password?
+                        </Link>
+                      )}
                     </div>
                     <input
                       id="password"
@@ -266,7 +292,7 @@ export default function AuthPage() {
                   </div>
                 )}
 
-                {/* 🔴 Magic Link vs Password Toggle */}
+                {/* Magic Link vs Password Toggle */}
                 {view === 'login' && (
                   <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '-0.5rem', marginBottom: '1rem' }}>
                     <button
@@ -275,7 +301,7 @@ export default function AuthPage() {
                         setLoginMethod(loginMethod === 'password' ? 'magic_link' : 'password');
                         setServerError('');
                       }}
-                      style={{ background: 'none', border: 'none', color: '#4F46E5', fontSize: '0.875rem', fontWeight: '500', cursor: 'pointer', padding: 0 }}
+                      style={{ background: 'none', border: 'none', color: '#6B7280', fontSize: '0.875rem', fontWeight: '500', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
                     >
                       {loginMethod === 'password' ? 'Prefer not to use a password?' : 'Sign in with a password instead'}
                     </button>
@@ -299,9 +325,7 @@ export default function AuthPage() {
               </form>
 
               <div className={styles.footer}>
-                {view === 'login' ? (
-                  <Link href="/forgot-password" className={styles.footerLink}>Forgot your password?</Link>
-                ) : (
+                {view === 'signup' && (
                   <p className={styles.footerText}>
                     By joining, you agree to our <Link href="/terms" className={styles.footerLink}>Terms</Link> and <Link href="/privacy" className={styles.footerLink}>Privacy Policy</Link>
                   </p>
@@ -314,4 +338,17 @@ export default function AuthPage() {
       </div>
     </div>
   );
+}
+
+// 2. We wrap our form inside the default export using Suspense to satisfy Next.js!
+export default function AuthPage() {
+  return (
+    <Suspense fallback={
+      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F9FAFB' }}>
+        <p style={{ color: '#6B7280' }}>Loading secure login...</p>
+      </div>
+    }>
+      <AuthFormContent />
+    </Suspense>
+  )
 }
