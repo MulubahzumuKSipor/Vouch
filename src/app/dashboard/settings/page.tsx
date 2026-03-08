@@ -7,6 +7,7 @@ import styles from '@/styles/settings.module.css'
 export default async function SettingsPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
+
   if (!user) redirect('/login')
 
   const { data: profile } = await supabase
@@ -19,12 +20,16 @@ export default async function SettingsPage() {
   if (!profile) redirect('/login')
 
   return (
-    // 🔴 FIXED: Added '|| false' to strictly guarantee a boolean value
     <DashboardLayout isSeller={profile?.is_seller || false} username={profile?.username}>
-      <div className={styles.container}>
-        <h1 className={styles.pageTitle}>Settings</h1>
+      <div className={styles.pageContainer}>
+
+        <div className={styles.pageHeader}>
+          <h1 className={styles.pageTitle}>Settings</h1>
+        </div>
+
         {/* Passed safely as any to prevent strict nested JSON mismatches */}
         <SettingsForm profile={profile as any} />
+
       </div>
     </DashboardLayout>
   )

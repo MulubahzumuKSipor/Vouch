@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { Menu, X } from 'lucide-react'
 import Sidebar from '@/components/sidebar'
+import GlobalModalWrapper from './ModalWrapper' // 🔴 ADDED IMPORT
 import styles from '@/styles/dashboard-layout.module.css'
 
 interface DashboardLayoutProps {
@@ -70,6 +71,9 @@ export default function DashboardLayout({ children, isSeller, username }: Dashbo
       <main className={styles.mainContent}>
         {children}
       </main>
+
+      {/* 🔴 THE GLOBAL MODAL: Rendered at the root, only for sellers */}
+      {isSeller && <GlobalModalWrapper />}
     </div>
   )
 }

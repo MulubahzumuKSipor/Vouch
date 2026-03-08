@@ -25,7 +25,7 @@ export default async function ProductsPage() {
     redirect('/dashboard/library')
   }
 
-  // 3. Fetch Products (Active only)
+  // 3. Fetch Products (Active only - all types are fetched naturally)
   const { data: products } = await supabase
     .from('products')
     .select('*')

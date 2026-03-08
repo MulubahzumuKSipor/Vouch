@@ -420,6 +420,7 @@ export type Database = {
       orders: {
         Row: {
           amount_paid: number
+          booking_time: string | null
           buyer_email: string | null
           buyer_id: string | null
           buyer_phone: string | null
@@ -442,6 +443,7 @@ export type Database = {
         }
         Insert: {
           amount_paid: number
+          booking_time?: string | null
           buyer_email?: string | null
           buyer_id?: string | null
           buyer_phone?: string | null
@@ -464,6 +466,7 @@ export type Database = {
         }
         Update: {
           amount_paid?: number
+          booking_time?: string | null
           buyer_email?: string | null
           buyer_id?: string | null
           buyer_phone?: string | null
@@ -540,7 +543,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "seller_stats"
             referencedColumns: ["seller_id"]
-          },
+          }
         ]
       }
       payouts: {
@@ -663,9 +666,11 @@ export type Database = {
       }
       products: {
         Row: {
+          availability: Json | null
           cover_image: string | null
           created_at: string
           description: string | null
+          duration_minutes: number | null
           id: string
           is_archived: boolean
           is_published: boolean
@@ -684,9 +689,11 @@ export type Database = {
           view_count: number
         }
         Insert: {
+          availability?: Json | null
           cover_image?: string | null
           created_at?: string
           description?: string | null
+          duration_minutes?: number | null
           id?: string
           is_archived?: boolean
           is_published?: boolean
@@ -705,9 +712,11 @@ export type Database = {
           view_count?: number
         }
         Update: {
+          availability?: Json | null
           cover_image?: string | null
           created_at?: string
           description?: string | null
+          duration_minutes?: number | null
           id?: string
           is_archived?: boolean
           is_published?: boolean
@@ -746,7 +755,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "seller_stats"
             referencedColumns: ["seller_id"]
-          },
+          }
         ]
       }
       profiles: {

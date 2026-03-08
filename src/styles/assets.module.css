@@ -1,0 +1,231 @@
+/* Container & Layout */
+.appWrapper {
+  width: 100%;
+}
+
+.headerSection {
+  background-color: transparent;
+  padding: 3rem 0 0 0;
+  margin-bottom: 2rem;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* Typography (Inherits your global Serif fonts) */
+.pageTitle {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+}
+
+.pageSubtitle {
+  color: #6B7280;
+  font-size: 1rem;
+  margin: 0;
+}
+
+/* Tabs (Matching Library) */
+.tabsContainer {
+  display: flex;
+  gap: 2rem;
+  border-bottom: 1px solid #E5E7EB;
+  margin-top: 2rem;
+}
+
+.tab {
+  padding: 0.75rem 0;
+  font-size: 0.95rem;
+  color: #6B7280;
+  cursor: pointer;
+  position: relative;
+  font-weight: 500;
+}
+
+.tabActive {
+  color: #111827;
+  font-weight: 600;
+}
+
+.tabActive::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #D96C4A; /* Terracotta line */
+}
+
+/* Buttons */
+.primaryBtn {
+  background-color: #111827;
+  color: white;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  transition: background-color 0.2s;
+  border: none;
+}
+
+.primaryBtn:hover {
+  background-color: #1F2937;
+}
+
+/* Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  padding-bottom: 4rem;
+}
+
+/* Cards (Matches Library Style exactly) */
+.card {
+  background-color: white;
+  border-radius: 12px;
+  border: 1px solid #E5E7EB;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+}
+
+/* Image */
+.imageWrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background-color: #F3F4F6;
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.coverImage {
+  object-fit: cover;
+}
+
+.imageFallback {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  color: #9CA3AF;
+  background-color: #F9FAFB;
+}
+
+/* Floating Badge inside Image */
+.imageBadge {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  background-color: rgba(60, 60, 60, 0.85); /* Dark badge like Library */
+  backdrop-filter: blur(4px);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.badgeDraft {
+  background-color: rgba(217, 108, 74, 0.9); /* Terracotta tint for drafts */
+}
+
+/* Card Body */
+.cardBody {
+  padding: 1.25rem 1.25rem 0.5rem 1.25rem;
+  flex-grow: 1;
+}
+
+.cardTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+  line-height: 1.4;
+}
+
+.author {
+  font-size: 0.875rem;
+  color: #6B7280;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* Card Footer */
+.cardFooter {
+  padding: 1rem 1.25rem 1.25rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+}
+
+.actionText {
+  color: #D96C4A; /* Terracotta action color */
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+.actionIcon {
+  color: #D96C4A;
+}
+
+/* Empty State */
+.emptyState {
+  background-color: white;
+  border-radius: 12px;
+  border: 1px dashed #D1D5DB;
+  padding: 5rem 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2rem;
+}
+
+.emptyIconCircle {
+  width: 64px;
+  height: 64px;
+  background-color: #F9FAFB;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.5rem;
+  color: #9CA3AF;
+}
+
+.emptyTitle {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #111827;
+  margin: 0 0 0.5rem 0;
+}
+
+.emptyDesc {
+  color: #6B7280;
+  max-width: 400px;
+  margin: 0 0 2rem 0;
+  line-height: 1.5;
+}

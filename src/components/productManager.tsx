@@ -3,14 +3,15 @@
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { useRouter, useSearchParams } from 'next/navigation' // <-- Added imports
+import { useRouter, useSearchParams } from 'next/navigation'
 import {
-  Search, Plus, MoreVertical, Eye, TrendingUp, Package, Edit3, ExternalLink, Link2, Check
+  Search, Plus, MoreVertical, Eye, TrendingUp, Package, Edit3, ExternalLink, Link2, Check, Video, FileText, Calendar
 } from 'lucide-react'
-import styles from '@/styles/productEdits.module.css' // Adjust if you renamed it to product-manager.module.css
+import styles from '@/styles/productEdits.module.css'
 import CreateProductModal from './newModal'
+import AssetActions from '@/components/AssetsAction'
 
-function ProductImage({ src, alt }: { src?: string | null; alt: string }) {
+function ProductImage({ src, alt, type }: { src?: string | null; alt: string, type: string }) {
   if (src) {
     return (
       <div className={styles.imageWrapper}>
@@ -20,9 +21,26 @@ function ProductImage({ src, alt }: { src?: string | null; alt: string }) {
   }
   return (
     <div className={styles.placeholderThumb}>
-      <Package size={20} strokeWidth={1.5} />
+      {type === 'course' && <Video size={20} strokeWidth={1.5} />}
+      {type === 'asset' && <FileText size={20} strokeWidth={1.5} />}
+      {type === 'service' && <Calendar size={20} strokeWidth={1.5} />}
+      {!['course', 'asset', 'service'].includes(type) && <Package size={20} strokeWidth={1.5} />}
     </div>
   )
+}
+
+// Dynamically route to the correct editor
+const getEditorPath = (type: string, id: string) => {
+  if (type === 'asset') return `/dashboard/assets/${id}`
+  if (type === 'service') return `/dashboard/services/${id}`
+  return `/dashboard/products/${id}`
+}
+
+// Generate nice UI badges based on product type
+const getTypeBadge = (type: string) => {
+  if (type === 'asset') return { label: 'Digital Asset', color: '#E11D48', bg: '#FFF1F2' }
+  if (type === 'service') return { label: 'Consultation', color: '#16A34A', bg: '#F0FDF4' }
+  return { label: 'Course', color: '#4F46E5', bg: '#EEF2FF' }
 }
 
 type Product = {
@@ -36,22 +54,19 @@ export default function ProductManager({ initialProducts, username }: { initialP
   const searchParams = useSearchParams()
 
   const [isModalOpen, setIsModalOpen] = useState(false)
-  const [filter, setFilter] = useState<'all' | 'published' | 'draft'>('all')
+  const [filterType, setFilterType] = useState<'all' | 'course' | 'asset' | 'service'>('all')
   const [searchQuery, setSearchQuery] = useState('')
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null)
   const [copiedId, setCopiedId] = useState<string | null>(null)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
-  // --- NEW: Auto-open modal if ?new=true is in URL ---
   useEffect(() => {
     if (searchParams.get('new') === 'true') {
       setIsModalOpen(true)
-      // Clean up the URL so a refresh doesn't pop it open again
       router.replace('/dashboard/products', { scroll: false })
     }
   }, [searchParams, router])
 
-  // --- Handle clicks outside dropdown ---
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -62,10 +77,11 @@ export default function ProductManager({ initialProducts, username }: { initialP
     return () => document.removeEventListener("mousedown", handleClickOutside)
   }, [])
 
+  // Filter by Search AND Product Type
   const filteredProducts = initialProducts.filter(product => {
     const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase())
-    const matchesTab = filter === 'all' ? true : filter === 'published' ? product.is_published : !product.is_published
-    return matchesSearch && matchesTab
+    const matchesType = filterType === 'all' ? true : product.product_type === filterType
+    return matchesSearch && matchesType
   })
 
   const handleCopyLink = (slug: string, id: string) => {
@@ -82,27 +98,28 @@ export default function ProductManager({ initialProducts, username }: { initialP
         {/* ── HEADER ── */}
         <header className={styles.header}>
           <div className={styles.headerText}>
-            <h1 className={styles.title}>Products</h1>
-            <p className={styles.subtitle}>Manage and organize your digital storefront.</p>
+            <h1 className={styles.title}>My Business</h1>
+            <p className={styles.subtitle}>Manage all your courses, assets, and consultations.</p>
           </div>
           <button onClick={() => setIsModalOpen(true)} className={styles.createBtn}>
-            <Plus size={18} /> <span>Add New Course</span>
+            <Plus size={18} /> <span>Add Product</span>
           </button>
         </header>
-
-        {/* ... Rest of your component (Toolbar, List Card, etc.) remains exactly the same ... */}
 
         {/* ── TOOLBAR ── */}
         <div className={styles.toolbar}>
           <div className={styles.tabs}>
-            <button onClick={() => setFilter('all')} className={`${styles.tab} ${filter === 'all' ? styles.activeTab : ''}`}>
+            <button onClick={() => setFilterType('all')} className={`${styles.tab} ${filterType === 'all' ? styles.activeTab : ''}`}>
               All <span className={styles.badge}>{initialProducts.length}</span>
             </button>
-            <button onClick={() => setFilter('published')} className={`${styles.tab} ${filter === 'published' ? styles.activeTab : ''}`}>
-              Published <span className={styles.badge}>{initialProducts.filter(p => p.is_published).length}</span>
+            <button onClick={() => setFilterType('course')} className={`${styles.tab} ${filterType === 'course' ? styles.activeTab : ''}`}>
+              Courses <span className={styles.badge}>{initialProducts.filter(p => p.product_type === 'course').length}</span>
             </button>
-            <button onClick={() => setFilter('draft')} className={`${styles.tab} ${filter === 'draft' ? styles.activeTab : ''}`}>
-              Drafts <span className={styles.badge}>{initialProducts.filter(p => !p.is_published).length}</span>
+            <button onClick={() => setFilterType('asset')} className={`${styles.tab} ${filterType === 'asset' ? styles.activeTab : ''}`}>
+              Assets <span className={styles.badge}>{initialProducts.filter(p => p.product_type === 'asset').length}</span>
+            </button>
+            <button onClick={() => setFilterType('service')} className={`${styles.tab} ${filterType === 'service' ? styles.activeTab : ''}`}>
+              Consultations <span className={styles.badge}>{initialProducts.filter(p => p.product_type === 'service').length}</span>
             </button>
           </div>
 
@@ -131,75 +148,88 @@ export default function ProductManager({ initialProducts, username }: { initialP
 
           {filteredProducts.length > 0 ? (
             <div className={styles.listBody}>
-              {filteredProducts.map((product) => (
-                <div key={product.id} className={styles.productRow}>
+              {filteredProducts.map((product) => {
+                const editorPath = getEditorPath(product.product_type, product.id)
+                const typeBadge = getTypeBadge(product.product_type)
 
-                  {/* Clickable Area spans the grid */}
-                  <Link href={`/dashboard/products/${product.id}`} className={styles.rowContent}>
+                return (
+                  <div key={product.id} className={styles.productRow}>
 
-                    {/* Column 1: Image & Info */}
-                    <div className={styles.colMain}>
-                      <ProductImage src={product.cover_image} alt={product.title} />
-                      <div className={styles.productInfo}>
-                        <h3 className={styles.productTitle}>{product.title}</h3>
-                        <div className={styles.productMeta}>
-                          <span className={styles.metaType}>{product.product_type}</span>
-                          <span className={styles.metaDot}>•</span>
-                          <span className={styles.metaPrice}>
-                            {product.price_amount > 0 ? `$${(product.price_amount / 100).toFixed(2)} ${product.price_currency}` : 'Free'}
-                          </span>
+                    {/* Clickable Area spans the grid */}
+                    <Link href={editorPath} className={styles.rowContent}>
+
+                      {/* Column 1: Image & Info */}
+                      <div className={styles.colMain}>
+                        <ProductImage src={product.cover_image} alt={product.title} type={product.product_type} />
+                        <div className={styles.productInfo}>
+                          <h3 className={styles.productTitle}>{product.title}</h3>
+                          <div className={styles.productMeta}>
+                            <span
+                              className={styles.metaType}
+                              style={{ backgroundColor: typeBadge.bg, color: typeBadge.color, padding: '2px 6px', borderRadius: '4px', fontSize: '0.75rem', fontWeight: 600 }}
+                            >
+                              {typeBadge.label}
+                            </span>
+                            <span className={styles.metaDot}>•</span>
+                            <span className={styles.metaPrice}>
+                              {product.price_amount > 0 ? `$${(product.price_amount / 100).toFixed(2)} ${product.price_currency}` : 'Free'}
+                            </span>
+                          </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Column 2: Stats */}
-                    <div className={styles.colStats}>
-                      <div className={styles.statGroup}>
-                        <TrendingUp size={14} className={styles.statIcon} />
-                        <span className={styles.statValue}>{product.sales_count} sales</span>
+                      {/* Column 2: Stats */}
+                      <div className={styles.colStats}>
+                        <div className={styles.statGroup}>
+                          <TrendingUp size={14} className={styles.statIcon} />
+                          <span className={styles.statValue}>{product.sales_count} sales</span>
+                        </div>
+                        <div className={styles.statGroup}>
+                          <Eye size={14} className={styles.statIcon} />
+                          <span className={styles.statValue}>{product.view_count} views</span>
+                        </div>
                       </div>
-                      <div className={styles.statGroup}>
-                        <Eye size={14} className={styles.statIcon} />
-                        <span className={styles.statValue}>{product.view_count} views</span>
+
+                      {/* Column 3: Status */}
+                      <div className={styles.colStatus}>
+                        <span className={`${styles.statusBadge} ${product.is_published ? styles.badgePublished : styles.badgeDraft}`}>
+                          {product.is_published ? 'Published' : 'Draft'}
+                        </span>
                       </div>
+                    </Link>
+
+                    {/* Column 4: Actions (Outside the Link) */}
+                    <div className={styles.colAction} ref={activeDropdown === product.id ? dropdownRef : null} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center' }}>
+
+                      <AssetActions id={product.id} title={product.title} />
+
+                      <button
+                        className={styles.iconBtn}
+                        onClick={(e) => { e.preventDefault(); setActiveDropdown(activeDropdown === product.id ? null : product.id) }}
+                        aria-label="Product Actions"
+                      >
+                        <MoreVertical size={18} />
+                      </button>
+
+                      {activeDropdown === product.id && (
+                        <div className={styles.dropdown}>
+                          <Link href={editorPath} className={styles.dropItem}>
+                            <Edit3 size={16} /> Edit {typeBadge.label}
+                          </Link>
+                          <Link href={`/vouch.lr/@${username}/${product.slug}`} target="_blank" className={styles.dropItem}>
+                            <ExternalLink size={16} /> View on Store
+                          </Link>
+                          <div className={styles.dropDivider} />
+                          <button onClick={() => handleCopyLink(product.slug, product.id)} className={styles.dropItem}>
+                            {copiedId === product.id ? <Check size={16} className={styles.textGreen} /> : <Link2 size={16} />}
+                            {copiedId === product.id ? 'Link Copied!' : 'Copy Link'}
+                          </button>
+                        </div>
+                      )}
                     </div>
-
-                    {/* Column 3: Status */}
-                    <div className={styles.colStatus}>
-                      <span className={`${styles.statusBadge} ${product.is_published ? styles.badgePublished : styles.badgeDraft}`}>
-                        {product.is_published ? 'Published' : 'Draft'}
-                      </span>
-                    </div>
-                  </Link>
-
-                  {/* Column 4: Actions (Outside the Link) */}
-                  <div className={styles.colAction} ref={activeDropdown === product.id ? dropdownRef : null}>
-                    <button
-                      className={styles.iconBtn}
-                      onClick={(e) => { e.preventDefault(); setActiveDropdown(activeDropdown === product.id ? null : product.id) }}
-                      aria-label="Product Actions"
-                    >
-                      <MoreVertical size={18} />
-                    </button>
-
-                    {activeDropdown === product.id && (
-                      <div className={styles.dropdown}>
-                        <Link href={`/dashboard/products/${product.id}`} className={styles.dropItem}>
-                          <Edit3 size={16} /> Edit Product
-                        </Link>
-                        <Link href={`/vouch.lr/@${username}/${product.slug}`} target="_blank" className={styles.dropItem}>
-                          <ExternalLink size={16} /> View on Store
-                        </Link>
-                        <div className={styles.dropDivider} />
-                        <button onClick={() => handleCopyLink(product.slug, product.id)} className={styles.dropItem}>
-                          {copiedId === product.id ? <Check size={16} className={styles.textGreen} /> : <Link2 size={16} />}
-                          {copiedId === product.id ? 'Link Copied!' : 'Copy Link'}
-                        </button>
-                      </div>
-                    )}
                   </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           ) : (
             <div className={styles.emptyState}>

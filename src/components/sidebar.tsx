@@ -14,7 +14,8 @@ import {
   ShoppingBag,
   Compass,
   Settings,
-  LogOut
+  LogOut,
+  FileBox // 🔴 ADDED FileBox icon for Assets
 } from 'lucide-react'
 import styles from '@/styles/sidebar.module.css'
 import { createClient } from '@/lib/client'
@@ -31,7 +32,7 @@ export default function Sidebar({ isSeller, username, onClose }: SidebarProps) {
 
   const sellerLinks = [
     { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-    { name: 'Course', href: '/dashboard/products', icon: Package },
+    { name: 'Courses', href: '/dashboard/products', icon: Package }, // Pluralized for consistency
     { name: 'Orders', href: '/dashboard/orders', icon: ShoppingCart },
     { name: 'Library', href: '/dashboard/library', icon: BookOpen },
     { name: 'Analytics', href: '/dashboard/analytics', icon: TrendingUp },

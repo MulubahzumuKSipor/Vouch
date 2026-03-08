@@ -2,9 +2,9 @@ import { createClient } from '@/lib/server'
 import { redirect } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, Store } from 'lucide-react'
-import StoreSettingsForm from '@/components/store'
+import StoreSettingsForm from '@/components/store' // Adjust path if needed
 import DashboardLayout from '@/components/dashboardLayout'
-import styles from '@/styles/settings.module.css' // Reuse the settings styles
+import styles from '@/styles/settings.module.css'
 
 export default async function StoreSettingsPage() {
   const supabase = await createClient()
@@ -23,13 +23,15 @@ export default async function StoreSettingsPage() {
   if (!profile?.is_seller) {
     return (
       <DashboardLayout isSeller={false} username={profile?.username}>
-        <div className={styles.container}>
-          <div className={styles.errorState}>
-            <Store size={48} />
-            <h2>Seller Account Required</h2>
-            <p>You must be a registered seller to configure a store.</p>
+        <div className={styles.pageContainer}>
+          <div className={styles.emptyState}>
+            <div className={styles.emptyIconCircle}>
+              <Store size={32} />
+            </div>
+            <h2 className={styles.emptyTitle}>Seller Account Required</h2>
+            <p className={styles.emptyDesc}>You must be a registered seller to configure a public storefront.</p>
             <Link href="/dashboard/settings" className={styles.saveBtn}>
-              Go to Settings
+              Go to General Settings
             </Link>
           </div>
         </div>
@@ -39,31 +41,17 @@ export default async function StoreSettingsPage() {
 
   return (
     <DashboardLayout isSeller={true} username={profile.username}>
-      <div className={styles.container}>
+      <div className={styles.pageContainer}>
         
         {/* Header with Back Button */}
-        <div style={{ marginBottom: '2rem' }}>
-          <Link 
-            href="/dashboard/settings" 
-            style={{ 
-                padding: '0.5rem 1rem',
-                paddingTop: '2rem',
-              display: 'inline-flex', 
-              alignItems: 'center', 
-              gap: '0.5rem', 
-              color: '#6B7280', 
-              marginBottom: '1rem',
-              fontSize: '0.9rem',
-              fontWeight: 600,
-              textDecoration: 'none'
-            }}
-          >
+        <div className={styles.pageHeader}>
+          <Link href="/dashboard/settings" className={styles.backLink}>
             <ArrowLeft size={16} /> Back to General Settings
           </Link>
           <h1 className={styles.pageTitle}>Store Settings</h1>
         </div>
 
-        {/* 🔴 FIXED: Added 'as any' to bypass the Postgres null vs TypeScript undefined mismatch */}
+        {/* Form Component */}
         <StoreSettingsForm profile={profile as any} />
         
       </div>

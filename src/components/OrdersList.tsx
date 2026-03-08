@@ -8,9 +8,9 @@ import {
   Filter, 
   Download, 
   ShoppingBag, 
-  TrendingUp, 
   Package, 
   User,
+  ArrowRight
 } from 'lucide-react'
 import styles from '@/styles/orders.module.css'
 
@@ -32,7 +32,6 @@ const formatDate = (dateString: string) => {
   })
 }
 
-// 🔴 FIXED: Updated the interface to accept the 'null' values Supabase might return
 interface Order {
   id: string
   order_number: string
@@ -42,7 +41,6 @@ interface Order {
   currency: string
   created_at: string
   product_title: string
-  // Account for Postgres joins potentially returning null or nullable columns
   profiles?: {
     full_name: string | null;
     email?: string | null;
@@ -66,12 +64,10 @@ export default function OrdersList({ initialOrders, view, isSeller }: OrdersList
   const [searchQuery, setSearchQuery] = useState('')
   const [statusFilter, setStatusFilter] = useState('all')
 
-  // Toggle between Sales and Purchases
   const toggleView = (newView: string) => {
     router.push(`/dashboard/orders?view=${newView}`)
   }
 
-  // Filter Logic
   const filteredOrders = initialOrders.filter(order => {
     const matchesSearch = 
       order.order_number.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -84,151 +80,167 @@ export default function OrdersList({ initialOrders, view, isSeller }: OrdersList
   })
 
   return (
-    <div className={styles.container}>
-      {/* Header */}
-      <div className={styles.header}>
-        <div>
-          <h1 className={styles.title}>
-            {view === 'sales' ? 'Orders Received' : 'Purchase History'}
-          </h1>
-          <p className={styles.subtitle}>
-            {view === 'sales' 
-              ? 'Manage your sales and track earnings.' 
-              : 'View your past purchases and receipts.'}
-          </p>
-        </div>
-        {view === 'sales' && (
-          <button className={styles.exportBtn}>
-            <Download size={18} />
-            <span>Export CSV</span>
-          </button>
-        )}
-      </div>
+    <div className={styles.appWrapper}>
 
-      {/* View Switcher (Only for Sellers) */}
-      {isSeller && (
-        <div className={styles.viewToggle}>
-          <button 
-            onClick={() => toggleView('sales')}
-            className={`${styles.toggleBtn} ${view === 'sales' ? styles.activeToggle : ''}`}
-          >
-            <TrendingUp size={16} />
-            Sales
-          </button>
-          <button 
-            onClick={() => toggleView('purchases')}
-            className={`${styles.toggleBtn} ${view === 'purchases' ? styles.activeToggle : ''}`}
-          >
-            <ShoppingBag size={16} />
-            Purchases
-          </button>
-        </div>
-      )}
+      {/* ── HEADER ── */}
+      <div className={styles.headerSection}>
+        <div className={styles.container}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+            <div>
+              <h1 className={styles.pageTitle}>
+                {view === 'sales' ? 'Orders Received' : 'Purchase History'}
+              </h1>
+              <p className={styles.pageSubtitle}>
+                {view === 'sales'
+                  ? 'Manage your sales and track earnings.'
+                  : 'View your past purchases and receipts.'}
+              </p>
+            </div>
 
-      {/* Filters & Search */}
-      <div className={styles.controls}>
-        <div className={styles.searchWrap}>
-          <Search size={18} className={styles.searchIcon} />
-          <input 
-            type="text" 
-            placeholder="Search order #, product, or name..." 
-            className={styles.searchInput}
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-        
-        <div className={styles.filterWrap}>
-          <Filter size={16} className={styles.filterIcon} />
-          <select 
-            className={styles.filterSelect}
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-          >
-            <option value="all">All Statuses</option>
-            <option value="completed">Completed</option>
-            <option value="pending">Pending</option>
-            <option value="refunded">Refunded</option>
-          </select>
+            {view === 'sales' && (
+              <button className={styles.secondaryBtn}>
+                <Download size={18} />
+                Export CSV
+              </button>
+            )}
+          </div>
+
+          {/* Minimal Tabs (Matching Library & Assets styling) */}
+          {isSeller && (
+            <div className={styles.tabsContainer}>
+              <button
+                onClick={() => toggleView('sales')}
+                className={`${styles.tab} ${view === 'sales' ? styles.tabActive : ''}`}
+              >
+                Sales
+              </button>
+              <button
+                onClick={() => toggleView('purchases')}
+                className={`${styles.tab} ${view === 'purchases' ? styles.tabActive : ''}`}
+              >
+                Purchases
+              </button>
+            </div>
+          )}
         </div>
       </div>
 
-      {/* Orders Table/List */}
-      <div className={styles.list}>
+      <div className={styles.container}>
+        {/* ── FILTERS & SEARCH ── */}
+        <div className={styles.controls}>
+          <div className={styles.searchWrap}>
+            <Search size={18} className={styles.searchIcon} />
+            <input
+              type="text"
+              placeholder="Search order #, product, or name..."
+              className={styles.searchInput}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
+
+          <div className={styles.filterWrap}>
+            <Filter size={16} className={styles.filterIcon} />
+            <select
+              className={styles.filterSelect}
+              value={statusFilter}
+              onChange={(e) => setStatusFilter(e.target.value)}
+            >
+              <option value="all">All Statuses</option>
+              <option value="completed">Completed</option>
+              <option value="pending">Pending</option>
+              <option value="refunded">Refunded</option>
+            </select>
+          </div>
+        </div>
+
+        {/* ── CONTENT GRID ── */}
         {filteredOrders.length > 0 ? (
-          filteredOrders.map((order) => (
-            <div key={order.id} className={styles.card}>
-              <div className={styles.cardHeader}>
-                <div className={styles.orderMeta}>
-                  <span className={styles.orderNumber}>#{order.order_number}</span>
-                  <span className={styles.dot}>•</span>
-                  <span className={styles.date}>{formatDate(order.created_at)}</span>
-                </div>
-                <span className={`${styles.statusBadge} ${styles[order.status]}`}>
-                  {order.status}
-                </span>
-              </div>
+          <div className={styles.grid}>
+            {filteredOrders.map((order) => (
+              <div key={order.id} className={styles.card}>
 
-              <div className={styles.cardBody}>
-                {/* Product Info */}
-                <div className={styles.productInfo}>
-                  <div className={styles.iconBox}>
-                    <Package size={20} />
+                {/* Card Header: Meta & Status */}
+                <div className={styles.cardHeader}>
+                  <div className={styles.orderMeta}>
+                    <span className={styles.orderNumber}>#{order.order_number}</span>
+                    <span className={styles.dot}>•</span>
+                    <span className={styles.date}>{formatDate(order.created_at)}</span>
                   </div>
-                  <div>
-                    <h3 className={styles.productTitle}>{order.product_title}</h3>
-                    <p className={styles.amount}>
-                      {view === 'sales' 
-                        ? `You earned: ${formatCurrency(order.seller_earnings, order.currency)}`
-                        : `Total: ${formatCurrency(order.amount_paid, order.currency)}`
-                      }
-                    </p>
-                  </div>
+                  <span className={`${styles.statusBadge} ${styles[order.status.toLowerCase()] || styles.defaultStatus}`}>
+                    {order.status}
+                  </span>
                 </div>
 
-                {/* Counterparty Info */}
-                <div className={styles.counterparty}>
-                  <div className={styles.userRow}>
-                    <User size={14} className={styles.userIcon} />
-                    <span>
-                      {view === 'sales' ? 'Buyer: ' : 'Seller: '}
-                      <span className={styles.userName}>
-                        {order.profiles?.full_name || 'Unknown User'}
+                {/* Card Body: Product & User */}
+                <div className={styles.cardBody}>
+                  <div className={styles.productInfo}>
+                    <div className={styles.iconBox}>
+                      <Package size={20} />
+                    </div>
+                    <div>
+                      <h3 className={styles.productTitle}>{order.product_title}</h3>
+                      <p className={styles.amount}>
+                        {view === 'sales'
+                          ? `Earnings: ${formatCurrency(order.seller_earnings, order.currency)}`
+                          : `Total: ${formatCurrency(order.amount_paid, order.currency)}`
+                        }
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className={styles.counterparty}>
+                    <div className={styles.userRow}>
+                      <User size={14} className={styles.userIcon} />
+                      <span className={styles.userLabel}>
+                        {view === 'sales' ? 'Buyer:' : 'Seller:'}
+                        <span className={styles.userName}>
+                          {order.profiles?.full_name || 'Guest User'}
+                        </span>
                       </span>
-                    </span>
+                    </div>
+                    {view === 'sales' && order.profiles?.email && (
+                      <div className={styles.emailRow}>{order.profiles.email}</div>
+                    )}
                   </div>
-                  {view === 'sales' && order.profiles?.email && (
-                    <div className={styles.emailRow}>{order.profiles.email}</div>
+                </div>
+
+                {/* Card Footer: Action Links */}
+                <div className={styles.cardFooter}>
+                  <Link href={`/dashboard/orders/${order.id}`} className={styles.actionText}>
+                    View Details
+                  </Link>
+
+                  {view === 'purchases' && order.status === 'completed' ? (
+                    <Link href={`/dashboard/library`} className={styles.actionLink}>
+                      Go to Library <ArrowRight size={16} />
+                    </Link>
+                  ) : (
+                    <ArrowRight size={16} className={styles.actionIcon} />
                   )}
                 </div>
               </div>
-
-              <div className={styles.cardFooter}>
-                <Link 
-                  href={`/dashboard/orders/${order.id}`}
-                  className={styles.detailsLink}
-                >
-                  View Details
-                </Link>
-                {view === 'purchases' && order.status === 'completed' && (
-                  <Link href={`/dashboard/library`} className={styles.actionLink}>
-                    View Content
-                  </Link>
-                )}
-              </div>
-            </div>
-          ))
+            ))}
+          </div>
         ) : (
+          /* ── EMPTY STATE ── */
           <div className={styles.emptyState}>
-            <ShoppingBag size={48} className={styles.emptyIcon} />
-            <h3>No orders found</h3>
-            <p>
+            <div className={styles.emptyIconCircle}>
+              <ShoppingBag size={32} />
+            </div>
+            <h3 className={styles.emptyTitle}>No orders found</h3>
+            <p className={styles.emptyDesc}>
               {searchQuery 
-                ? `No results for "${searchQuery}"` 
+                ? `We couldn't find any orders matching "${searchQuery}".`
                 : view === 'sales' 
                   ? "Share your products to get your first sale!" 
                   : "Explore the marketplace to make your first purchase."}
             </p>
+            {!searchQuery && view === 'purchases' && (
+              <Link href="/explore" className={styles.primaryBtn}>
+                Explore Marketplace
+              </Link>
+            )}
           </div>
         )}
       </div>

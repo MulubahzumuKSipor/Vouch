@@ -1,7 +1,6 @@
 'use server'
 
 import { createClient } from '@/lib/server'
-import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
 import crypto from 'crypto'
 
@@ -24,7 +23,7 @@ function generateSlug(title: string) {
 export async function createProduct(formData: FormData) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
-  if (!user) throw new Error('Unauthorized')
+  if (!user) return { error: 'Unauthorized' }
 
   const title = formData.get('title') as string
   const type = formData.get('type') as 'course' | 'service' | 'asset'
@@ -47,8 +46,8 @@ export async function createProduct(formData: FormData) {
 
   if (error) return { error: 'Failed to create product' }
 
-  revalidatePath('/dashboard/products')
-  redirect(`/dashboard/products/${data.id}/edit`)
+  // Hand the ID back so the client-side modal can route properly
+  return { id: data.id }
 }
 
 // --- 2. UPDATE PRODUCT DETAILS ---
@@ -71,7 +70,6 @@ export async function updateProductDetails(productId: string, formData: FormData
       title,
       description,
       price_amount: priceAmount,
-      // 🔴 FIXED: Asserted the string to match the strict Supabase currency_enum
       price_currency: currency as 'USD' | 'LRD' | 'EUR' | 'GBP' | 'NGN' | 'GHS' | 'KES',
       is_published: isPublished,
       updated_at: new Date().toISOString()
@@ -147,7 +145,7 @@ export async function saveVideoAttachment(productId: string, videoId: string, fi
       product_id: productId,
       file_name: fileName,
       storage_path: videoId,
-      attachment_type: 'video',
+      attachment_type: 'video' as const, // 🔴 FIXED: Strict typing for Enum
       mime_type: 'video/mp4',
       is_preview: true
     })
@@ -170,7 +168,7 @@ export async function saveFileAttachment(productId: string, storagePath: string,
       product_id: productId,
       file_name: fileName,
       storage_path: storagePath,
-      attachment_type: 'file',
+      attachment_type: 'file' as const, // 🔴 FIXED
       mime_type: fileType,
       is_preview: false
     })
@@ -181,13 +179,12 @@ export async function saveFileAttachment(productId: string, storagePath: string,
   return { success: true }
 }
 
-// Delete a file from Supabase Private Storage
+// --- DELETE FILES ---
 export async function deleteSupabaseFile(filePath: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { success: false, error: 'Unauthorized' }
 
-  // Extract just the file name/path from the full URL if necessary
   const pathClean = filePath.replace('resources/', '')
 
   const { error } = await supabase.storage
@@ -198,14 +195,13 @@ export async function deleteSupabaseFile(filePath: string) {
   return { success: true }
 }
 
-// Delete a video from Bunny.net
 export async function deleteBunnyVideo(videoId: string) {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return { success: false, error: 'Unauthorized' }
 
   const libraryId = process.env.NEXT_PUBLIC_BUNNY_LIBRARY_ID
-  const apiKey = process.env.BUNNY_API_KEY // Server-side Access Key
+  const apiKey = process.env.BUNNY_API_KEY
 
   const url = `https://video.bunnycdn.com/library/${libraryId}/videos/${videoId}`
 
@@ -220,4 +216,180 @@ export async function deleteBunnyVideo(videoId: string) {
   } catch (err) {
     return { success: false, error: String(err) }
   }
+}
+
+// --- 6. UPDATE ASSET ---
+export async function updateAsset(formData: FormData) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Unauthorized' }
+
+  const id = formData.get('id') as string
+  const title = formData.get('title') as string
+  const description = formData.get('description') as string
+  const priceString = formData.get('price_amount') as string
+  const coverImage = formData.get('cover_image') as string
+
+  // Grab the JSON string of multiple files instead of a single file path
+  const newFilesString = formData.get('new_files') as string
+  const isPublished = formData.get('is_published') === 'true'
+
+  const priceAmount = Math.round(parseFloat(priceString) * 100)
+
+  // A. Update the main product data
+  const { error: productError } = await supabase
+    .from('products')
+    .update({
+      title,
+      description,
+      price_amount: priceAmount,
+      cover_image: coverImage || null,
+      is_published: isPublished,
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', id)
+    .eq('seller_id', user.id)
+
+  if (productError) return { error: productError.message }
+
+  // B. Handle Multiple Secure Files
+  if (newFilesString) {
+    const newFiles: { path: string, name: string }[] = JSON.parse(newFilesString)
+
+    // 1. Clear out any old file attachments to prevent duplicates (Replace behavior)
+    await supabase
+      .from('product_attachments')
+      .delete()
+      .eq('product_id', id)
+      .eq('attachment_type', 'file')
+
+    // 2. Insert the new file paths sequentially
+    const attachmentsToInsert = newFiles.map((file, index) => ({
+      product_id: id,
+      file_name: file.name,
+      storage_path: file.path,
+      attachment_type: 'file' as const, // 🔴 FIXED
+      sort_order: index,
+      is_preview: false
+    }))
+
+    await supabase
+      .from('product_attachments')
+      .insert(attachmentsToInsert)
+  }
+
+  revalidatePath(`/dashboard/assets/${id}`)
+  revalidatePath(`/dashboard/products`)
+  return { success: true }
+}
+
+// --- 7. ARCHIVE (SOFT DELETE) PRODUCT ---
+export async function archiveProduct(productId: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Unauthorized' }
+
+  const { error } = await supabase
+    .from('products')
+    .update({ is_archived: true })
+    .eq('id', productId)
+    .eq('seller_id', user.id)
+
+  if (error) return { error: error.message }
+
+  revalidatePath('/dashboard/assets')
+  revalidatePath('/dashboard/products')
+  return { success: true }
+}
+
+// --- 8. PERMANENTLY DELETE PRODUCT & FILES ---
+export async function deleteProduct(productId: string) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Unauthorized' }
+
+  // 1. Fetch attachments specifically to wipe them from the secure storage bucket
+  const { data: attachments } = await supabase
+    .from('product_attachments')
+    .select('storage_path, attachment_type')
+    .eq('product_id', productId)
+
+  if (attachments && attachments.length > 0) {
+    const filePaths = attachments
+      .filter(a => a.attachment_type === 'file')
+      .map(a => a.storage_path)
+
+    if (filePaths.length > 0) {
+      await supabase.storage.from('product-files').remove(filePaths)
+    }
+  }
+
+  // 2. Delete the attachment records
+  await supabase
+    .from('product_attachments')
+    .delete()
+    .eq('product_id', productId)
+
+  // 3. Hard delete the row from the database
+  const { error } = await supabase
+    .from('products')
+    .delete()
+    .eq('id', productId)
+    .eq('seller_id', user.id)
+
+  if (error) return { error: error.message }
+
+  revalidatePath('/dashboard/assets')
+  revalidatePath('/dashboard/products')
+  return { success: true }
+}
+
+// --- 9. UPDATE SERVICE / CONSULTATION (NATIVE CALENDAR VERSION) ---
+export async function updateService(formData: FormData) {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) return { error: 'Unauthorized' }
+
+  const id = formData.get('id') as string
+  const title = formData.get('title') as string
+  const description = formData.get('description') as string
+  const priceString = formData.get('price_amount') as string
+  const coverImage = formData.get('cover_image') as string
+  const isPublished = formData.get('is_published') === 'true'
+
+  // 🔴 Grab the native booking data generated by AvailabilityPicker
+  const durationStr = formData.get('duration_minutes') as string
+  const availabilityStr = formData.get('availability') as string
+
+  const priceAmount = Math.round(parseFloat(priceString) * 100)
+
+  // Parse the JSON safely, default to empty object if it fails
+  let parsedAvailability = {}
+  try {
+    if (availabilityStr) parsedAvailability = JSON.parse(availabilityStr)
+  } catch (e) {
+    console.error("Failed to parse availability", e)
+  }
+
+  // 🔴 Update the main product data WITH the new schedule columns!
+  const { error: productError } = await supabase
+    .from('products')
+    .update({
+      title,
+      description,
+      price_amount: priceAmount,
+      cover_image: coverImage || null,
+      is_published: isPublished,
+      duration_minutes: parseInt(durationStr) || 60, // Fallback to 60 mins
+      availability: parsedAvailability,              // Save the JSON directly to the new column
+      updated_at: new Date().toISOString()
+    })
+    .eq('id', id)
+    .eq('seller_id', user.id)
+
+  if (productError) return { error: productError.message }
+
+  revalidatePath(`/dashboard/services/${id}`)
+  revalidatePath(`/dashboard/products`)
+  return { success: true }
 }
