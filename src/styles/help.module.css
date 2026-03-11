@@ -1,0 +1,571 @@
+/* ── BASE PATTERNS ── */
+.main {
+  width: 100%;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #111827;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.subtleTexture {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image: radial-gradient(#111827 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+
+/* ── 1. HERO & SEARCH ── */
+.heroSection {
+  background-color: #111827; /* Deep Kente Black */
+  padding: 120px 0 100px;
+  position: relative;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.heroTexture {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(245, 158, 11, 0.15) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 10;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.headline {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  letter-spacing: -0.02em;
+}
+
+.subheadline {
+  font-size: 1.125rem;
+  color: #D1D5DB;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+/* The Search Bar */
+.searchWrapper {
+  display: flex;
+  align-items: center;
+  background: #FFFFFF;
+  padding: 8px 8px 8px 24px;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+  border: 4px solid transparent;
+}
+
+/* Kente Gold highlight when focused inside the wrapper */
+.searchWrapper:focus-within {
+  border-color: #111827;
+  box-shadow: 8px 8px 0px 0px #F59E0B;
+  transform: translate(-2px, -2px);
+}
+
+.searchIcon {
+  color: #9CA3AF;
+  flex-shrink: 0;
+}
+
+.searchInput {
+  flex-grow: 1;
+  border: none;
+  outline: none;
+  padding: 16px;
+  font-size: 1.125rem;
+  color: #111827;
+  background: transparent;
+}
+
+.searchInput::placeholder {
+  color: #9CA3AF;
+}
+
+.searchBtn {
+  background-color: #DC2626; /* Kente Red */
+  color: #FFFFFF;
+  border: none;
+  padding: 16px 32px;
+  border-radius: 4px;
+  font-weight: 800;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.searchBtn:hover {
+  background-color: #B91C1C;
+}
+
+/* ── 2. HELP CATEGORIES ── */
+.categoriesSection {
+  background-color: #FFFFFF;
+  padding: 96px 0;
+  margin-top: -40px; /* Pulls categories slightly up over the hero */
+  position: relative;
+  z-index: 20;
+}
+
+.categoriesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 32px;
+}
+
+.categoryCard {
+  background: #FFFFFF;
+  padding: 40px 32px;
+  border-radius: 8px;
+  border: 2px solid #E5E7EB;
+  border-top: 4px solid #111827;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.categoryCard:hover {
+  transform: translateY(-4px);
+  box-shadow: 8px 8px 0px 0px rgba(17, 24, 39, 0.1);
+  border-color: #111827;
+}
+
+.iconGold, .iconGreen, .iconRed, .iconDark {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  margin-bottom: 24px;
+}
+.iconGold { background-color: rgba(245, 158, 11, 0.1); color: #D97706; }
+.iconGreen { background-color: rgba(21, 128, 61, 0.1); color: #15803D; }
+.iconRed { background-color: rgba(220, 38, 38, 0.1); color: #DC2626; }
+.iconDark { background-color: rgba(17, 24, 39, 0.05); color: #111827; }
+
+.categoryCard h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 12px;
+}
+
+.categoryCard p {
+  color: #4B5563;
+  line-height: 1.6;
+  font-size: 0.9375rem;
+  margin: 0;
+}
+
+/* ── 3. POPULAR ARTICLES ── */
+.articlesSection {
+  background-color: #FCFAFA;
+  padding: 96px 0;
+  position: relative;
+}
+
+.centerHeader {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.sectionTitle {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #111827;
+  margin-bottom: 16px;
+}
+
+.titleUnderline {
+  width: 60px;
+  height: 6px;
+  background-color: #F59E0B; /* Kente Gold */
+  margin: 0 auto;
+  border-radius: 2px;
+}
+
+.articlesGrid {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #FFFFFF;
+  border: 2px solid #E5E7EB;
+  border-radius: 8px;
+  overflow: hidden; /* Keeps the borders neat on the rows */
+}
+
+.articleRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 32px;
+  border-bottom: 1px solid #E5E7EB;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.articleRow:last-child {
+  border-bottom: none;
+}
+
+.articleRow:hover {
+  background-color: #F9FAFB;
+}
+
+.articleTitle {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.articleArrow {
+  color: #9CA3AF;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.articleRow:hover .articleArrow {
+  color: #DC2626; /* Kente Red */
+  transform: translateX(4px);
+}
+
+/* ── 4. CONTACT SUPPORT ── */
+.contactSection {
+  background-color: #FFFFFF;
+  padding: 96px 0;
+}
+
+.contactBox {
+  background-color: #111827; /* Deep Black */
+  border-radius: 8px;
+  padding: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 48px;
+  box-shadow: 16px 16px 0px 0px #15803D; /* Kente Green offset */
+}
+
+.contactText {
+  flex: 1;
+}
+
+.contactTitle {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #FFFFFF;
+  margin-bottom: 16px;
+}
+
+.contactDesc {
+  color: #D1D5DB;
+  line-height: 1.6;
+  font-size: 1.125rem;
+}
+
+.contactActions {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 250px;
+}
+
+.whatsappBtn, .emailBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 16px 24px;
+  border-radius: 4px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: transform 0.2s ease;
+}
+
+.whatsappBtn {
+  background-color: #25D366; /* WhatsApp Green */
+  color: #FFFFFF;
+}
+
+.whatsappBtn:hover {
+  transform: translateY(-2px);
+}
+
+.emailBtn {
+  background-color: transparent;
+  color: #FFFFFF;
+  border: 2px solid #FFFFFF;
+}
+
+.emailBtn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 992px) {
+  .contactBox {
+    flex-direction: column;
+    text-align: center;
+    padding: 48px 32px;
+  }
+}
+
+@media (max-width: 768px) {
+  .searchWrapper {
+    flex-direction: column;
+    padding: 16px;
+    background: transparent;
+    box-shadow: none;
+    border: none;
+  }
+  
+  .searchInput {
+    background: #FFFFFF;
+    width: 100%;
+    border-radius: 4px;
+    margin: 8px 0;
+  }
+  
+  .searchBtn {
+    width: 100%;
+  }
+
+  .searchWrapper:focus-within {
+    box-shadow: none;
+    transform: none;
+  }
+
+  .categoriesSection {
+    margin-top: 0;
+  }
+}
+
+/* ── SEARCH RESULTS PAGE SPECIFIC STYLES ── */
+
+.miniHeroSection {
+  background-color: #111827; /* Deep Black */
+  padding: 64px 0 48px;
+  color: #FFFFFF;
+}
+
+.backLink {
+  display: inline-block;
+  color: #9CA3AF;
+  text-decoration: none;
+  font-weight: 600;
+  margin-bottom: 24px;
+  transition: color 0.2s ease;
+}
+
+.backLink:hover {
+  color: #FFFFFF;
+}
+
+.miniHeadline {
+  font-size: 2.5rem;
+  font-weight: 900;
+  margin-bottom: 8px;
+}
+
+.miniSubheadline {
+  font-size: 1.125rem;
+  color: #D1D5DB;
+}
+
+.highlightQuery {
+  color: #F59E0B; /* Kente Gold */
+  font-weight: 700;
+}
+
+.resultsSection {
+  background-color: #FCFAFA;
+  padding: 64px 0 120px;
+}
+
+.resultsLayout {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 48px;
+  align-items: start;
+}
+
+.resultsList {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.resultCard {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 32px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+}
+
+.resultCard:hover {
+  border-color: #111827;
+  transform: translateY(-2px);
+  box-shadow: 6px 6px 0px 0px rgba(17, 24, 39, 0.1); /* Subtle shadow */
+}
+
+.resultCategory {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #15803D; /* Kente Green */
+  margin-bottom: 12px;
+}
+
+.resultTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 12px;
+}
+
+.resultExcerpt {
+  color: #4B5563;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.readMore {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: #DC2626; /* Kente Red */
+}
+
+/* Empty States */
+.emptyState {
+  text-align: center;
+  padding: 64px 32px;
+  background: #FFFFFF;
+  border: 1px dashed #D1D5DB;
+  border-radius: 8px;
+}
+
+.emptyIcon { color: #9CA3AF; margin-bottom: 16px; }
+.emptyIconAlert { color: #DC2626; margin-bottom: 16px; }
+
+.emptyState h2 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 12px;
+}
+
+.emptyState p {
+  color: #6B7280;
+  margin-bottom: 24px;
+}
+
+.primaryBtnSmall {
+  display: inline-block;
+  background-color: #111827;
+  color: #FFFFFF;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* Sidebar */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.sidebarBox {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-top: 4px solid #F59E0B; /* Gold accent */
+  border-radius: 8px;
+  padding: 32px;
+}
+
+.sidebarBoxDark {
+  background: #111827;
+  color: #FFFFFF;
+  border-radius: 8px;
+  padding: 32px;
+  box-shadow: 8px 8px 0px 0px #15803D; /* Green Kente offset */
+}
+
+.sidebarBox h3, .sidebarBoxDark h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 16px;
+}
+
+.sidebarBoxDark p {
+  color: #D1D5DB;
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+.sidebarSearch {
+  display: flex;
+  gap: 8px;
+}
+
+.sidebarInput {
+  flex-grow: 1;
+  padding: 12px;
+  border: 1px solid #D1D5DB;
+  border-radius: 4px;
+  outline: none;
+}
+
+.sidebarInput:focus {
+  border-color: #111827;
+}
+
+.sidebarBtn {
+  background: #111827;
+  color: #FFFFFF;
+  border: none;
+  border-radius: 4px;
+  padding: 0 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidebarLink {
+  color: #F59E0B; /* Gold link */
+  font-weight: 700;
+  text-decoration: none;
+}
+
+@media (max-width: 992px) {
+  .resultsLayout {
+    grid-template-columns: 1fr;
+  }
+  .sidebar {
+    order: -1; /* Puts search sidebar on top on mobile */
+  }
+}

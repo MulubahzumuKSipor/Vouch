@@ -1,0 +1,396 @@
+/* ── BASE PATTERNS ── */
+.main {
+  width: 100%;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #111827;
+  background-color: #FCFAFA;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.subtleTexture {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image: radial-gradient(#111827 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+
+.sectionTitle {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 900;
+  color: #111827;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+/* ── 1. HERO SECTION ── */
+.heroSection {
+  background-color: #111827; /* Deep Black */
+  padding: 120px 0 100px;
+  position: relative;
+  text-align: center;
+  color: #FFFFFF;
+}
+
+.heroTexture {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(245, 158, 11, 0.15) 1px, transparent 1px);
+  background-size: 32px 32px;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.heroContent {
+  position: relative;
+  z-index: 10;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #DC2626; /* Kente Red */
+  background: rgba(220, 38, 38, 0.15);
+  padding: 6px 16px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+}
+
+.headline {
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  letter-spacing: -0.02em;
+}
+
+.highlightLine {
+  position: relative;
+  display: inline-block;
+  color: #FFFFFF;
+  border-bottom: 6px solid #F59E0B; /* Thick Kente Gold */
+  padding-bottom: 4px;
+}
+
+.subheadline {
+  font-size: clamp(1.125rem, 2vw, 1.35rem);
+  color: #D1D5DB;
+  line-height: 1.6;
+}
+
+/* ── 2. COMPANY FACTS ── */
+.factsSection {
+  background-color: #FFFFFF;
+  padding: 96px 0;
+}
+
+.factsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.factDesc {
+  font-size: 1.125rem;
+  color: #4B5563;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.factList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.factList li {
+  font-size: 1.125rem;
+  color: #4B5563;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.factList strong {
+  color: #111827;
+  display: inline-block;
+  width: 140px;
+}
+
+.statsVisual {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.statBox {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: #F9FAFB;
+  padding: 24px 32px;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+  border-left: 4px solid #111827;
+}
+
+.iconGold, .iconRed, .iconGreen {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+.iconGold { background-color: rgba(245, 158, 11, 0.1); color: #D97706; }
+.iconRed { background-color: rgba(220, 38, 38, 0.1); color: #DC2626; }
+.iconGreen { background-color: rgba(21, 128, 61, 0.1); color: #15803D; }
+
+.statBox h3 {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.statBox p {
+  color: #6B7280;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* ── 3. RECENT NEWS ── */
+.newsSection {
+  background-color: #FCFAFA;
+  padding: 96px 0;
+  position: relative;
+}
+
+.newsHeader {
+  margin-bottom: 48px;
+}
+
+.titleUnderline {
+  width: 60px;
+  height: 6px;
+  background-color: #DC2626; /* Kente Red */
+  border-radius: 2px;
+  margin-top: 8px;
+}
+
+.newsGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.newsCard {
+  background: #FFFFFF;
+  border: 2px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 32px;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.newsCard:hover {
+  border-color: #111827;
+  transform: translateX(4px);
+  box-shadow: -8px 8px 0px 0px #15803D; /* Kente Green Offset */
+}
+
+.newsMeta {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  font-size: 0.875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.publicationName {
+  color: #111827;
+}
+
+.articleType {
+  color: #F59E0B; /* Gold */
+}
+
+.newsTitle {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 24px;
+  line-height: 1.3;
+}
+
+.newsFooter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid #E5E7EB;
+  padding-top: 24px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #6B7280;
+}
+
+.readArticleBtn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #111827;
+}
+
+.newsCard:hover .readArticleBtn {
+  color: #DC2626; /* Hover to red */
+}
+
+/* ── 4. BRAND ASSETS ── */
+.assetsSection {
+  background-color: #FFFFFF;
+  padding: 120px 0;
+  border-top: 1px solid #E5E7EB;
+}
+
+.assetsLayout {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.assetsDesc {
+  font-size: 1.125rem;
+  color: #4B5563;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.pressContactBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #111827;
+  color: #FFFFFF;
+  padding: 16px 24px;
+  border-radius: 4px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 4px 4px 0px 0px #F59E0B;
+}
+
+.pressContactBtn:hover {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px 0px #F59E0B;
+}
+
+.downloadGrid {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.downloadCard {
+  display: flex;
+  background: #FFFFFF;
+  border: 2px solid #111827;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 8px 8px 0px 0px #111827; /* Hard black shadow */
+}
+
+.downloadVisual {
+  width: 140px;
+  background: #F3F4F6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-right: 2px solid #111827;
+}
+
+.placeholderIcon {
+  color: #9CA3AF;
+}
+
+.downloadInfo {
+  flex-grow: 1;
+  padding: 24px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.downloadInfo h4 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.downloadInfo p {
+  color: #6B7280;
+  font-size: 0.9375rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.downloadBtn {
+  background: #F59E0B; /* Kente Gold */
+  color: #111827;
+  border: none;
+  width: 48px;
+  height: 48px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.downloadBtn:hover {
+  transform: translateY(-2px);
+  background: #D97706;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 992px) {
+  .factsGrid, .assetsLayout {
+    grid-template-columns: 1fr;
+    gap: 64px;
+  }
+}
+
+@media (max-width: 600px) {
+  .downloadCard {
+    flex-direction: column;
+  }
+  .downloadVisual {
+    width: 100%;
+    height: 120px;
+    border-right: none;
+    border-bottom: 2px solid #111827;
+  }
+}

@@ -1,24 +1,38 @@
 import Link from "next/link";
 import { CheckCircle2, HelpCircle, XCircle, Smartphone, Landmark, ArrowRight } from "lucide-react";
 import styles from "@/styles/pricing.module.css";
+import Image from "next/image";
 
 export default function PricingPage() {
   return (
     <main className={styles.main}>
 
-      {/* ── 1. HERO (Warm Sand) ── */}
+      {/* ── 1. HERO (Woven White) ── */}
       <section className={styles.heroSection}>
+        <Image
+          src="/pricing-hero.jpg" /* 🔴 Add a wide, high-quality image of creators/students here */
+          alt="Creators succeeding with Vouch"
+          fill
+          className={styles.heroBgImage}
+          priority
+        />
+
+        {/* Dark overlay to ensure the white text is perfectly readable */}
+        <div className={styles.heroOverlay} aria-hidden="true" />
         <div className={styles.subtleTexture} aria-hidden="true" />
+
         <div className={styles.container}>
-          <div className={styles.eyebrow}>Simple & Transparent</div>
-          <h1 className={styles.headline}>
-            We only succeed when <br />
-            <span className={styles.highlight}>you succeed.</span>
-          </h1>
-          <p className={styles.subheadline}>
-            No monthly subscriptions. No setup fees. No hidden charges.
-            You get full access to every feature Vouch offers from day one, absolutely free.
-          </p>
+          <div className={styles.heroContent}>
+            <div className={styles.eyebrow}>Simple & Transparent</div>
+            <h1 className={styles.headline}>
+              We only succeed when <br />
+              <span className={styles.highlightLine}>you succeed.</span>
+            </h1>
+            <p className={styles.subheadline}>
+              No monthly subscriptions. No setup fees. No hidden charges.
+              You get full access to every feature Vouch offers from day one, absolutely free.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -53,8 +67,7 @@ export default function PricingPage() {
                 <li><CheckCircle2 size={20} className={styles.checkIcon} /> Unlimited Digital Product Downloads</li>
                 <li><CheckCircle2 size={20} className={styles.checkIcon} /> Automated Calendar & Bookings</li>
                 <li><CheckCircle2 size={20} className={styles.checkIcon} /> Accept MTN & Orange Mobile Money</li>
-                <li><CheckCircle2 size={20} className={styles.checkIcon} /> Accept Visa & Mastercard</li>
-                <li><CheckCircle2 size={20} className={styles.checkIcon} /> Payouts direct to local bank (LRD or USD)</li>
+                <li><CheckCircle2 size={20} className={styles.checkIcon} /> Zero-FX Payouts (Keep the exact LRD or USD you earn)</li>
               </ul>
             </div>
 
@@ -86,7 +99,7 @@ export default function PricingPage() {
                 <li><XCircle size={18} className={styles.xIcon} /> Course Hosting (Teachable) <span>$39/mo</span></li>
                 <li><XCircle size={18} className={styles.xIcon} /> Calendar Bookings (Calendly) <span>$15/mo</span></li>
                 <li><XCircle size={18} className={styles.xIcon} /> Website Builder (Squarespace) <span>$23/mo</span></li>
-                <li><XCircle size={18} className={styles.xIcon} /> Payment Gateway <span>3% + 30¢</span></li>
+                <li><XCircle size={18} className={styles.xIcon} /> Foreign Gateway <span className={styles.subNote}>(If approved)</span> <span>3% + 30¢</span></li>
               </ul>
               <div className={styles.compareTotalBad}>
                 <span>Fixed Monthly Cost:</span>
@@ -149,7 +162,8 @@ export default function PricingPage() {
               <div className={styles.stepIconHighlight}><Landmark size={28} /></div>
               <div className={styles.stepNumberHighlight}>Step 3</div>
               <h3>Your Payout</h3>
-              <p><strong>LRD 900</strong> is deposited directly into your local bank account.</p>
+              {/* 🔴 Updated Payout text */}
+              <p><strong>LRD 900</strong> is deposited directly into your local bank account. No hidden exchange rates.</p>
             </div>
           </div>
         </div>
@@ -179,11 +193,12 @@ export default function PricingPage() {
               </div>
             </div>
 
+            {/* 🔴 Updated FAQ about USD/LRD */}
             <div className={styles.faqItem}>
               <div className={styles.faqIcon}><HelpCircle size={24} /></div>
               <div>
-                <h3>Can I charge my customers in USD?</h3>
-                <p>Yes. You can price your products in either United States Dollars (USD) or Liberian Dollars (LRD). Customers can pay with whichever currency their Mobile Money or card supports, and we handle the secure conversion.</p>
+                <h3>Can I earn in both USD and LRD?</h3>
+                <p>Yes. To protect you from terrible bank exchange rates, we use a strict &quot;Like-for-Like&quot; system. If your student pays in LRD, your dashboard balances LRD. If they pay in USD, you balance USD. You withdraw the exact currency you earned, meaning you never lose a single cent to hidden conversion fees.</p>
               </div>
             </div>
 

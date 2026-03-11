@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { createClient } from '@/lib/server';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, MessageCircle, BookOpen, CalendarHeart } from 'lucide-react';
 import styles from '@/styles/community.module.css';
 import { CTA } from '@/components/marketing/cta';
 
@@ -40,7 +40,7 @@ export default async function CommunityPage() {
   return (
     <main className={styles.main}>
 
-      {/* ── 1. HERO (Warm Sand) ── */}
+      {/* ── 1. HERO (Woven White) ── */}
       <section className={styles.heroSection}>
         <div className={styles.subtleTexture} aria-hidden="true" />
         <div className={styles.container}>
@@ -48,17 +48,17 @@ export default async function CommunityPage() {
             <span className={styles.eyebrow}>The Vouch Community</span>
             <h1 className={styles.headline}>
               Meet the Liberian creators<br />
-              building the future
+              <span className={styles.highlightLine}>building the future.</span>
             </h1>
             <p className={styles.subheadline}>
-              Teachers, coaches, artists, and experts—hundreds of Liberians are
+              Teachers, coaches, artists, and experts, hundreds of Liberians are
               turning their knowledge into income. You are not building this alone.
             </p>
           </div>
         </div>
       </section>
 
-      {/* ── 2. LIVE STATS BAR (Pure White) ── */}
+      {/* ── 2. LIVE STATS BAR (Deep Kente Black) ── */}
       <section className={styles.statsSection}>
         <div className={styles.container}>
           <div className={styles.statsGrid}>
@@ -116,7 +116,7 @@ export default async function CommunityPage() {
         </div>
       </section>
 
-      {/* ── 4. CATEGORIES WITH ROUTING (Pure White) ── */}
+      {/* ── 4. CATEGORIES (Pure White) ── */}
       <section className={styles.categoriesSection}>
         <div className={styles.container}>
           <div className={styles.centerHeader}>
@@ -151,17 +151,17 @@ export default async function CommunityPage() {
           </div>
           <div className={styles.valuesGrid}>
             <div className={styles.valueCard}>
-              <div className={styles.valueNumber}>01</div>
+              <div className={`${styles.valueNumber} ${styles.textGold}`}>01</div>
               <h3 className={styles.valueTitle}>Liberian-first</h3>
               <p className={styles.valueDescription}>Every feature is built for how Liberians actually work. MTN Mobile Money isn&apos;t an afterthought — it&apos;s the default.</p>
             </div>
             <div className={styles.valueCard}>
-              <div className={styles.valueNumber}>02</div>
+              <div className={`${styles.valueNumber} ${styles.textRed}`}>02</div>
               <h3 className={styles.valueTitle}>Quality over quantity</h3>
               <p className={styles.valueDescription}>We want 500 creators making real money to support their families, not 50,000 abandoned accounts.</p>
             </div>
             <div className={styles.valueCard}>
-              <div className={styles.valueNumber}>03</div>
+              <div className={`${styles.valueNumber} ${styles.textGreen}`}>03</div>
               <h3 className={styles.valueTitle}>Creators help creators</h3>
               <p className={styles.valueDescription}>Our community shares what&apos;s working, what&apos;s not, and how to grow. No gatekeeping, just real talk.</p>
             </div>
@@ -169,7 +169,7 @@ export default async function CommunityPage() {
         </div>
       </section>
 
-      {/* ── 6. RESOURCES (Warm Sand) ── */}
+      {/* ── 6. RESOURCES (Woven White) ── */}
       <section className={styles.resourcesSection}>
         <div className={styles.subtleTexture} aria-hidden="true" />
         <div className={styles.container}>
@@ -178,19 +178,19 @@ export default async function CommunityPage() {
           </div>
           <div className={styles.resourcesGrid}>
             <div className={styles.resourceCard}>
-              <div className={styles.resourceIcon}>💬</div>
+              <div className={styles.resourceIconGold}><MessageCircle size={28}/></div>
               <h3>WhatsApp Community</h3>
               <p>Join creators sharing tips, wins, and honest feedback. Weekly office hours with the Vouch team.</p>
               <Link href="/whatsapp" className={styles.resourceLink}>Join the group →</Link>
             </div>
             <div className={styles.resourceCard}>
-              <div className={styles.resourceIcon}>📖</div>
+              <div className={styles.resourceIconRed}><BookOpen size={28}/></div>
               <h3>Creator Guides</h3>
               <p>Step-by-step tutorials on pricing, marketing, and building products that sell.</p>
               <Link href="/guides" className={styles.resourceLink}>Read the guides →</Link>
             </div>
             <div className={styles.resourceCard}>
-              <div className={styles.resourceIcon}>📅</div>
+              <div className={styles.resourceIconGreen}><CalendarHeart size={28}/></div>
               <h3>Creator Meetups</h3>
               <p>In-person events in Monrovia. Network, learn, and celebrate wins together.</p>
               <Link href="/events" className={styles.resourceLink}>See upcoming events →</Link>

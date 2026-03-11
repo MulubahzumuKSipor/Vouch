@@ -1,0 +1,194 @@
+/* ── BASE PATTERNS ── */
+.main {
+  width: 100%;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #111827;
+  background-color: #FCFAFA;
+}
+
+.container {
+  max-width: 1000px; /* Narrower container for better reading width */
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ── 1. LEGAL HERO ── */
+.heroSection {
+  background-color: #111827; /* Deep Black */
+  padding: 100px 0 64px;
+  color: #FFFFFF;
+  text-align: center;
+  border-bottom: 4px solid #F59E0B; /* Kente Gold */
+}
+
+.heroContent {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #DC2626; /* Kente Red */
+  margin-bottom: 16px;
+}
+
+.headline {
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 16px;
+}
+
+.subheadline {
+  font-size: 1.125rem;
+  color: #D1D5DB;
+  margin-bottom: 24px;
+}
+
+.lastUpdated {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #9CA3AF;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 50px;
+  display: inline-block;
+}
+
+/* ── 2. DOCUMENT CONTENT ── */
+.documentSection {
+  padding: 80px 0 120px;
+}
+
+.documentLayout {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 64px;
+  align-items: start;
+}
+
+/* Sidebar Navigation */
+.sidebar {
+  position: sticky;
+  top: 40px; /* Sticks to the top as they scroll */
+}
+
+.tableOfContents {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 4px 4px 0px 0px rgba(17, 24, 39, 0.05);
+}
+
+.tableOfContents h3 {
+  font-size: 0.875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #111827;
+  margin-bottom: 16px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.tableOfContents ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tableOfContents a {
+  text-decoration: none;
+  color: #6B7280;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.tableOfContents a:hover {
+  color: #15803D; /* Kente Green */
+}
+
+/* Main Legal Text */
+.legalContent {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 64px;
+}
+
+.legalSection {
+  margin-bottom: 48px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.legalSection:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.legalSection h2 {
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: #111827;
+  margin-bottom: 24px;
+}
+
+.legalSection h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #111827;
+  margin-top: 32px;
+  margin-bottom: 16px;
+}
+
+.legalSection p {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: #4B5563;
+  margin-bottom: 16px;
+}
+
+.legalSection ul {
+  padding-left: 24px;
+  margin-bottom: 24px;
+}
+
+.legalSection li {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: #4B5563;
+  margin-bottom: 8px;
+}
+
+.legalSection strong {
+  color: #111827;
+  font-weight: 700;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 992px) {
+  .documentLayout {
+    grid-template-columns: 1fr; /* Stacks the sidebar on top of text */
+    gap: 40px;
+  }
+  
+  .sidebar {
+    position: static;
+  }
+  
+  .legalContent {
+    padding: 32px 24px;
+  }
+}

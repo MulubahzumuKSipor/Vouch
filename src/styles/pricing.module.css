@@ -1,550 +1,540 @@
-/* --- COLOR PALETTE (Warm African Minimalism) --- */
+/* ── BASE PATTERNS ── */
+/* ── BASE PATTERNS ── */
 .main {
-  --color-bg-sand: #FCFAF8;
-  --color-bg-white: #FFFFFF;
-  --color-bg-stone: #F5F5F4;
-  --color-text-main: #292524;
-  --color-text-muted: #78716C;
-  --color-terracotta: #C2410C;
-  --radius-soft: 12px;
-
-  font-family: system-ui, -apple-system, sans-serif;
-  color: var(--color-text-main);
-  overflow-x: hidden;
+  width: 100%;
+  /* overflow-x: hidden; */
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #111827; /* Kente Black */
 }
 
 .container {
-  width: 100%;
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 1.5rem 1.5rem;
-  position: relative;
-  z-index: 2;
-}
-
-.centerHeader {
-  text-align: center;
-  max-width: 600px;
-  margin: 0 auto 4rem auto;
-}
-
-.sectionTitle {
-  font-size: clamp(2rem, 3vw, 2.5rem);
-  font-weight: 800;
-  margin-bottom: 1rem;
-}
-
-.sectionSubtitle {
-  font-size: 1.125rem;
-  color: var(--color-text-muted);
-  line-height: 1.6;
+  /* 🔴 CHANGED: Removed the 80px vertical padding */
+  padding: 0 24px;
 }
 
 .subtleTexture {
   position: absolute;
   inset: 0;
-  background-image: radial-gradient(var(--color-text-muted) 1px, transparent 1px);
-  background-size: 32px 32px;
   opacity: 0.04;
+  background-image: radial-gradient(#111827 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+
+/* ── 1. CINEMATIC HERO ── */
+.heroSection {
+  position: relative;
+  min-height: 85vh;
+  display: flex;
+  flex-direction: column; /* Keeps content centered vertically */
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  /* Creates a massive empty "safe zone" at the bottom of the image for the card to overlap */
+  padding-bottom: 380px;
+  padding-top: 180px;
+  overflow: hidden;
+
+}
+
+.heroBgImage {
+  object-fit: cover;
+  z-index: 0;
+}
+
+/* Deep Kente Black gradient overlay to make text pop */
+.heroOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(17, 24, 39, 0.7), rgba(17, 24, 39, 0.95));
   z-index: 1;
 }
 
-/* --- 1. HERO --- */
-.heroSection {
-  background-color: var(--color-bg-sand);
-  padding: 120px 0 160px;
-  position: relative;
-  text-align: center;
-}
-
-.eyebrow {
-  font-size: 0.85rem;
-  font-weight: 700;
-  color: var(--color-terracotta);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 1.5rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.eyebrow::before,
-.eyebrow::after {
-  content: "❖";
-  font-size: 0.6rem;
-  opacity: 0.4;
-}
-
-.headline {
-  font-size: clamp(2.5rem, 5vw, 4.5rem);
-  font-weight: 800;
-  line-height: 1.1;
-  margin-bottom: 1.5rem;
-  letter-spacing: -0.02em;
-}
-
-.highlight {
-  position: relative;
-  display: inline-block;
-}
-
-.highlight::after {
-  content: '';
+.subtleTexture {
   position: absolute;
-  bottom: 8px;
-  left: 0;
-  width: 100%;
-  height: 8px;
-  background-color: var(--color-terracotta);
-  opacity: 0.2;
-  z-index: -1;
+  inset: 0;
+  opacity: 0.1; /* Slightly more visible on dark backgrounds */
+  background-image: radial-gradient(#FFFFFF 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 2;
 }
 
-.subheadline {
-  font-size: 1.25rem;
-  color: var(--color-text-muted);
-  line-height: 1.6;
-  max-width: 600px;
+.heroSection .container {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+}
+
+.heroContent {
+  max-width: 800px;
   margin: 0 auto;
 }
 
-/* --- 2. PRICING CARD --- */
-.pricingSection {
-  background-color: var(--color-bg-stone);
-  padding-bottom: 100px;
-  margin-top: -80px;
+.eyebrow {
+  display: inline-block;
+  font-size: 0.875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #F59E0B; /* Kente Gold pops beautifully on dark backgrounds */
+  background: rgba(245, 158, 11, 0.15);
+  padding: 6px 16px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.headline {
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  color: #FFFFFF; /* White text */
+  margin-bottom: 24px;
+  letter-spacing: -0.03em;
+}
+
+.highlightLine {
   position: relative;
+  display: inline-block;
+  color: #FFFFFF; /* White text */
+  border-bottom: 6px solid #F59E0B; /* Kente Gold Underline */
+  padding-bottom: 4px;
+  line-height: 1.1;
+}
+
+.subheadline {
+  font-size: clamp(1.125rem, 2vw, 1.35rem);
+  color: #D1D5DB; /* Light Gray for readability */
+  line-height: 1.6;
+  max-width: 700px;
+  margin: 0 auto;
+  font-weight: 400;
+}
+
+/* ── 2. PRICING CARD (Clean Overlap) ── */
+.pricingSection {
+  position: relative;
+  /* The solid white background starts cleanly below the hero image now */
+  background-color: #FFFFFF;
+  padding-bottom: 96px;
+  padding-top: 20px;
+  border-top: #D97706 4px solid; /* Kente Orange border to anchor the section */
   z-index: 10;
 }
 
 .pricingCard {
-  background-color: var(--color-bg-white);
-  border-radius: var(--radius-soft);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.06);
-  border: 1px solid #E7E5E4;
-  overflow: hidden;
-  max-width: 700px;
-  margin: 0 auto;
+  max-width: 600px;
+  /* Pulls ONLY the card up into the hero's safe zone, perfectly spacing it from the text */
+  margin: -180px auto 0;
+  background-color: #FFFFFF;
+  border: 4px solid #111827;
+  border-radius: 8px;
+  padding: 48px;
+  /* Digital Kente hard shadow */
+  box-shadow: 16px 16px 0px 0px #F59E0B;
+  position: relative;
 }
 
 .cardHeader {
-  padding: 3rem;
   text-align: center;
-  border-bottom: 1px solid #E7E5E4;
+  border-bottom: 1px solid #E5E7EB;
+  padding-bottom: 32px;
+  margin-bottom: 32px;
 }
 
 .planName {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 16px;
 }
 
 .priceContainer {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.25rem;
-  margin-bottom: 1rem;
+  gap: 4px;
+  margin-bottom: 16px;
 }
 
 .priceSymbol {
   font-size: 2rem;
   font-weight: 700;
-  color: var(--color-text-muted);
+  color: #4B5563;
   align-self: flex-start;
-  margin-top: 0.5rem;
+  margin-top: 8px;
 }
 
 .priceAmount {
   font-size: 5rem;
-  font-weight: 800;
+  font-weight: 900;
   line-height: 1;
-  color: var(--color-text-main);
-  letter-spacing: -0.05em;
+  color: #111827;
 }
 
 .pricePeriod {
   font-size: 1.125rem;
-  font-weight: 600;
-  color: var(--color-text-muted);
+  color: #6B7280;
+  font-weight: 500;
   align-self: flex-end;
-  margin-bottom: 1rem;
+  margin-bottom: 12px;
 }
 
 .priceDesc {
-  font-size: 1.125rem;
-  color: var(--color-text-muted);
-  max-width: 400px;
-  margin: 0 auto;
-  line-height: 1.5;
+  color: #4B5563;
+  line-height: 1.6;
 }
 
 .transactionFee {
-  background-color: var(--color-bg-sand);
-  padding: 2rem 3rem;
   display: flex;
-  align-items: flex-start;
-  gap: 1.5rem;
-  border-bottom: 1px solid #E7E5E4;
-}
-
-@media (max-width: 600px) {
-  .transactionFee {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    padding: 2rem;
-  }
+  align-items: center;
+  gap: 24px;
+  background-color: #F9FAFB;
+  padding: 24px;
+  border-radius: 4px;
+  border-left: 4px solid #15803D; /* Kente Green accent */
+  margin-bottom: 32px;
 }
 
 .feeHighlight {
   font-size: 2.5rem;
-  font-weight: 800;
-  color: var(--color-terracotta);
-  background: white;
-  padding: 1rem;
-  border-radius: 8px;
-  border: 1px solid #E7E5E4;
-  line-height: 1;
+  font-weight: 900;
+  color: #15803D;
 }
 
 .feeText strong {
   display: block;
-  font-size: 1.25rem;
-  font-weight: 800;
-  margin-bottom: 0.5rem;
+  font-size: 1.125rem;
+  color: #111827;
+  margin-bottom: 4px;
 }
 
 .feeText p {
-  font-size: 0.95rem;
-  color: var(--color-text-muted);
+  color: #4B5563;
+  font-size: 0.875rem;
   line-height: 1.5;
-}
-
-.featuresList {
-  padding: 3rem;
+  margin: 0;
 }
 
 .featuresTitle {
-  font-size: 1.125rem;
-  font-weight: 700;
-  margin-bottom: 1.5rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 16px;
 }
 
 .featuresList ul {
   list-style: none;
   padding: 0;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-}
-
-@media (min-width: 600px) {
-  .featuresList ul {
-    grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
-  }
+  margin: 0 0 40px 0;
 }
 
 .featuresList li {
   display: flex;
-  align-items: flex-start;
-  gap: 0.75rem;
-  font-size: 1rem;
-  color: var(--color-text-main);
+  align-items: center;
+  gap: 12px;
+  color: #4B5563;
+  margin-bottom: 16px;
   font-weight: 500;
-  line-height: 1.4;
 }
 
 .checkIcon {
-  color: var(--color-terracotta);
+  color: #15803D; /* Green Check */
   flex-shrink: 0;
 }
 
-.cardAction {
-  padding: 0 3rem 3rem;
-  text-align: center;
-}
-
 .primaryBtn {
-  display: inline-block;
-  width: 100%;
-  background-color: var(--color-terracotta);
-  color: white;
-  padding: 1.25rem 2.5rem;
-  border-radius: var(--radius-soft);
-  font-weight: 700;
+  display: block;
+  text-align: center;
+  background-color: #111827;
+  color: #FFFFFF;
+  padding: 18px 32px;
+  border-radius: 4px;
   font-size: 1.125rem;
-  transition: transform 0.2s ease, background-color 0.2s ease;
-  box-shadow: 0 4px 14px rgba(194, 65, 12, 0.2);
+  font-weight: 800;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  box-shadow: 4px 4px 0px 0px rgba(17, 24, 39, 0.4);
 }
 
 .primaryBtn:hover {
-  background-color: #9A3412;
-  transform: translateY(-2px);
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0px 0px rgba(17, 24, 39, 0.4);
 }
 
-/* --- 3. THE VALUE STACK (Pure White) --- */
+/* ── RESPONSIVE FIX FOR MOBILE OVERLAP ── */
+@media (max-width: 768px) {
+  .heroSection {
+    padding-top: 80px;
+    padding-bottom: 160px; /* Adjust safe zone for smaller screens */
+  }
+
+  .pricingCard {
+    margin: -120px auto 0; /* Pulls up slightly less on mobile */
+    padding: 32px 24px;
+  }
+
+  .transactionFee {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+    border-left: none;
+    border-top: 4px solid #15803D;
+  }
+}
+
+/* ── 3. THE VALUE STACK ── */
 .valueSection {
-  background-color: var(--color-bg-white);
-  padding: 100px 0;
+  background-color: #FFFFFF;
+  padding: 80px 0 120px;
+}
+
+.centerHeader {
+  text-align: center;
+  margin-bottom: 64px;
+}
+
+.sectionTitle {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 900;
+  color: #111827;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.sectionSubtitle {
+  font-size: 1.125rem;
+  color: #4B5563;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
 }
 
 .comparisonGrid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 2rem;
-}
-
-@media (min-width: 768px) {
-  .comparisonGrid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.oldWayCard, .vouchWayCard {
-  padding: 2.5rem;
-  border-radius: var(--radius-soft);
-  border: 1px solid #E7E5E4;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 .oldWayCard {
-  background-color: #FAFAF9;
+  background-color: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 40px;
 }
 
 .vouchWayCard {
-  background-color: var(--color-bg-sand);
-  border: 2px solid var(--color-terracotta);
-  box-shadow: 0 10px 30px rgba(194, 65, 12, 0.05);
+  background-color: #FFFFFF;
+  border: 4px solid #111827;
+  border-radius: 8px;
+  padding: 40px;
+  box-shadow: 8px 8px 0px 0px #15803D; /* Green Kente Shadow */
 }
 
 .compareTitle {
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: var(--color-text-muted);
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #4B5563;
 }
 
 .compareTitleVouch {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: var(--color-terracotta);
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: #111827;
 }
 
 .compareDesc {
-  font-size: 0.95rem;
-  color: var(--color-text-muted);
-  margin-bottom: 2rem;
+  color: #6B7280;
+  margin-bottom: 32px;
 }
 
 .compareList {
   list-style: none;
   padding: 0;
-  margin-bottom: 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  margin: 0 0 32px 0;
 }
 
 .compareList li {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  font-size: 0.95rem;
+  gap: 12px;
+  padding: 16px 0;
+  border-bottom: 1px solid #E5E7EB;
+  color: #4B5563;
   font-weight: 500;
 }
 
 .compareList li span {
   margin-left: auto;
   font-weight: 700;
-  color: var(--color-text-muted);
+  color: #111827;
+}
+
+.subNote {
+  font-size: 0.75rem;
+  color: #9CA3AF !important;
+  font-weight: 400 !important;
 }
 
 .xIcon {
-  color: #A8A29E;
+  color: #DC2626; /* Red X */
   flex-shrink: 0;
 }
 
 .compareTotalBad, .compareTotalGood {
-  padding-top: 2rem;
-  border-top: 1px solid #E7E5E4;
+  padding: 24px;
+  border-radius: 4px;
+  text-align: center;
 }
 
-.compareTotalBad span, .compareTotalGood span {
+.compareTotalBad {
+  background-color: #FEF2F2;
+  color: #991B1B;
+}
+
+.compareTotalGood {
+  background-color: #F0FDF4;
+  color: #166534;
+}
+
+.compareTotalBad strong, .compareTotalGood strong {
   display: block;
-  font-size: 0.85rem;
-  text-transform: uppercase;
-  color: var(--color-text-muted);
-  font-weight: 700;
-  margin-bottom: 0.5rem;
-}
-
-.compareTotalBad strong {
   font-size: 2.5rem;
-  font-weight: 800;
-  color: var(--color-text-muted);
+  font-weight: 900;
+  margin: 8px 0;
 }
 
-.compareTotalGood strong {
-  font-size: 2.5rem;
-  font-weight: 800;
-  color: var(--color-terracotta);
-}
-
-.compareTotalBad p, .compareTotalGood p {
-  font-size: 0.85rem;
-  color: var(--color-text-muted);
-  margin-top: 0.5rem;
-}
-
-/* --- 4. THE MONEY FLOW (Warm Sand) --- */
+/* ── 4. THE MONEY FLOW ── */
 .flowSection {
-  background-color: var(--color-bg-sand);
-  padding: 100px 0;
+  background-color: #FCFAFA;
+  padding: 96px 0;
   position: relative;
-  border-top: 1px solid #E7E5E4;
-  border-bottom: 1px solid #E7E5E4;
+  border-top: 1px solid #E5E7EB;
+  border-bottom: 1px solid #E5E7EB;
 }
 
 .flowGrid {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 2rem;
-}
-
-@media (min-width: 768px) {
-  .flowGrid {
-    flex-direction: row;
-    align-items: stretch;
-    justify-content: space-between;
-    gap: 1rem;
-  }
+  justify-content: space-between;
+  gap: 16px;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 .flowStep, .flowStepHighlight {
   flex: 1;
-  background-color: var(--color-bg-white);
-  padding: 2.5rem 2rem;
-  border-radius: var(--radius-soft);
+  background: #FFFFFF;
+  padding: 32px 24px;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
   text-align: center;
-  border: 1px solid #E7E5E4;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.02);
-  width: 100%;
 }
 
 .flowStepHighlight {
-  border: 2px solid var(--color-terracotta);
-  background-color: var(--color-bg-sand);
+  border: 2px solid #F59E0B;
+  box-shadow: 0 10px 25px -5px rgba(245, 158, 11, 0.2);
 }
 
 .stepIcon, .stepIconHighlight {
   width: 64px;
   height: 64px;
-  margin: 0 auto 1.5rem auto;
-  border-radius: 50%;
+  margin: 0 auto 16px;
   display: flex;
   align-items: center;
   justify-content: center;
+  border-radius: 50%;
 }
 
-.stepIcon {
-  background-color: var(--color-bg-stone);
-  color: var(--color-text-muted);
-}
-
-.stepIconHighlight {
-  background-color: var(--color-terracotta);
-  color: white;
-}
+.stepIcon { background-color: #F3F4F6; color: #4B5563; }
+.stepIconHighlight { background-color: rgba(245, 158, 11, 0.1); color: #D97706; }
 
 .stepNumber, .stepNumberHighlight {
-  font-size: 0.85rem;
-  font-weight: 700;
+  font-size: 0.75rem;
+  font-weight: 800;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 0.5rem;
+  letter-spacing: 0.1em;
+  margin-bottom: 8px;
 }
 
-.stepNumber { color: var(--color-text-muted); }
-.stepNumberHighlight { color: var(--color-terracotta); }
+.stepNumber { color: #6B7280; }
+.stepNumberHighlight { color: #D97706; }
 
 .flowStep h3, .flowStepHighlight h3 {
   font-size: 1.25rem;
-  font-weight: 700;
-  margin-bottom: 1rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 12px;
 }
 
 .flowStep p, .flowStepHighlight p {
-  font-size: 0.95rem;
-  color: var(--color-text-muted);
-  line-height: 1.5;
-}
-
-.flowStep p strong, .flowStepHighlight p strong {
-  color: var(--color-text-main);
-  font-weight: 700;
+  color: #4B5563;
+  font-size: 0.9375rem;
+  line-height: 1.6;
 }
 
 .flowArrow {
-  color: #D6D3D1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: #9CA3AF;
+  flex-shrink: 0;
 }
 
-@media (max-width: 767px) {
-  .flowArrow {
-    transform: rotate(90deg);
-  }
-}
-
-/* --- 5. FAQ SECTION (Soft Stone) --- */
+/* ── 5. FAQ SECTION ── */
 .faqSection {
-  background-color: var(--color-bg-stone);
-  padding: 100px 0;
+  background-color: #FFFFFF;
+  padding: 96px 0;
 }
 
 .faqGrid {
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
-}
-
-@media (min-width: 768px) {
-  .faqGrid {
-    grid-template-columns: 1fr 1fr;
-    gap: 4rem;
-  }
+  grid-template-columns: 1fr 1fr;
+  gap: 48px;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 .faqItem {
   display: flex;
-  align-items: flex-start;
-  gap: 1rem;
+  gap: 16px;
 }
 
 .faqIcon {
-  color: var(--color-terracotta);
+  color: #DC2626; /* Kente Red */
   flex-shrink: 0;
-  background: white;
-  padding: 0.5rem;
-  border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  margin-top: 4px;
 }
 
 .faqItem h3 {
-  font-size: 1.125rem;
-  font-weight: 700;
-  margin-bottom: 0.75rem;
-  line-height: 1.4;
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 12px;
 }
 
 .faqItem p {
-  color: var(--color-text-muted);
+  color: #4B5563;
   line-height: 1.6;
-  font-size: 0.95rem;
+}
+
+/* ── RESPONSIVE DESIGN ── */
+@media (max-width: 992px) {
+  .comparisonGrid { grid-template-columns: 1fr; }
+  .vouchWayCard { order: -1; } /* Puts Vouch on top for mobile */
+
+  .flowGrid {
+    flex-direction: column;
+    gap: 24px;
+  }
+  .flowArrow {
+    transform: rotate(90deg); /* Points arrows down on mobile */
+  }
+}
+
+@media (max-width: 768px) {
+  .pricingCard { padding: 32px 24px; }
+  .transactionFee { flex-direction: column; text-align: center; gap: 16px; border-left: none; border-top: 4px solid #15803D; }
+  .faqGrid { grid-template-columns: 1fr; gap: 32px; }
 }

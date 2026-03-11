@@ -1,0 +1,224 @@
+/* ── BASE PATTERNS ── */
+.main {
+  width: 100%;
+  min-height: 100vh;
+  background-color: #FCFAFA;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #111827;
+  padding: 64px 24px 120px;
+}
+
+.articleContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 64px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* ── 1. HEADER ── */
+.header {
+  margin-bottom: 48px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.breadcrumbs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 24px;
+}
+
+.breadcrumbLink {
+  color: #6B7280;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumbLink:hover {
+  color: #111827;
+}
+
+.breadcrumbSeparator {
+  color: #D1D5DB;
+}
+
+.breadcrumbCurrent {
+  color: #DC2626; /* Kente Red */
+}
+
+.title {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 900;
+  line-height: 1.2;
+  color: #111827;
+  margin-bottom: 16px;
+  letter-spacing: -0.02em;
+}
+
+.excerpt {
+  font-size: 1.25rem;
+  line-height: 1.6;
+  color: #4B5563;
+  margin-bottom: 24px;
+}
+
+.metaData {
+  display: flex;
+  align-items: center;
+  color: #9CA3AF;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.metaItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ── 2. DOCUMENTATION CONTENT ── */
+.contentWrapper {
+  margin-bottom: 64px;
+}
+
+.richText p {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: #374151;
+  margin-bottom: 24px;
+}
+
+.richText h2 {
+  font-size: 1.75rem;
+  font-weight: 800;
+  color: #111827;
+  margin-top: 48px;
+  margin-bottom: 24px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.richText h3 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #111827;
+  margin-top: 32px;
+  margin-bottom: 16px;
+}
+
+.richText ul, .richText ol {
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  color: #374151;
+  margin-bottom: 24px;
+  padding-left: 24px;
+}
+
+.richText li {
+  margin-bottom: 8px;
+}
+
+.richText strong {
+  color: #111827;
+  font-weight: 700;
+}
+
+.richText a {
+  color: #15803D; /* Kente Green for helpful links */
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+}
+
+.richText a:hover {
+  color: #166534;
+}
+
+.richText blockquote {
+  border-left: 4px solid #111827;
+  background: #F9FAFB;
+  padding: 16px 24px;
+  margin: 0 0 24px 0;
+  border-radius: 0 4px 4px 0;
+  font-size: 1.0625rem;
+  color: #4B5563;
+}
+
+/* ── 3. BOTTOM SUPPORT CTA ── */
+.articleFooter {
+  border-top: 2px solid #E5E7EB;
+  padding-top: 48px;
+}
+
+.supportBox {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  padding: 32px;
+  border-radius: 8px;
+}
+
+.supportIcon {
+  color: #F59E0B; /* Kente Gold */
+  flex-shrink: 0;
+}
+
+.supportText flex-grow {
+  flex-grow: 1;
+}
+
+.supportText h3 {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 4px;
+}
+
+.supportText p {
+  color: #4B5563;
+  margin: 0;
+  font-size: 0.9375rem;
+}
+
+.contactBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #111827;
+  color: #FFFFFF;
+  font-weight: 700;
+  padding: 12px 24px;
+  border-radius: 4px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: background-color 0.2s ease;
+}
+
+.contactBtn:hover {
+  background-color: #374151;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 768px) {
+  .articleContainer {
+    padding: 32px 24px;
+  }
+  
+  .supportBox {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+  
+  .contactBtn {
+    width: 100%;
+  }
+}

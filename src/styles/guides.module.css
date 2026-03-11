@@ -1,0 +1,349 @@
+/* ── BASE PATTERNS ── */
+.main {
+  width: 100%;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #111827;
+  background-color: #FCFAFA;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.subtleTexture {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image: radial-gradient(#111827 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+
+/* ── 1. HERO SECTION ── */
+.heroSection {
+  padding: 120px 0 100px;
+  position: relative;
+  text-align: center;
+}
+
+.heroHeader {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #15803D; /* Kente Green */
+  background: rgba(21, 128, 61, 0.1);
+  padding: 6px 16px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+}
+
+.headline {
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  color: #111827;
+  margin-bottom: 24px;
+  letter-spacing: -0.03em;
+}
+
+.highlightLine {
+  position: relative;
+  display: inline-block;
+  color: #111827;
+  border-bottom: 6px solid #F59E0B; /* Kente Gold */
+  padding-bottom: 4px;
+}
+
+.subheadline {
+  font-size: clamp(1.125rem, 2vw, 1.35rem);
+  color: #4B5563;
+  line-height: 1.6;
+}
+
+/* ── 2. THE BLUEPRINT (START HERE) ── */
+.blueprintSection {
+  padding-bottom: 96px;
+  margin-top: -40px;
+  position: relative;
+  z-index: 20;
+}
+
+.blueprintCard {
+  background-color: #111827; /* Deep Black */
+  border-radius: 12px;
+  padding: 64px;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 64px;
+  align-items: center;
+  box-shadow: 16px 16px 0px 0px #DC2626; /* Kente Red Offset */
+  color: #FFFFFF;
+}
+
+.blueprintBadge {
+  display: inline-block;
+  background-color: #F59E0B; /* Gold */
+  color: #111827;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  margin-bottom: 24px;
+}
+
+.blueprintTitle {
+  font-size: clamp(2rem, 4vw, 2.75rem);
+  font-weight: 900;
+  margin-bottom: 16px;
+  line-height: 1.1;
+}
+
+.blueprintDesc {
+  font-size: 1.125rem;
+  color: #D1D5DB;
+  line-height: 1.6;
+  margin-bottom: 32px;
+}
+
+.curriculumList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-bottom: 40px;
+}
+
+.curriculumItem {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 16px 24px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  font-weight: 600;
+}
+
+.stepNumber {
+  color: #F59E0B;
+  font-weight: 900;
+  font-size: 1.25rem;
+}
+
+.blueprintBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  background-color: #FFFFFF;
+  color: #111827;
+  padding: 18px 32px;
+  border-radius: 4px;
+  font-size: 1.125rem;
+  font-weight: 900;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.blueprintBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgba(255, 255, 255, 0.2);
+}
+
+/* Pure CSS Book Mockup */
+.blueprintVisual {
+  display: flex;
+  justify-content: center;
+  perspective: 1000px; /* Gives a 3D effect */
+}
+
+.bookMockup {
+  width: 280px;
+  height: 380px;
+  background-color: #F59E0B; /* Gold Cover */
+  border-radius: 4px 16px 16px 4px;
+  position: relative;
+  box-shadow: 
+    inset 4px 0 10px rgba(0, 0, 0, 0.1),
+    20px 20px 30px rgba(0, 0, 0, 0.5);
+  transform: rotateY(-15deg) rotateX(5deg);
+  transition: transform 0.5s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 32px;
+  color: #111827;
+}
+
+.bookMockup:hover {
+  transform: rotateY(0deg) rotateX(0deg);
+}
+
+.bookSpine {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 16px;
+  background: linear-gradient(to right, #D97706, #F59E0B);
+  border-radius: 4px 0 0 4px;
+}
+
+.bookCover h3 {
+  font-size: 2rem;
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+}
+
+.bookCover p {
+  font-weight: 700;
+  font-size: 1.125rem;
+  opacity: 0.8;
+}
+
+/* ── 3. TACTICAL GUIDES GRID ── */
+.gridSection {
+  padding: 80px 0 120px;
+}
+
+.sectionHeader {
+  margin-bottom: 48px;
+}
+
+.sectionHeader h2 {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.sectionHeader p {
+  font-size: 1.125rem;
+  color: #6B7280;
+}
+
+.guidesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 32px;
+}
+
+.guideCard {
+  background-color: #FFFFFF;
+  border: 2px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 32px;
+  text-decoration: none;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease;
+}
+
+.guideCard:hover {
+  border-color: #111827;
+  box-shadow: 8px 8px 0px 0px #15803D; /* Green Shadow */
+  transform: translateY(-4px);
+}
+
+.cardHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.iconBox {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+}
+
+.iconRed { background-color: rgba(220, 38, 38, 0.1); color: #DC2626; }
+.iconGreen { background-color: rgba(21, 128, 61, 0.1); color: #15803D; }
+.iconGold { background-color: rgba(245, 158, 11, 0.1); color: #D97706; }
+.iconDark { background-color: rgba(17, 24, 39, 0.05); color: #111827; }
+
+.readTimeBadge {
+  background: #F3F4F6;
+  color: #4B5563;
+  padding: 4px 12px;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.guideCategory {
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #6B7280;
+  margin-bottom: 8px;
+}
+
+.guideTitle {
+  font-size: 1.25rem;
+  font-weight: 800;
+  color: #111827;
+  line-height: 1.3;
+  margin-bottom: 12px;
+}
+
+.guideDesc {
+  color: #4B5563;
+  line-height: 1.6;
+  margin-bottom: 32px;
+  flex-grow: 1;
+}
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #111827;
+  font-weight: 800;
+  border-top: 1px solid #E5E7EB;
+  padding-top: 24px;
+}
+
+.cardArrow {
+  color: #9CA3AF;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.guideCard:hover .cardArrow {
+  color: #15803D;
+  transform: translateX(4px);
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 992px) {
+  .blueprintCard {
+    grid-template-columns: 1fr;
+    gap: 48px;
+    padding: 48px 32px;
+  }
+  
+  .blueprintVisual {
+    order: -1; /* Puts the book on top on mobile */
+  }
+}

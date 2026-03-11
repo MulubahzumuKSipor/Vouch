@@ -1,24 +1,57 @@
+'use client'
+
+import { useState, useEffect } from 'react';
 import Link from "next/link";
-import { Heart, Users, Lightbulb, TrendingUp, ShieldCheck, Wallet } from "lucide-react";
+import { Heart, Lightbulb, TrendingUp, ShieldCheck, Wallet, GraduationCap } from "lucide-react";
 import Image from "next/image";
 import styles from "@/styles/hero.module.css";
 
 export default function HomePage() {
+  const words = ["Income.", "Revenue.", "Earnings.", "Capital.", "Funds."];
+  const [index, setIndex] = useState(0);
+  const [isRevealing, setIsRevealing] = useState(false);
+
+  // ── THE COVER & REVEAL ANIMATION TIMER ──
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // 1. Trigger the black block to slide over the word
+      setIsRevealing(true);
+
+      // 2. Exactly halfway through the animation (400ms), when the word is completely covered, swap it out.
+      setTimeout(() => {
+        setIndex((prevIndex) => (prevIndex + 1) % words.length);
+      }, 400);
+
+      // 3. When the block finishes sliding away (800ms), reset the state for the next cycle.
+      setTimeout(() => {
+        setIsRevealing(false);
+      }, 800);
+
+    }, 4000); // Leaves the word on screen for a solid 4 seconds so it's easily read
+
+    return () => clearInterval(interval);
+  }, [words.length]);
+
   return (
     <main className={styles.main}>
 
-      {/* ── 1. HERO (Warm Sand) ── */}
+      {/* ── 1. HERO ── */}
       <section className={styles.heroSection}>
         <div className={styles.subtleTexture} aria-hidden="true" />
         <div className={styles.container}>
-          <div className={styles.eyebrow}>Built for Liberian Creators</div>
+          <div className={styles.eyebrow}>Built for Liberian Creators & Educators</div>
           <h1 className={styles.headline}>
-            Your Audience Is Valuable. <br />
-            Now It Can <span className={styles.highlight}>Pay You Back.</span>
+            You’ve Built Influence. <br />
+            Now Turn It Into{' '}
+            {/* The Cover Reveal Container */}
+            <span className={styles.revealContainer}>
+              {words[index]}
+              {/* This span only exists while the animation is playing */}
+              {isRevealing && <span className={styles.revealBlock}></span>}
+            </span>
           </h1>
           <p className={styles.subheadline}>
-            You’ve built attention. You’ve built influence. You’ve built trust.
-            Now you can turn that into income directly from the people who support you. No brand deals required.
+            Our platform helps Liberian creators, educators, and leaders earn from their audience through direct support, memberships, exclusive access, and community contributions.
           </p>
           <div className={styles.buttonGroup}>
             <Link href="/login" className={styles.primaryBtn}>
@@ -28,25 +61,27 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 2. THE REALITY (Pure White) ── */}
+      {/* ── 2. THE REALITY ── */}
       <section className={styles.problemSection}>
         <div className={styles.container}>
           <div className={styles.problemGrid}>
             <div className={styles.problemText}>
-              <h2 className={styles.sectionTitle}>Stop Depending Only on Brand Deals.</h2>
+              <h2 className={styles.sectionTitle}>If You Have an Audience, You Have an Opportunity.</h2>
               <p>
-                Brand deals are inconsistent, hard to get, not guaranteed, and often underpaid.
-                Why wait for a company to value you when your audience already does?
+                Are you a university professor sharing deep expertise? A Facebook content creator sparking daily conversations? A WAEC tutor guiding engaged students? Or a TikTok personality setting the trends?
               </p>
               <p>
-                <strong>If you have followers, you can earn.</strong> Whether you are a TikTok personality, a community leader, or a WAEC tutor with engaged students. If people follow you, they believe in you. And people who believe in you are willing to support you.
+                <strong>If people follow you, listen to you, or learn from you. They believe in your value.</strong> And people who believe in your value are willing to support it.
+              </p>
+              <p>
+                This is designed for how communities actually grow in Liberia: strong communal ties, loyal followers, dedicated students, and deep personal connections.
               </p>
             </div>
             <div className={styles.problemImagePlaceholder}>
               <div className={styles.imageBox}>
                 <Image
-                  src="/teacher.jpg" /* 🔴 Update this image in your public folder */
-                  alt="A Liberian content creator engaging with their community"
+                  src="/teacher.jpg"
+                  alt="A Liberian educator and creator engaging with their community"
                   fill
                   className={styles.teacherImage}
                   priority
@@ -54,7 +89,7 @@ export default function HomePage() {
                 <div className={styles.imageOverlay} aria-hidden="true"></div>
 
                 <span className={styles.imageQuote}>
-                  &quot;Your followers don’t just watch you. They feel connected to you. Now they can support you.&quot;
+                  &quot;Your audience doesn’t just consume your content. They feel connected to your mission. Now, they can financially support it.&quot;
                 </span>
               </div>
             </div>
@@ -62,37 +97,37 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 3. THE TOOLS (Soft Stone) ── */}
+      {/* ── 3. THE TOOLS ── */}
       <section className={styles.toolsSection}>
         <div className={styles.container}>
           <div className={styles.centerHeader}>
-            <h2 className={styles.sectionTitle}>Turn your influence into income.</h2>
+            <h2 className={styles.sectionTitle}>Direct Support, Direct Growth.</h2>
             <p className={styles.sectionSubtitle}>
-              With our platform, your supporters can back you consistently. You decide your offers. You build community, not just views.
+              You turn influence and intellect into income. Here is how your community can back you consistently.
             </p>
           </div>
 
           <div className={styles.toolsGrid}>
             <div className={styles.toolCard}>
-              <div className={styles.toolIcon}><Heart size={28} /></div>
-              <h3>Direct Support</h3>
-              <p>Receive direct financial support from followers who value your voice and your content.</p>
+              <div className={styles.toolIconRed}><Heart size={28} /></div>
+              <h3>Direct Financial Support</h3>
+              <p>Receive immediate backing from followers, students, and fans who value your voice and content.</p>
             </div>
             <div className={styles.toolCard}>
-              <div className={styles.toolIcon}><Users size={28} /></div>
-              <h3>Exclusive Community</h3>
-              <p>Launch a supporter club where fans contribute monthly for exclusive access to you.</p>
+              <div className={styles.toolIconGreen}><GraduationCap size={28} /></div>
+              <h3>Exclusive Inner Circle</h3>
+              <p>Launch a membership for students, professionals, or loyal fans wanting advanced lectures and mentorship.</p>
             </div>
             <div className={styles.toolCard}>
-              <div className={styles.toolIcon}><Lightbulb size={28} /></div>
+              <div className={styles.toolIconGold}><Lightbulb size={28} /></div>
               <h3>Fund Your Ideas</h3>
-              <p>Raise funds to upgrade your equipment, host community events, or launch your next big project.</p>
+              <p>Raise funds to upgrade your studio equipment, back your research, or launch a community initiative.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── 4. THE MATH (Warm Sand) ── */}
+      {/* ── 4. THE MATH ── */}
       <section className={styles.paymentsSection}>
         <div className={styles.subtleTexture} aria-hidden="true" />
         <div className={styles.container}>
@@ -102,29 +137,27 @@ export default function HomePage() {
                   <div className={styles.receiptHeader}>Monthly Predictable Income</div>
                   <div className={styles.receiptAmount}>$500.00</div>
                   <div className={styles.receiptMethod}>
-                    <TrendingUp size={16} /> From 100 loyal supporters
+                    <TrendingUp size={16} /> From just 100 loyal supporters
                   </div>
                </div>
-               {/* 🔴 Adding diagram for context */}
-
             </div>
             <div className={styles.paymentsText}>
               <h2 className={styles.sectionTitle}>Small Audience. Real Income.</h2>
               <p style={{ fontSize: '1.1rem', color: '#4B5563', marginBottom: '1.5rem' }}>
-                You don’t need millions of followers. You need to go deep.
+                You don’t need millions of followers. You just need loyal ones.
               </p>
               <ul className={styles.checkList}>
                 <li>
                   <strong>Do the math:</strong>
-                  <span>If just 100 followers support you with $5, that’s $500.</span>
+                  <span>If just 100 people support you with $5, that’s $500.</span>
                 </li>
                 <li>
                   <strong>Predictable Earnings:</strong>
-                  <span>If 200 supporters contribute monthly, you’ve created sustainable, predictable income.</span>
+                  <span>If 200 supporters contribute monthly, you’ve built a predictable, sustainable income.</span>
                 </li>
                 <li>
                   <strong>No viral algorithms needed:</strong>
-                  <span>You don&apos;t need to trend to make a living. You just need a true community.</span>
+                  <span>You don&apos;t need to go viral to make a living. You need to go deep.</span>
                 </li>
               </ul>
             </div>
@@ -132,43 +165,43 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* ── 5. VISION & COMMUNITY (Deep Charcoal) ── */}
+      {/* ── 5. VISION & COMMUNITY ── */}
       <section className={styles.valuesSection}>
         <div className={styles.container}>
           <div className={styles.centerHeaderLight}>
             <h2 className={styles.sectionTitleLight}>Ownership Changes Everything.</h2>
             <p className={styles.sectionSubtitleLight}>
-              Imagine a campus influencer raising funds for a project, or a content creator buying a new camera through audience support.
+              When you monetize your audience directly, your audience becomes your economic power.
             </p>
           </div>
 
           <div className={styles.valuesGrid}>
             <div className={styles.valueItem}>
-              <Wallet size={32} className={styles.accentIcon} />
+              <Wallet size={32} className={styles.accentIconGold} />
               <h4>Control Your Income</h4>
-              <p>When you monetize your audience directly, you stop waiting for permission from sponsors. Your audience becomes your economic power.</p>
+              <p>You decide what you offer. You control your pricing. You stop waiting for unpredictable brand deals or sponsorships.</p>
             </div>
             <div className={styles.valueItem}>
-              <ShieldCheck size={32} className={styles.accentIcon} />
+              <ShieldCheck size={32} className={styles.accentIconGreen} />
               <h4>Grow Independently</h4>
-              <p>Built for how creators actually grow in Liberia: strong community ties, loyal followers, and active, personal engagement.</p>
+              <p>Build a real community, not just a view count. Grow on your own terms with the people who truly believe in your value.</p>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ── 6. FINAL CTA (Terracotta) ── */}
+      {/* ── 6. FINAL CTA ── */}
       <section className={styles.ctaSection}>
         <div className={styles.container}>
-          <h2 className={styles.ctaTitle}>This Is the New Creator Economy in Liberia.</h2>
+          <h2 className={styles.ctaTitle}>This Is the New Economy in Liberia.</h2>
           <p className={styles.ctaSubtitle}>
-            Not just posting. Not just trending. Building sustainable income and stronger communities.
+            It’s not just about posting. It’s not just about trending. It’s about building sustainable income, stronger communities, and real independence.
           </p>
           <Link href="/login" className={styles.ctaBtn}>
             Create Your Support Page Today
           </Link>
-          <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#FCA5A5' }}>
-            Set up your page. Invite your followers. Start receiving support.
+          <p style={{ marginTop: '1rem', fontSize: '0.9rem', color: '#FEF3C7' }}>
+            Set up your profile. Invite your students and fans. Start receiving support.
           </p>
         </div>
       </section>

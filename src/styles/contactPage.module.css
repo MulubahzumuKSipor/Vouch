@@ -1,0 +1,299 @@
+/* ── BASE PATTERNS ── */
+.main {
+  width: 100%;
+  overflow-x: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  color: #111827;
+  background-color: #FCFAFA;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.subtleTexture {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image: radial-gradient(#111827 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+}
+
+/* ── 1. HERO SECTION ── */
+.heroSection {
+  padding: 120px 0 80px;
+  position: relative;
+  text-align: center;
+}
+
+.heroContent {
+  max-width: 800px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+}
+
+.eyebrow {
+  display: inline-block;
+  font-size: 0.875rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #15803D; /* Kente Green */
+  background: rgba(21, 128, 61, 0.1);
+  padding: 6px 16px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+}
+
+.headline {
+  font-size: clamp(3rem, 6vw, 4.5rem);
+  font-weight: 900;
+  line-height: 1.1;
+  color: #111827;
+  margin-bottom: 24px;
+  letter-spacing: -0.03em;
+}
+
+.highlightLine {
+  position: relative;
+  display: inline-block;
+  color: #111827;
+  border-bottom: 6px solid #F59E0B; /* Kente Gold */
+  padding-bottom: 4px;
+}
+
+.subheadline {
+  font-size: clamp(1.125rem, 2vw, 1.35rem);
+  color: #4B5563;
+  line-height: 1.6;
+}
+
+/* ── 2. CONTACT LAYOUT ── */
+.contactSection {
+  padding-bottom: 120px;
+}
+
+.contactLayout {
+  display: grid;
+  grid-template-columns: 1fr 1.2fr;
+  gap: 80px;
+  align-items: flex-start;
+}
+
+/* Left Column: Info */
+.columnTitle {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #111827;
+  margin-bottom: 16px;
+}
+
+.columnDesc {
+  font-size: 1.125rem;
+  color: #4B5563;
+  line-height: 1.6;
+  margin-bottom: 40px;
+}
+
+.infoCards {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.infoCard, .infoCardStatic {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  background: #FFFFFF;
+  padding: 24px;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  text-decoration: none;
+  color: #111827;
+  transition: all 0.2s ease;
+}
+
+.infoCard:hover {
+  border-color: #111827;
+  box-shadow: 4px 4px 0px 0px rgba(17, 24, 39, 0.1);
+  transform: translateX(4px);
+}
+
+.iconGreen, .iconRed, .iconGold, .iconDark {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+.iconGreen { background-color: rgba(21, 128, 61, 0.1); color: #15803D; }
+.iconRed { background-color: rgba(220, 38, 38, 0.1); color: #DC2626; }
+.iconGold { background-color: rgba(245, 158, 11, 0.1); color: #D97706; }
+.iconDark { background-color: rgba(17, 24, 39, 0.05); color: #111827; }
+
+.infoCard h3, .infoCardStatic h3 {
+  font-size: 1.125rem;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+
+.infoCard p, .infoCardStatic p {
+  color: #4B5563;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Right Column: Form */
+.formWrapper {
+  background: #FFFFFF;
+  border: 4px solid #111827;
+  border-radius: 8px;
+  padding: 48px;
+  box-shadow: 16px 16px 0px 0px #F59E0B; /* Kente Gold Shadow */
+}
+
+.formTitle {
+  font-size: 1.75rem;
+  font-weight: 900;
+  margin-bottom: 32px;
+}
+
+.inputGroup {
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.inputGroup label {
+  font-weight: 700;
+  color: #111827;
+  font-size: 0.9375rem;
+}
+
+.inputGroup input,
+.inputGroup select,
+.inputGroup textarea {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid #E5E7EB;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: inherit;
+  outline: none;
+  transition: border-color 0.2s ease;
+  background-color: #F9FAFB;
+}
+
+.inputGroup input:focus,
+.inputGroup select:focus,
+.inputGroup textarea:focus {
+  border-color: #111827;
+  background-color: #FFFFFF;
+}
+
+.submitBtn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  background-color: #111827;
+  color: #FFFFFF;
+  padding: 18px;
+  border: none;
+  border-radius: 4px;
+  font-size: 1.125rem;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.submitBtn:hover:not(:disabled) {
+  background-color: #1F2937;
+  transform: translateY(-2px);
+}
+
+.submitBtn:disabled {
+  background-color: #9CA3AF;
+  cursor: not-allowed;
+}
+
+.formDisclaimer {
+  margin-top: 16px;
+  text-align: center;
+  font-size: 0.875rem;
+  color: #6B7280;
+}
+
+.formDisclaimer a {
+  color: #DC2626;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.formDisclaimer a:hover {
+  text-decoration: underline;
+}
+
+/* Success State */
+.successState {
+  text-align: center;
+  padding: 40px 0;
+}
+
+.successIcon {
+  color: #15803D;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+
+.successState h3 {
+  font-size: 2rem;
+  font-weight: 900;
+  color: #111827;
+  margin-bottom: 16px;
+}
+
+.successState p {
+  font-size: 1.125rem;
+  color: #4B5563;
+  margin-bottom: 32px;
+  line-height: 1.6;
+}
+
+.resetBtn {
+  background: transparent;
+  border: 2px solid #111827;
+  color: #111827;
+  padding: 12px 24px;
+  border-radius: 4px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.resetBtn:hover {
+  background: #111827;
+  color: #FFFFFF;
+}
+
+/* ── RESPONSIVE ── */
+@media (max-width: 992px) {
+  .contactLayout {
+    grid-template-columns: 1fr;
+    gap: 64px;
+  }
+  
+  .formWrapper {
+    padding: 32px 24px;
+  }
+}

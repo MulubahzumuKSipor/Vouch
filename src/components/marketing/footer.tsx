@@ -41,7 +41,7 @@ export function Footer() {
               <li><Link href="/features" className={styles.link}>Features</Link></li>
               <li><Link href="/pricing" className={styles.link}>Pricing</Link></li>
               <li><Link href="/community" className={styles.link}>Creators</Link></li>
-              <li><Link href="/examples" className={styles.link}>Examples</Link></li>
+              <li><Link href="/explore" className={styles.link}>Explore</Link></li>
             </ul>
           </div>
 
@@ -51,7 +51,7 @@ export function Footer() {
               <li><Link href="/help" className={styles.link}>Help Center</Link></li>
               <li><Link href="/blog" className={styles.link}>Blog</Link></li>
               <li><Link href="/guides" className={styles.link}>Creator Guides</Link></li>
-              <li><Link href="/api" className={styles.link}>API</Link></li>
+              {/* <li><Link href="/api" className={styles.link}>API</Link></li> */}
             </ul>
           </div>
 

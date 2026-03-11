@@ -1,3 +1,6 @@
+Need to install the following packages:
+supabase@2.78.1
+Ok to proceed? (y) 
 export type Json =
   | string
   | number
@@ -189,6 +192,57 @@ export type Database = {
           },
         ]
       }
+      blog_posts: {
+        Row: {
+          author_name: string
+          category: string
+          content: string
+          cover_image_url: string | null
+          created_at: string | null
+          excerpt: string
+          id: string
+          is_featured: boolean | null
+          is_published: boolean | null
+          published_at: string | null
+          read_time_minutes: number | null
+          slug: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          author_name: string
+          category: string
+          content: string
+          cover_image_url?: string | null
+          created_at?: string | null
+          excerpt: string
+          id?: string
+          is_featured?: boolean | null
+          is_published?: boolean | null
+          published_at?: string | null
+          read_time_minutes?: number | null
+          slug: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          author_name?: string
+          category?: string
+          content?: string
+          cover_image_url?: string | null
+          created_at?: string | null
+          excerpt?: string
+          id?: string
+          is_featured?: boolean | null
+          is_published?: boolean | null
+          published_at?: string | null
+          read_time_minutes?: number | null
+          slug?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       cart_items: {
         Row: {
           created_at: string
@@ -261,8 +315,39 @@ export type Database = {
           },
         ]
       }
+      contact_messages: {
+        Row: {
+          created_at: string | null
+          email: string
+          full_name: string
+          id: string
+          message: string
+          status: Database["public"]["Enums"]["contact_status_enum"] | null
+          subject: string
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          full_name: string
+          id?: string
+          message: string
+          status?: Database["public"]["Enums"]["contact_status_enum"] | null
+          subject: string
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          full_name?: string
+          id?: string
+          message?: string
+          status?: Database["public"]["Enums"]["contact_status_enum"] | null
+          subject?: string
+        }
+        Relationships: []
+      }
       course_lessons: {
         Row: {
+          allow_download: boolean | null
           content_body: string | null
           content_url: string | null
           created_at: string
@@ -276,6 +361,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          allow_download?: boolean | null
           content_body?: string | null
           content_url?: string | null
           created_at?: string
@@ -289,6 +375,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          allow_download?: boolean | null
           content_body?: string | null
           content_url?: string | null
           created_at?: string
@@ -356,6 +443,54 @@ export type Database = {
           },
         ]
       }
+      creator_guides: {
+        Row: {
+          category: string
+          color_class: string
+          content: string
+          created_at: string | null
+          description: string
+          icon_name: string
+          id: string
+          is_published: boolean | null
+          read_time_minutes: number | null
+          slug: string
+          sort_order: number | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          color_class?: string
+          content: string
+          created_at?: string | null
+          description: string
+          icon_name?: string
+          id?: string
+          is_published?: boolean | null
+          read_time_minutes?: number | null
+          slug: string
+          sort_order?: number | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          color_class?: string
+          content?: string
+          created_at?: string | null
+          description?: string
+          icon_name?: string
+          id?: string
+          is_published?: boolean | null
+          read_time_minutes?: number | null
+          slug?: string
+          sort_order?: number | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       follows: {
         Row: {
           created_at: string
@@ -416,6 +551,84 @@ export type Database = {
             referencedColumns: ["seller_id"]
           },
         ]
+      }
+      help_articles: {
+        Row: {
+          category: string
+          content: string
+          created_at: string | null
+          excerpt: string
+          id: string
+          is_published: boolean | null
+          slug: string
+          sort_order: number | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          category: string
+          content: string
+          created_at?: string | null
+          excerpt: string
+          id?: string
+          is_published?: boolean | null
+          slug: string
+          sort_order?: number | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          category?: string
+          content?: string
+          created_at?: string | null
+          excerpt?: string
+          id?: string
+          is_published?: boolean | null
+          slug?: string
+          sort_order?: number | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      open_roles: {
+        Row: {
+          application_url: string | null
+          created_at: string | null
+          department: string
+          description: string
+          employment_type: string
+          id: string
+          is_active: boolean | null
+          location: string
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          application_url?: string | null
+          created_at?: string | null
+          department: string
+          description: string
+          employment_type?: string
+          id?: string
+          is_active?: boolean | null
+          location: string
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          application_url?: string | null
+          created_at?: string | null
+          department?: string
+          description?: string
+          employment_type?: string
+          id?: string
+          is_active?: boolean | null
+          location?: string
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       orders: {
         Row: {
@@ -543,7 +756,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "seller_stats"
             referencedColumns: ["seller_id"]
-          }
+          },
         ]
       }
       payouts: {
@@ -609,6 +822,39 @@ export type Database = {
             referencedColumns: ["seller_id"]
           },
         ]
+      }
+      press_releases: {
+        Row: {
+          created_at: string | null
+          external_url: string | null
+          id: string
+          is_published: boolean | null
+          publication_name: string
+          published_date: string
+          release_type: string
+          title: string
+        }
+        Insert: {
+          created_at?: string | null
+          external_url?: string | null
+          id?: string
+          is_published?: boolean | null
+          publication_name: string
+          published_date: string
+          release_type: string
+          title: string
+        }
+        Update: {
+          created_at?: string | null
+          external_url?: string | null
+          id?: string
+          is_published?: boolean | null
+          publication_name?: string
+          published_date?: string
+          release_type?: string
+          title?: string
+        }
+        Relationships: []
       }
       product_attachments: {
         Row: {
@@ -755,7 +1001,7 @@ export type Database = {
             isOneToOne: false
             referencedRelation: "seller_stats"
             referencedColumns: ["seller_id"]
-          }
+          },
         ]
       }
       profiles: {
@@ -1161,6 +1407,7 @@ export type Database = {
           seller_username: string
         }[]
       }
+      increment_product_view: { Args: { prod_id: string }; Returns: undefined }
       increment_view_count: {
         Args: { p_product_id: string }
         Returns: undefined
@@ -1221,6 +1468,7 @@ export type Database = {
     }
     Enums: {
       attachment_type_enum: "video" | "file" | "link" | "image"
+      contact_status_enum: "new" | "read" | "replied" | "archived"
       currency_enum: "USD" | "LRD" | "EUR" | "GBP" | "NGN" | "GHS" | "KES"
       event_type_enum: "view" | "click" | "purchase" | "share"
       order_status_enum: "pending" | "completed" | "refunded" | "cancelled"
@@ -1354,6 +1602,7 @@ export const Constants = {
   public: {
     Enums: {
       attachment_type_enum: ["video", "file", "link", "image"],
+      contact_status_enum: ["new", "read", "replied", "archived"],
       currency_enum: ["USD", "LRD", "EUR", "GBP", "NGN", "GHS", "KES"],
       event_type_enum: ["view", "click", "purchase", "share"],
       order_status_enum: ["pending", "completed", "refunded", "cancelled"],
