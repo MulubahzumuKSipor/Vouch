@@ -168,15 +168,27 @@ export async function processGuestCheckout(payload: {
   );
 
   try {
+    // 🔴 1. We track the currency of the very first item to enforce consistency
+    let checkoutCurrency: string | null = null;
+
     for (const item of items) {
       const productId = item.product_id || item.id;
+
+      // 🔴 2. Fetch the true price_currency straight from the database
       const { data: productData, error: productError } = await supabaseAdmin
         .from('products')
-        .select(`seller_id, profiles!inner(email)`)
+        .select(`seller_id, price_currency, profiles!inner(email)`)
         .eq('id', productId)
         .single();
 
       if (productError || !productData) throw new Error(`Product not found: ${item.title}`);
+
+      // 🔴 3. STRICT CURRENCY CHECK
+      if (!checkoutCurrency) {
+        checkoutCurrency = productData.price_currency;
+      } else if (checkoutCurrency !== productData.price_currency) {
+        throw new Error(`Checkout failed: You cannot mix ${checkoutCurrency} and ${productData.price_currency} items in the same transaction. Please purchase them separately.`);
+      }
 
       const profileData = productData.profiles as ProfileJoinData;
       const sellerEmail = Array.isArray(profileData) ? profileData[0]?.email : profileData?.email;
@@ -218,7 +230,7 @@ export async function processGuestCheckout(payload: {
     const ordersToInsert = items.map(item => {
       const amountPaid = (item.price_amount || item.price || 0) * (item.quantity || 1);
 
-      // 🔴 UPDATED: Platform fee is now correctly set to 10%
+      // Platform fee is correctly set to 10%
       const platformFee = Math.floor(amountPaid * 0.10);
 
       return {
@@ -231,7 +243,10 @@ export async function processGuestCheckout(payload: {
         product_title: item.title,
         product_price: item.price_amount || item.price || 0,
         amount_paid: amountPaid,
-        currency: item.currency || 'USD',
+
+        // 🔴 4. FORCE the database currency into the order record
+        currency: checkoutCurrency || 'USD',
+
         platform_fee: platformFee,
         seller_earnings: amountPaid - platformFee,
         payment_method: method,

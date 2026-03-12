@@ -5,10 +5,8 @@ import { Smartphone, History, AlertCircle, CheckCircle2, Clock, ArrowRight } fro
 import styles from '@/styles/payouts.module.css'
 import DashboardLayout from '@/components/dashboardLayout'
 import PayoutForm from '@/components/PayoutForm'
-import { getPayoutStats } from '@/lib/payout'
 
 // --- INTERFACES ---
-// 🔴 FIXED: Restrict 'method' from a generic string to the exact allowed literal types
 interface PaymentDetails {
   number?: string
   method?: 'mtn_momo' | 'orange_money'
@@ -20,36 +18,66 @@ interface PayoutRecord {
   payment_method: string
   amount: number
   status: string
+  currency: 'USD' | 'LRD'
 }
 
-// Helper to format currency
-const money = (amount: number) =>
-  new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(amount / 100)
+// 🔴 FIXED: Helper now dynamically formats based on the specific currency passed to it
+const money = (amount: number, currency: 'USD' | 'LRD' | string) =>
+  new Intl.NumberFormat('en-US', { style: 'currency', currency: currency }).format(amount / 100)
 
 export default async function PayoutsPage() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect('/login')
 
-  // 1. Fetch Data
-  const stats = await getPayoutStats()
+  // 1. Fetch Orders to calculate total earnings per currency
+  const { data: orders } = await supabase
+    .from('orders')
+    .select('currency, seller_earnings')
+    .eq('seller_id', user.id)
+    .eq('status', 'completed')
 
+  // 2. Fetch Payouts to calculate withdrawals and render history
   const { data: history } = await supabase
     .from('payouts')
     .select('*')
     .eq('seller_id', user.id)
     .order('created_at', { ascending: false })
 
+  // 3. Compute accurate separated balances
+  const balances = {
+    USD: { earnings: 0, withdrawn: 0, pending: 0, available: 0 },
+    LRD: { earnings: 0, withdrawn: 0, pending: 0, available: 0 }
+  }
+
+  // Tally up earnings
+  orders?.forEach(o => {
+    const cur = o.currency as 'USD' | 'LRD'
+    if (balances[cur]) balances[cur].earnings += (o.seller_earnings || 0)
+  })
+
+  // Subtract withdrawals and pending lockups
+  history?.forEach(p => {
+    const cur = p.currency as 'USD' | 'LRD'
+    if (balances[cur]) {
+      if (p.status === 'completed') balances[cur].withdrawn += p.amount
+      if (p.status === 'pending' || p.status === 'processing') balances[cur].pending += p.amount
+    }
+  })
+
+  // Final Available Balance calculation
+  balances.USD.available = balances.USD.earnings - balances.USD.withdrawn - balances.USD.pending
+  balances.LRD.available = balances.LRD.earnings - balances.LRD.withdrawn - balances.LRD.pending
+
+  // 4. Check for saved payment details
   const { data: profile } = await supabase
     .from('profiles')
     .select('*')
     .eq('id', user.id)
     .single()
 
-  // 2. Check for saved payment details
   const paymentDetails = profile?.payment_details as PaymentDetails | null
   const savedNumber = paymentDetails?.number
-  // 🔴 FIXED: Tell TypeScript this fallback strictly matches the literal type
   const savedMethod = paymentDetails?.method || ('mtn_momo' as const)
 
   return (
@@ -62,35 +90,54 @@ export default async function PayoutsPage() {
         </div>
 
         <div className={styles.balanceCard}>
-          {/* LEFT: Balance Info */}
+          {/* LEFT: Balance Info (Now split into USD and LRD Wallets) */}
           <div className={styles.balanceLeft}>
-            <span className={styles.balanceLabel}>Available Balance</span>
-            <h2 className={styles.balanceAmount}>{money(stats?.availableBalance || 0)}</h2>
-            <div className={styles.balanceContext}>
-              <span>Total Earnings: {money(stats?.totalEarnings || 0)}</span>
-              <span className={styles.dot}>•</span>
-              <span>Paid Out: {money(stats?.totalWithdrawn || 0)}</span>
-            </div>
+            <span className={styles.balanceLabel}>Available Balances</span>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', marginTop: '16px' }}>
+              {/* 💵 USD WALLET */}
+              <div style={{ paddingBottom: '24px', borderBottom: '1px solid #E5E7EB' }}>
+                <span style={{ fontSize: '0.875rem', color: '#6B7280', fontWeight: 600 }}>USD Wallet</span>
+                <h2 className={styles.balanceAmount}>{money(balances.USD.available, 'USD')}</h2>
+                <div className={styles.balanceContext}>
+                  <span>Earned: {money(balances.USD.earnings, 'USD')}</span>
+                  <span className={styles.dot}>•</span>
+                  <span>Withdrawn: {money(balances.USD.withdrawn, 'USD')}</span>
+                </div>
+              </div>
+
+              {/* 💵 LRD WALLET */}
+              <div>
+                <span style={{ fontSize: '0.875rem', color: '#6B7280', fontWeight: 600 }}>LRD Wallet</span>
+                <h2 className={styles.balanceAmount}>{money(balances.LRD.available, 'LRD')}</h2>
+                <div className={styles.balanceContext}>
+                  <span>Earned: {money(balances.LRD.earnings, 'LRD')}</span>
+                  <span className={styles.dot}>•</span>
+                  <span>Withdrawn: {money(balances.LRD.withdrawn, 'LRD')}</span>
+                </div>
+              </div>
+          </div>
           </div>
 
           {/* RIGHT: Action Area */}
           <div className={styles.balanceRight}>
              {savedNumber ? (
-               // A. If number exists, show the Form
+               // A. Form (Now takes both balances so the user can choose which to withdraw)
                <PayoutForm
-                 maxAmount={stats?.availableBalance || 0}
+                 availableUsd={balances.USD.available}
+                 availableLrd={balances.LRD.available}
                  savedNumber={savedNumber}
                  savedMethod={savedMethod}
                />
              ) : (
-               // B. If NO number, prompt to Settings
+               // B. Prompt to Settings
                <div className={styles.setupCard}>
                  <div className={styles.setupIconWrap}>
                    <Smartphone size={24} />
                  </div>
                  <h3 className={styles.setupTitle}>Connect Mobile Money</h3>
                  <p className={styles.setupText}>
-                   To protect your funds, you must save a verified Mobile Money number in your settings before withdrawing.
+                   To protect your funds, you must save a verified Mobile Money number before withdrawing.
                  </p>
                  <Link href="/dashboard/settings" className={styles.setupBtn}>
                    Go to Settings <ArrowRight size={16} />
@@ -117,8 +164,7 @@ export default async function PayoutsPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {/* Applied the strictly typed interface here */}
-                  {(history as PayoutRecord[]).map((payout) => (
+                  {(history as unknown as PayoutRecord[]).map((payout) => (
                     <tr key={payout.id}>
                       <td>{new Date(payout.created_at).toLocaleDateString()}</td>
                       <td>
@@ -127,7 +173,10 @@ export default async function PayoutsPage() {
                           {payout.payment_method === 'mtn_momo' ? 'MTN MoMo' : 'Orange Money'}
                         </div>
                       </td>
-                      <td className={styles.amountCell}>{money(payout.amount)}</td>
+                      {/* 🔴 Format the amount to the specific currency of this payout */}
+                      <td className={styles.amountCell}>
+                        {money(payout.amount, payout.currency || 'USD')}
+                      </td>
                       <td><StatusBadge status={payout.status} /></td>
                     </tr>
                   ))}
@@ -148,6 +197,6 @@ export default async function PayoutsPage() {
 
 function StatusBadge({ status }: { status: string }) {
   if (status === 'completed') return <span className={`${styles.badge} ${styles.success}`}><CheckCircle2 size={12}/> Paid</span>
-  if (status === 'pending') return <span className={`${styles.badge} ${styles.pending}`}><Clock size={12}/> Pending</span>
+  if (status === 'pending' || status === 'processing') return <span className={`${styles.badge} ${styles.pending}`}><Clock size={12}/> Pending</span>
   return <span className={`${styles.badge} ${styles.failed}`}><AlertCircle size={12}/> Failed</span>
 }

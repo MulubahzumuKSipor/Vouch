@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import { 
   AreaChart, 
   Area, 
@@ -18,7 +19,8 @@ import styles from '@/styles/analytics.module.css'
 // --- INTERFACES ---
 export interface ChartDataPoint {
   date: string
-  revenue: number
+  revenueUSD: number
+  revenueLRD: number
   views: number
 }
 
@@ -30,7 +32,8 @@ export interface DeviceDataPoint {
 interface AnalyticsProps {
   chartData: ChartDataPoint[]
   stats: {
-    revenue: number
+    revenueUSD: number
+    revenueLRD: number
     views: number
     orders: number
     conversionRate: string
@@ -39,26 +42,71 @@ interface AnalyticsProps {
 }
 
 export default function AnalyticsDashboard({ chartData, stats, deviceData }: AnalyticsProps) {
+  // 🔴 ADDED: State to track which currency the user wants to analyze
+  const [currency, setCurrency] = useState<'USD' | 'LRD'>('USD')
   
-  // Colors for charts
   const COLORS = ['#1a1a1a', '#9ca3af', '#e5e7eb']
+
+  const formatMoney = (amount: number, curr: 'USD' | 'LRD') => {
+    return new Intl.NumberFormat(curr === 'LRD' ? 'en-LR' : 'en-US', {
+      style: 'currency',
+      currency: curr,
+      maximumFractionDigits: curr === 'LRD' ? 0 : 2
+    }).format(amount / 100)
+  }
+
+  // 🔴 DYNAMIC VARIABLES: These change instantly when the toggle is clicked
+  const activeRevenueKey = currency === 'USD' ? 'revenueUSD' : 'revenueLRD'
+  const activeRevenueTotal = currency === 'USD' ? stats.revenueUSD : stats.revenueLRD
 
   return (
     <div className={styles.container}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>Analytics</h1>
-        <p className={styles.subtitle}>Overview for the last 30 days</p>
+      <div className={styles.header} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '16px' }}>
+        <div>
+          <h1 className={styles.title}>Analytics</h1>
+          <p className={styles.subtitle}>Overview for the last 30 days</p>
+        </div>
+
+        {/* 🔴 NEW: Currency Toggle Buttons */}
+        <div style={{ display: 'flex', backgroundColor: '#F3F4F6', padding: '4px', borderRadius: '8px', gap: '4px' }}>
+          <button
+            onClick={() => setCurrency('USD')}
+            style={{
+              padding: '6px 16px', borderRadius: '6px', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer',
+              border: 'none', transition: 'all 0.2s',
+              backgroundColor: currency === 'USD' ? '#FFFFFF' : 'transparent',
+              color: currency === 'USD' ? '#111827' : '#6B7280',
+              boxShadow: currency === 'USD' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+            }}
+          >
+            USD
+          </button>
+          <button
+            onClick={() => setCurrency('LRD')}
+            style={{
+              padding: '6px 16px', borderRadius: '6px', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer',
+              border: 'none', transition: 'all 0.2s',
+              backgroundColor: currency === 'LRD' ? '#FFFFFF' : 'transparent',
+              color: currency === 'LRD' ? '#111827' : '#6B7280',
+              boxShadow: currency === 'LRD' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none'
+            }}
+          >
+            LRD
+          </button>
+        </div>
       </div>
 
       {/* KPI Cards */}
       <div className={styles.grid}>
+
+        {/* 🔴 DYNAMIC REVENUE CARD */}
         <div className={styles.card}>
           <div className={styles.cardHeader}>
-            <span className={styles.cardLabel}>Total Revenue</span>
+            <span className={styles.cardLabel}>Total Revenue ({currency})</span>
             <DollarSign size={18} className={styles.iconGold} />
           </div>
           <div className={styles.cardValue}>
-            {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(stats.revenue / 100)}
+            {formatMoney(activeRevenueTotal, currency)}
           </div>
         </div>
 
@@ -116,7 +164,8 @@ export default function AnalyticsDashboard({ chartData, stats, deviceData }: Ana
                 tick={{ fontSize: 12, fill: '#666' }} 
                 axisLine={false}
                 tickLine={false}
-                tickFormatter={(val) => `$${val}`}
+                // 🔴 Formats the Y-axis numbers dynamically based on the toggle
+                tickFormatter={(val) => formatMoney(val * 100, currency)}
               />
               <YAxis 
                 yAxisId="right"
@@ -127,11 +176,17 @@ export default function AnalyticsDashboard({ chartData, stats, deviceData }: Ana
               />
               <Tooltip 
                 contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
+                formatter={(value: any, name: any) => {
+                  const numValue = Number(value) || 0
+                  if (name === 'Revenue') return formatMoney(numValue * 100, currency)
+                  return numValue
+                }}
               />
+              {/* 🔴 Plugs in the activeRevenueKey to swap the chart line instantly */}
               <Area 
                 yAxisId="left"
                 type="monotone" 
-                dataKey="revenue" 
+                dataKey={activeRevenueKey}
                 stroke="#1a1a1a" 
                 strokeWidth={2}
                 fillOpacity={1} 
@@ -189,7 +244,7 @@ export default function AnalyticsDashboard({ chartData, stats, deviceData }: Ana
           </div>
         </div>
 
-        {/* Placeholder for Top Products (could easily be added later) */}
+        {/* Traffic Insights */}
         <div className={styles.card}>
            <h3 className={styles.chartTitle}>Traffic Insights</h3>
            <div className={styles.insightItem}>

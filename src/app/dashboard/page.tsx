@@ -28,6 +28,7 @@ interface RecentSale {
   order_number: string
   product_title: string
   seller_earnings: number
+  currency: string // Added to show the exact currency paid
   status: string
   created_at: string
   buyer_email: string
@@ -42,6 +43,7 @@ interface Purchase {
   order_number: string
   product_title: string
   amount_paid: number
+  currency: string // Added to show the exact currency paid
   status: string
   created_at: string
   products: {
@@ -115,20 +117,23 @@ export default async function DashboardPage() {
     .eq('id', user.id)
     .single()
 
-  // 3. Initialize seller data
-  let sellerStats = { totalRevenue: 0, totalSales: 0, totalViews: 0, followerCount: 0 }
+  // 3. Initialize seller data (Now splitting USD and LRD)
+  let sellerStats = { totalRevenueUSD: 0, totalRevenueLRD: 0, totalSales: 0, totalViews: 0, followerCount: 0 }
   let topProducts: TopProduct[] = []
   let recentSales: RecentSale[] = []
 
   // 4. Fetch seller-specific data
   if (profile?.is_seller) {
+    // 🔴 Fetch currency along with seller_earnings
     const { data: revenueData } = await supabase
       .from('orders')
-      .select('seller_earnings')
+      .select('seller_earnings, currency')
       .eq('seller_id', user.id)
       .eq('status', 'completed')
 
-    const totalRevenue = revenueData?.reduce((sum, order) => sum + (order.seller_earnings || 0), 0) || 0
+    // 🔴 Calculate USD and LRD separately
+    const totalRevenueUSD = revenueData?.filter(o => o.currency === 'USD' || !o.currency).reduce((sum, order) => sum + (order.seller_earnings || 0), 0) || 0
+    const totalRevenueLRD = revenueData?.filter(o => o.currency === 'LRD').reduce((sum, order) => sum + (order.seller_earnings || 0), 0) || 0
 
     const { data: productsData } = await supabase
       .from('products')
@@ -139,7 +144,7 @@ export default async function DashboardPage() {
     const totalViews = productsData?.reduce((sum, p) => sum + (p.view_count || 0), 0) || 0
     const totalSales = productsData?.reduce((sum, p) => sum + (p.sales_count || 0), 0) || 0
 
-    sellerStats = { totalRevenue, totalSales, totalViews, followerCount: profile?.follower_count || 0 }
+    sellerStats = { totalRevenueUSD, totalRevenueLRD, totalSales, totalViews, followerCount: profile?.follower_count || 0 }
 
     const { data: products } = await supabase
       .from('products')
@@ -151,19 +156,20 @@ export default async function DashboardPage() {
       .limit(3)
     topProducts = products as TopProduct[] || []
 
+    // 🔴 Also select `currency` to properly format the Recent Sales feed
     const { data: orders } = await supabase
       .from('orders')
-      .select(`id, order_number, product_title, seller_earnings, status, created_at, buyer_email, profiles!orders_buyer_id_fkey(full_name, avatar_url)`)
+      .select(`id, order_number, product_title, seller_earnings, currency, status, created_at, buyer_email, profiles!orders_buyer_id_fkey(full_name, avatar_url)`)
       .eq('seller_id', user.id)
       .order('created_at', { ascending: false })
       .limit(5)
     recentSales = orders as unknown as RecentSale[] || []
   }
 
-  // 5. Fetch buyer purchases
+  // 5. Fetch buyer purchases (Also selecting currency)
   const { data: purchases } = await supabase
     .from('orders')
-    .select(`id, order_number, product_title, amount_paid, status, created_at, products(id, slug, cover_image, price_currency), profiles!orders_seller_id_fkey(username, full_name)`)
+    .select(`id, order_number, product_title, amount_paid, currency, status, created_at, products(id, slug, cover_image, price_currency), profiles!orders_seller_id_fkey(username, full_name)`)
     .eq('buyer_id', user.id)
     .eq('status', 'completed')
     .order('created_at', { ascending: false })
@@ -179,7 +185,7 @@ export default async function DashboardPage() {
     .order('sales_count', { ascending: false })
     .limit(3)
 
-  // 7. Quick Actions (UPDATED TO USE ?new=true)
+  // 7. Quick Actions
   const quickActions = profile?.is_seller
     ? [
         { name: 'New Service', href: '/dashboard/products?new=true', icon: Calendar },
@@ -219,7 +225,6 @@ export default async function DashboardPage() {
         <div className={styles.dashboardHero}>
           <div className={styles.heroSubtlePattern} aria-hidden="true" />
           <div className={styles.container}>
-            {/* 🔴 FIXED: Added 'as any' Type Assertion to bypass Supabase JSON restriction */}
             <PayoutAlert profile={profile as any} />
 
             <div className={styles.heroContent}>
@@ -232,7 +237,6 @@ export default async function DashboardPage() {
 
               {profile?.is_seller && (
                 <div className={styles.heroAction}>
-                  {/* UPDATED TO USE ?new=true */}
                   <Link href="/dashboard/products?new=true" className={styles.primaryBtn}>
                     <Plus size={20} /> Add New Course
                   </Link>
@@ -252,7 +256,15 @@ export default async function DashboardPage() {
                     <span className={styles.metricLabel}>Total Lifetime Revenue</span>
                     <div className={styles.iconWrapGold}><DollarSign size={18} /></div>
                   </div>
-                  <p className={styles.metricValueLarge}>{formatCurrency(sellerStats.totalRevenue, 'USD')}</p>
+                  {/* 🔴 Stacked USD and LRD display */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', marginTop: '8px' }}>
+                    <p className={styles.metricValueLarge} style={{ lineHeight: '1', margin: 0 }}>
+                      {formatCurrency(sellerStats.totalRevenueUSD, 'USD')} USD
+                    </p>
+                    <p style={{ fontSize: '1.125rem', fontWeight: 600, opacity: 0.9, margin: 0 }}>
+                      {formatCurrency(sellerStats.totalRevenueLRD, 'LRD')} LRD
+                    </p>
+                  </div>
                 </div>
 
                 <div className={styles.metricCard}>
@@ -336,7 +348,8 @@ export default async function DashboardPage() {
                             </div>
                           </div>
                           <div className={styles.listItemRight}>
-                            <p className={styles.amountText}>+{formatCurrency(order.seller_earnings, 'USD')}</p>
+                            {/* 🔴 Dynamically show the correct currency for the sale */}
+                            <p className={styles.amountText}>+{formatCurrency(order.seller_earnings, order.currency || 'USD')}</p>
                             <span className={`${styles.statusBadge} ${styles.statusCompleted}`}>Paid</span>
                           </div>
                         </Link>
@@ -408,7 +421,8 @@ export default async function DashboardPage() {
                             </div>
                           </div>
                           <div className={styles.listItemRight}>
-                            <p className={styles.priceText}>{formatCurrency(order.amount_paid, 'USD')}</p>
+                            {/* 🔴 Dynamically show the correct currency for the purchase */}
+                            <p className={styles.priceText}>{formatCurrency(order.amount_paid, order.currency || 'USD')}</p>
                             <span className={`${styles.statusBadge} ${styles.statusCompleted}`}>Paid</span>
                           </div>
                         </Link>

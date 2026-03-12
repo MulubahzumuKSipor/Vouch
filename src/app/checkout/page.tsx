@@ -6,11 +6,12 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { createClient } from '@/lib/client'
 import { useCart } from '@/context/CartContext'
-import { processGuestCheckout, checkEmailOwnership } from '@/lib/action' // 🔴 IMPORTED BOTH ACTIONS
-import { Lock, Smartphone, ShieldCheck, Loader2, ArrowLeft, Mail } from 'lucide-react'
+import { processGuestCheckout, checkEmailOwnership } from '@/lib/action'
+import { Lock, Smartphone, ShieldCheck, Loader2, ArrowLeft, Mail, AlertTriangle } from 'lucide-react'
 import styles from '@/styles/checkout.module.css'
 
-type PaymentMethod = 'mtn_momo' | 'orange_money' | 'tipme'
+// 🔴 1. REMOVED TIPME
+type PaymentMethod = 'mtn_momo' | 'orange_money'
 
 export default function CheckoutPage() {
   const { items: cartItems, isLoading, removeItem } = useCart()
@@ -23,15 +24,16 @@ export default function CheckoutPage() {
   const [isProcessing, setIsProcessing] = useState(false)
   const [paymentStep, setPaymentStep] = useState<'idle' | 'checking' | 'prompting' | 'verifying' | 'completing'>('idle')
 
+  // New state to show phone validation errors natively without browser alerts
+  const [phoneError, setPhoneError] = useState<string | null>(null)
+
   const [isDirectMode, setIsDirectMode] = useState(false)
   const [directItem, setDirectItem] = useState<any | null>(null)
   const [isInitializing, setIsInitializing] = useState(true)
 
-  // 🔴 STATES FOR THE MODAL
   const [ownershipWarning, setOwnershipWarning] = useState<{status: string, message: string} | null>(null)
   const [showModal, setShowModal] = useState(false)
 
-  // 1. Check if we are in Direct Buy mode & Fetch User on mount
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const isDirect = window.location.search.includes('mode=direct')
@@ -46,7 +48,6 @@ export default function CheckoutPage() {
       setIsInitializing(false)
     }
 
-    // Pre-fill email if user is already logged in
     const fetchUser = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       if (user?.email) {
@@ -59,34 +60,62 @@ export default function CheckoutPage() {
   const activeItems = isDirectMode ? (directItem ? [directItem] : []) : cartItems
   const isReady = isDirectMode ? !isInitializing : !isLoading
 
+  // 🔴 2. DETECT CHECKOUT CURRENCY AND CHECK FOR MIXED CARTS
+  const checkoutCurrency = activeItems.length > 0 ? (activeItems[0].currency || activeItems[0].price_currency || 'USD') : 'USD'
+  const hasMixedCurrencies = activeItems.some(item => (item.currency || item.price_currency || 'USD') !== checkoutCurrency)
+
   const total = activeItems.reduce((acc, item) => acc + (item.price_amount || item.price * (item.quantity || 1)), 0)
-  const totalFormatted = new Intl.NumberFormat('en-US', {
+  const totalFormatted = new Intl.NumberFormat(checkoutCurrency === 'LRD' ? 'en-LR' : 'en-US', {
     style: 'currency',
-    currency: 'USD',
-    minimumFractionDigits: 2
+    currency: checkoutCurrency,
+    minimumFractionDigits: checkoutCurrency === 'LRD' ? 0 : 2
   }).format(total / 100)
 
-  // Kick out if cart is empty
   useEffect(() => {
     if (isInitializing || isProcessing) return;
-
     const timer = setTimeout(() => {
       if (isReady && activeItems.length === 0) {
         router.push('/explore')
       }
     }, 600)
-
     return () => clearTimeout(timer)
   }, [activeItems.length, isReady, isProcessing, isInitializing, router])
 
   const handleSimulatedPayment = async (e: React.FormEvent) => {
     e.preventDefault()
-    if (!phone || phone.length < 9 || !email) return
+    setPhoneError(null)
+
+    if (hasMixedCurrencies) {
+      alert("You cannot mix USD and LRD items in the same checkout. Please adjust your cart.")
+      return;
+    }
+
+    // 🔴 3. STRICT PHONE VALIDATION LOGIC
+    // Remove all spaces and hyphens
+    const cleanPhone = phone.replace(/[-\s]/g, '')
+    let isValidPhone = false
+
+    if (method === 'mtn_momo') {
+      if (cleanPhone.startsWith('088') && cleanPhone.length === 10) isValidPhone = true
+      else if (cleanPhone.startsWith('+23188') && cleanPhone.length === 13) isValidPhone = true
+      else {
+        setPhoneError('MTN MoMo numbers must start with 088 (10 digits) or +23188 (13 characters).')
+        return
+      }
+    } else if (method === 'orange_money') {
+      if (cleanPhone.startsWith('077') && cleanPhone.length === 10) isValidPhone = true
+      else if (cleanPhone.startsWith('+23177') && cleanPhone.length === 13) isValidPhone = true
+      else {
+        setPhoneError('Orange Money numbers must start with 077 (10 digits) or +23177 (13 characters).')
+        return
+      }
+    }
+
+    if (!isValidPhone || !email) return
 
     setIsProcessing(true)
     setPaymentStep('checking')
 
-    // 🔴 1. CHECK OWNERSHIP FIRST (Happens instantly when they click pay)
     const productIds = activeItems.map(item => item.product_id || item.id)
     const ownershipCheck = await checkEmailOwnership(email, productIds)
 
@@ -96,12 +125,11 @@ export default function CheckoutPage() {
         message: ownershipCheck.message || 'You already own this product.'
       })
       setShowModal(true)
-      setIsProcessing(false) // Re-enable the form
+      setIsProcessing(false)
       setPaymentStep('idle')
-      return; // Stop the payment process completely
+      return;
     }
 
-    // 2. IF CLEAR, PROCEED WITH PAYMENT SIMULATION
     setPaymentStep('prompting')
     await new Promise(resolve => setTimeout(resolve, 1500))
 
@@ -111,10 +139,10 @@ export default function CheckoutPage() {
     setPaymentStep('completing')
 
     try {
-      // 3. SECURE SERVER CHECKOUT
+      // Pass the CLEANED phone number to the backend
       const result = await processGuestCheckout({
         email,
-        phone,
+        phone: cleanPhone,
         method,
         items: activeItems
       })
@@ -123,7 +151,6 @@ export default function CheckoutPage() {
         throw new Error(result.error)
       }
 
-      // If successful, clean up the cart/storage
       if (!isDirectMode) {
         for (const item of activeItems) {
           const productId = item.product_id || item.id
@@ -133,7 +160,6 @@ export default function CheckoutPage() {
         sessionStorage.removeItem('directBuyItem')
       }
 
-      // Send them to the success page!
       router.push(`/checkout/success?amount=${total}&email=${encodeURIComponent(email)}`)
 
     } catch (error: any) {
@@ -168,6 +194,17 @@ export default function CheckoutPage() {
           </div>
 
           <div className={styles.formContainer}>
+
+            {/* Frontend Mix Currency Warning */}
+            {hasMixedCurrencies && (
+              <div style={{ background: '#FEF2F2', border: '1px solid #F87171', padding: '12px', borderRadius: '8px', marginBottom: '20px', display: 'flex', gap: '8px', color: '#991B1B' }}>
+                <AlertTriangle size={20} />
+                <p style={{ fontSize: '0.875rem', margin: 0 }}>
+                  <strong>Mixed Currencies Detected!</strong> You cannot purchase USD and LRD items in the same transaction. Please check out separately.
+                </p>
+              </div>
+            )}
+
             <div className={styles.sectionHeader}>
               <h2 className={styles.sectionTitle}>Payment Details</h2>
               <div className={styles.secureBadge}>
@@ -203,7 +240,7 @@ export default function CheckoutPage() {
                 <button
                   type="button"
                   className={`${styles.methodCard} ${method === 'mtn_momo' ? styles.methodActive : ''}`}
-                  onClick={() => setMethod('mtn_momo')}
+                  onClick={() => { setMethod('mtn_momo'); setPhoneError(null); }}
                 >
                   <div className={styles.radioCircle}>
                     {method === 'mtn_momo' && <div className={styles.radioDot} />}
@@ -215,7 +252,7 @@ export default function CheckoutPage() {
                 <button
                   type="button"
                   className={`${styles.methodCard} ${method === 'orange_money' ? styles.methodActive : ''}`}
-                  onClick={() => setMethod('orange_money')}
+                  onClick={() => { setMethod('orange_money'); setPhoneError(null); }}
                 >
                   <div className={styles.radioCircle}>
                     {method === 'orange_money' && <div className={styles.radioDot} />}
@@ -223,44 +260,42 @@ export default function CheckoutPage() {
                   <div className={`${styles.providerIcon} ${styles.orangeIcon}`}>O</div>
                   <span>Orange Money</span>
                 </button>
-
-                <button
-                  type="button"
-                  className={`${styles.methodCard} ${method === 'tipme' ? styles.methodActive : ''}`}
-                  onClick={() => setMethod('tipme')}
-                >
-                  <div className={styles.radioCircle}>
-                    {method === 'tipme' && <div className={styles.radioDot} />}
-                  </div>
-                  <div className={`${styles.providerIcon} ${styles.tipmeIcon}`}>T</div>
-                  <span>TipMe</span>
-                </button>
               </div>
 
               <div className={styles.inputGroup}>
                 <label htmlFor="phone" className={styles.label}>
-                  {method === 'tipme' ? 'TipMe Wallet Number' : 'Mobile Money Number'}
+                  Mobile Money Number
                 </label>
                 <div className={styles.inputWrapper}>
                   <Smartphone size={20} className={styles.inputIcon} />
                   <input
                     id="phone"
                     type="tel"
-                    placeholder="e.g. 088xxxxxxx or 077xxxxxxx"
+                    placeholder={method === 'mtn_momo' ? "+23188 / 088..." : "+23177 / 077..."}
                     className={styles.input}
                     value={phone}
-                    onChange={(e) => setPhone(e.target.value.replace(/\D/g, ''))}
+                    // 🔴 4. ALLOW DIGITS, HYPHENS, AND THE PLUS SIGN
+                    onChange={(e) => {
+                      setPhoneError(null)
+                      setPhone(e.target.value.replace(/[^\d+-]/g, ''))
+                    }}
                     required
                     disabled={isProcessing}
-                    maxLength={10}
+                    maxLength={16} // Increased to allow + and hyphens during typing
                   />
                 </div>
+                {/* 🔴 5. INLINE PHONE ERROR MESSAGES */}
+                {phoneError && (
+                  <p style={{ color: '#DC2626', fontSize: '0.875rem', marginTop: '4px', fontWeight: 500 }}>
+                    {phoneError}
+                  </p>
+                )}
               </div>
 
               <button
                 type="submit"
                 className={styles.submitBtn}
-                disabled={isProcessing || phone.length < 9 || !email}
+                disabled={isProcessing || !phone || !email || hasMixedCurrencies}
               >
                 {isProcessing ? (
                   <div className={styles.processingWrapper}>
@@ -313,7 +348,7 @@ export default function CheckoutPage() {
                     <p className={styles.itemAuthor}>by {item.seller_username || item.username || 'Creator'}</p>
                   </div>
                   <div className={styles.itemPrice}>
-                    {new Intl.NumberFormat('en-US', { style: 'currency', currency: item.currency || item.price_currency || 'USD' }).format((item.price_amount || item.price * (item.quantity || 1)) / 100)}
+                    {new Intl.NumberFormat(item.currency === 'LRD' || item.price_currency === 'LRD' ? 'en-LR' : 'en-US', { style: 'currency', currency: item.currency || item.price_currency || 'USD' }).format((item.price_amount || item.price * (item.quantity || 1)) / 100)}
                   </div>
                 </div>
               ))}
@@ -337,15 +372,11 @@ export default function CheckoutPage() {
         </div>
       </div>
 
-      {/* 🔴 THE OWNERSHIP MODAL */}
       {showModal && ownershipWarning && (
         <div style={{ position: 'fixed', inset: 0, zIndex: 50, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '1rem' }}>
-          {/* Dark Overlay */}
           <div onClick={() => setShowModal(false)} style={{ position: 'absolute', inset: 0, background: 'rgba(15, 23, 42, 0.6)', backdropFilter: 'blur(4px)' }} />
 
-          {/* Modal Box */}
           <div style={{ position: 'relative', background: 'white', borderRadius: '16px', width: '100%', maxWidth: '400px', padding: '2.5rem 2rem', textAlign: 'center', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1)' }}>
-
             <div style={{ width: '64px', height: '64px', background: '#FEF2F2', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 1.5rem auto' }}>
               <Lock size={32} color="#DC2626" />
             </div>

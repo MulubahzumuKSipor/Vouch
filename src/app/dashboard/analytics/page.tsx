@@ -35,10 +35,10 @@ export default async function AnalyticsPage() {
   startDate.setUTCDate(endDate.getUTCDate() - 29) // 30 days total inclusive
   startDate.setUTCHours(0, 0, 0, 0) // Start of day 1 (UTC)
 
-  // 3. Fetch Orders (Revenue)
+  // 3. Fetch Orders (Revenue) - 🔴 NOW FETCHING CURRENCY
   const { data: orders, error: ordersError } = await supabase
     .from('orders')
-    .select('created_at, seller_earnings')
+    .select('created_at, seller_earnings, currency')
     .eq('seller_id', user.id)
     .eq('status', 'completed')
     .gte('created_at', startDate.toISOString())
@@ -57,14 +57,14 @@ export default async function AnalyticsPage() {
     .eq('event_type', 'view')
     .gte('created_at', startDate.toISOString())
     .lte('created_at', endDate.toISOString())
-    .limit(10000) // SAFETY VALVE: Prevent OOM crash on viral products
+    .limit(10000)
 
   if (viewsError) {
     console.error("Views fetch error:", viewsError)
   }
 
-  // 5. Build strict Date Map
-  const chartDataMap = new Map<string, { date: string, revenue: number, views: number }>()
+  // 5. Build strict Date Map - 🔴 UPDATED TO TRACK BOTH CURRENCIES
+  const chartDataMap = new Map<string, { date: string, revenueUSD: number, revenueLRD: number, views: number }>()
 
   // Generate exactly 30 days dynamically to ensure no gaps in the chart
   for (let i = 0; i < 30; i++) {
@@ -74,7 +74,8 @@ export default async function AnalyticsPage() {
 
     chartDataMap.set(dateStr, {
       date: d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' }),
-      revenue: 0,
+      revenueUSD: 0,
+      revenueLRD: 0,
       views: 0
     })
   }
@@ -83,9 +84,16 @@ export default async function AnalyticsPage() {
   orders?.forEach(order => {
     // Split on 'T' handles ISO strings safely
     const dateStr = order.created_at.split('T')[0]
-    if (chartDataMap.has(dateStr)) {
-      // Chart needs flat dollars/currency, not cents
-      chartDataMap.get(dateStr)!.revenue += (order.seller_earnings / 100)
+    const targetDay = chartDataMap.get(dateStr)
+
+    if (targetDay) {
+      // 🔴 Sort into the correct wallet and convert from cents to flat currency
+      const amount = order.seller_earnings / 100
+      if (order.currency === 'LRD') {
+        targetDay.revenueLRD += amount
+      } else {
+        targetDay.revenueUSD += amount
+      }
     }
   })
 
@@ -96,15 +104,15 @@ export default async function AnalyticsPage() {
     }
   })
 
-  // 7. Calculate Totals
-  // totalRevenue stays in cents so your <PriceDisplay /> component formats it correctly
-  const totalRevenue = orders?.reduce((sum, o) => sum + o.seller_earnings, 0) || 0
+  // 7. Calculate Totals - 🔴 SEPARATE KPI TOTALS IN CENTS
+  const totalRevenueUSD = orders?.filter(o => o.currency === 'USD' || !o.currency).reduce((sum, o) => sum + o.seller_earnings, 0) || 0
+  const totalRevenueLRD = orders?.filter(o => o.currency === 'LRD').reduce((sum, o) => sum + o.seller_earnings, 0) || 0
+
   const totalViews = views?.length || 0
   const totalOrders = orders?.length || 0
   const conversionRate = totalViews > 0 ? ((totalOrders / totalViews) * 100).toFixed(1) : '0.0'
 
   // 8. Device Breakdown (Strictly Typed)
-  // We cast views to our interface, and tell reduce to expect a dictionary of strings to numbers
   const deviceStats = (views as AnalyticsView[] | null)?.reduce<Record<string, number>>((acc, curr) => {
     const device = curr.device_type || 'Unknown'
     acc[device] = (acc[device] || 0) + 1
@@ -121,7 +129,9 @@ export default async function AnalyticsPage() {
       <AnalyticsDashboard
         chartData={Array.from(chartDataMap.values())}
         stats={{
-          revenue: totalRevenue, // Passed in cents
+          // 🔴 Passing both totals down to the client component
+          revenueUSD: totalRevenueUSD,
+          revenueLRD: totalRevenueLRD,
           views: totalViews,
           orders: totalOrders,
           conversionRate
