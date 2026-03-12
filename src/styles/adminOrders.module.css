@@ -1,0 +1,207 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #6B7280;
+}
+
+/* ── METRICS GRID ── */
+.metricsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.metricCard {
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 16px 20px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.metricLabel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #6B7280;
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.metricValue {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #111827;
+}
+
+/* ── TOOLBAR & SEARCH ── */
+.toolBar {
+  margin-bottom: 24px;
+}
+
+.searchForm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  border: 1px solid #D1D5DB;
+  padding: 8px 16px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.2s;
+}
+
+.searchForm:focus-within {
+  border-color: #F59E0B;
+}
+
+.searchInput {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 0.875rem;
+  color: #111827;
+}
+
+/* ── TABLE STYLES ── */
+.tableCard {
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th {
+  background-color: #F9FAFB;
+  padding: 12px 24px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6B7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.table td {
+  padding: 16px 24px;
+  border-bottom: 1px solid #E5E7EB;
+  vertical-align: top;
+}
+
+/* ── TABLE CELLS ── */
+.orderDetails, .productDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.orderNumber {
+  font-family: monospace;
+  font-weight: 700;
+  color: #111827;
+  font-size: 0.875rem;
+  background: #F3F4F6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  width: fit-content;
+}
+
+.buyerEmail {
+  font-size: 0.875rem;
+  color: #4B5563;
+  font-weight: 500;
+}
+
+.date {
+  font-size: 0.75rem;
+  color: #9CA3AF;
+}
+
+.productTitle {
+  font-weight: 600;
+  color: #111827;
+  font-size: 0.9375rem;
+}
+
+.sellerName {
+  font-size: 0.8125rem;
+  color: #6B7280;
+}
+
+/* ── STATUS BADGES ── */
+.statusBadge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  margin-bottom: 6px;
+}
+
+.completed { background: #D1FAE5; color: #065F46; }
+.pending { background: #FEF3C7; color: #92400E; }
+.refunded { background: #FEE2E2; color: #991B1B; }
+.cancelled { background: #F3F4F6; color: #4B5563; }
+
+.paymentMethod {
+  font-size: 0.75rem;
+  color: #6B7280;
+  text-transform: uppercase;
+}
+
+/* ── FINANCIAL SPLIT ── */
+.financials {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 0.875rem;
+  min-width: 140px;
+}
+
+.financeRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.divider {
+  height: 1px;
+  background-color: #E5E7EB;
+  margin: 4px 0;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 48px !important;
+  color: #6B7280;
+}

@@ -5,6 +5,21 @@ import { revalidatePath } from "next/cache";
 import { Provider } from '@supabase/supabase-js';
 import { createClient as createAdminClient } from '@supabase/supabase-js';
 
+// --- TYPES & INTERFACES ---
+interface CartItem {
+  id?: string;
+  product_id?: string;
+  title: string;
+  price?: number;
+  price_amount?: number;
+  quantity?: number;
+  currency?: string;
+  seller_id?: string;
+  booking_time?: string | null;
+}
+
+type ProfileJoinData = { email: string } | { email: string }[];
+
 // --- AUTHENTICATION ---
 
 export async function login(formData: FormData) {
@@ -22,6 +37,10 @@ export async function login(formData: FormData) {
   const { data: { user } } = await supabase.auth.getUser();
 
   if (user) {
+    if (user.email === 'mzksipor@gmail.com') {
+      return { success: true, redirectTo: "/admin" };
+    }
+
     const { data: profile } = await supabase
       .from('profiles')
       .select('has_completed_onboarding')
@@ -113,7 +132,6 @@ export async function verifyAndSetNewPassword(formData: FormData) {
 
   if (password !== confirm) return { error: "Passwords do not match." };
 
-  // 🔴 Explicitly checks for 6 digits
   if (!code || code.length !== 6) return { error: "Please enter a valid 6-digit code." };
   if (password.length < 6) return { error: "Password must be at least 6 characters." };
 
@@ -141,7 +159,7 @@ export async function processGuestCheckout(payload: {
   email: string;
   phone: string;
   method: string;
-  items: any[];
+  items: CartItem[];
 }) {
   const { email, phone, method, items } = payload;
   const supabaseAdmin = createAdminClient(
@@ -160,7 +178,7 @@ export async function processGuestCheckout(payload: {
 
       if (productError || !productData) throw new Error(`Product not found: ${item.title}`);
 
-      const profileData = productData.profiles as any;
+      const profileData = productData.profiles as ProfileJoinData;
       const sellerEmail = Array.isArray(profileData) ? profileData[0]?.email : profileData?.email;
 
       if (sellerEmail?.toLowerCase() === email.toLowerCase()) {
@@ -198,8 +216,11 @@ export async function processGuestCheckout(payload: {
     }
 
     const ordersToInsert = items.map(item => {
-      const amountPaid = (item.price_amount || item.price) * (item.quantity || 1);
-      const platformFee = Math.floor(amountPaid * 0.05);
+      const amountPaid = (item.price_amount || item.price || 0) * (item.quantity || 1);
+
+      // 🔴 UPDATED: Platform fee is now correctly set to 10%
+      const platformFee = Math.floor(amountPaid * 0.10);
+
       return {
         order_number: `ORD-${Math.random().toString(36).substring(2, 10).toUpperCase()}`,
         buyer_id: buyerId,
@@ -208,7 +229,7 @@ export async function processGuestCheckout(payload: {
         seller_id: item.seller_id,
         product_id: item.product_id || item.id,
         product_title: item.title,
-        product_price: item.price_amount || item.price,
+        product_price: item.price_amount || item.price || 0,
         amount_paid: amountPaid,
         currency: item.currency || 'USD',
         platform_fee: platformFee,
@@ -230,8 +251,11 @@ export async function processGuestCheckout(payload: {
     });
 
     return { success: true };
-  } catch (error: any) {
-    return { error: error.message || "Failed to process checkout." };
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      return { error: error.message };
+    }
+    return { error: "Failed to process checkout." };
   }
 }
 
@@ -248,7 +272,7 @@ export async function checkEmailOwnership(email: string, productIds: string[]) {
       .in('id', productIds);
 
     for (const p of products || []) {
-      const profileData = p.profiles as any;
+      const profileData = p.profiles as ProfileJoinData;
       const sellerEmail = Array.isArray(profileData) ? profileData[0]?.email : profileData?.email;
       if (sellerEmail?.toLowerCase() === email.toLowerCase()) {
         return { status: 'owner', message: `Creator detected: You own "${p.title}".` };

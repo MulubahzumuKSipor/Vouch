@@ -1,0 +1,259 @@
+.container {
+  display: flex;
+  flex-direction: column;
+}
+
+.header {
+  margin-bottom: 32px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: #111827;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #6B7280;
+}
+
+.toolBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.searchForm {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: white;
+  border: 1px solid #D1D5DB;
+  padding: 8px 16px;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.2s;
+}
+
+.searchForm:focus-within {
+  border-color: #F59E0B; /* Kente Gold */
+}
+
+.searchInput {
+  border: none;
+  outline: none;
+  width: 100%;
+  font-size: 0.875rem;
+  color: #111827;
+}
+
+.stats {
+  background: white;
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+  font-size: 0.875rem;
+  color: #6B7280;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+.stats strong {
+  color: #111827;
+  font-weight: 700;
+  font-size: 1rem;
+}
+
+/* ── TABLE STYLES ── */
+.tableCard {
+  background: white;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.tableWrapper {
+  overflow-x: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.table th {
+  background-color: #F9FAFB;
+  padding: 12px 24px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #6B7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-bottom: 1px solid #E5E7EB;
+}
+
+.table td {
+  padding: 16px 24px;
+  border-bottom: 1px solid #E5E7EB;
+  vertical-align: middle;
+}
+
+.rowSuspended td {
+  background-color: #FEF2F2; /* Light red tint for suspended users */
+}
+
+.userInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.username {
+  font-weight: 700;
+  color: #111827;
+  font-size: 0.9375rem;
+}
+
+.email {
+  font-size: 0.8125rem;
+  color: #6B7280;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.fullName {
+  font-size: 0.75rem;
+  color: #9CA3AF;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 2px;
+}
+
+/* ── BADGES ── */
+.badgeVerified {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #D1FAE5;
+  color: #065F46;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.badgeStandard {
+  color: #6B7280;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  padding: 4px 0;
+}
+
+.badgeSuspended {
+  display: inline-flex;
+  align-items: center;
+  background: #FEE2E2;
+  color: #991B1B;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.salesInfo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 1rem;
+  color: #111827;
+}
+
+.dateCell {
+  color: #6B7280;
+  font-size: 0.875rem;
+}
+
+.emptyState {
+  text-align: center;
+  padding: 48px !important;
+  color: #6B7280;
+}
+
+/* ── ACTION BUTTONS ── */
+.actionGroup {
+  display: flex;
+  gap: 8px;
+}
+
+.verifyBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  border: 1px solid #D1D5DB;
+  color: #374151;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.verifyBtn:hover:not(:disabled) {
+  background: #F3F4F6;
+  border-color: #9CA3AF;
+}
+
+.suspendBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  border: 1px solid #FECACA;
+  color: #DC2626;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.suspendBtn:hover:not(:disabled) {
+  background: #FEF2F2;
+}
+
+.activateBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: white;
+  border: 1px solid #A7F3D0;
+  color: #059669;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.activateBtn:hover:not(:disabled) {
+  background: #ECFDF5;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

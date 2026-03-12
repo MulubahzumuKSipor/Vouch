@@ -2,7 +2,7 @@
 
 import { selectRole } from '@/lib/onboard'
 import styles from '@/styles/onboard.module.css'
-import { Briefcase, ShoppingBag, Search } from 'lucide-react'
+import { Briefcase, ShoppingBag, Search, Info } from 'lucide-react'
 
 export default function OnboardingForm() {
   async function handleSelection(formData: FormData) {
@@ -25,8 +25,32 @@ export default function OnboardingForm() {
           </p>
         </div>
 
+        {/* ── BETA TESTING ALERT BANNER ── */}
+        <div style={{
+          backgroundColor: '#EFF6FF',
+          border: '1px solid #BFDBFE',
+          borderRadius: '8px',
+          padding: '16px',
+          marginBottom: '24px',
+          display: 'flex',
+          gap: '12px',
+          alignItems: 'flex-start',
+          textAlign: 'left'
+        }}>
+          <Info size={20} color="#2563EB" style={{ flexShrink: 0, marginTop: '2px' }} />
+          <div>
+            <h3 style={{ color: '#1E3A8A', margin: '0 0 4px 0', fontSize: '0.875rem', fontWeight: 600 }}>
+              Welcome to the Vouch Beta!
+            </h3>
+            <p style={{ color: '#1E40AF', margin: 0, fontSize: '0.875rem', lineHeight: 1.5 }}>
+              We are currently in our testing phase. Please note that <strong>real money transfers and payouts are temporarily disabled</strong> until our official launch. Feel free to set up your store, explore the dashboard, and get ready!
+            </p>
+          </div>
+        </div>
+
         <div className={styles.options}>
           
+          {/* OPTION 1: SELLER */}
           <form action={handleSelection}>
             <input type="hidden" name="role" value="seller" />
             <button type="submit" className={styles.optionBtn}>
